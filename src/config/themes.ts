@@ -93,8 +93,60 @@ export const themes: Record<string, Theme> = {
       colorblindSafe: false,
     },
   },
+
+  'solarized-neurodivergent': {
+    name: 'Solarized Neurodivergent',
+    colors: {
+      primary: '#268BD2',
+      secondary: '#2AA198',
+      success: '#859900',
+      warning: '#B58900',
+      error: '#DC322F',
+      info: '#268BD2',
+      background: '#FDF6E3',
+      foreground: '#657B83',
+      muted: '#93A1A1',
+      border: '#EEE8D5',
+      focusBorder: '#268BD2',
+    },
+    accessibility: {
+      highContrast: true,
+      reducedMotion: true,
+      colorblindSafe: true,
+    },
+  },
+
+  'monochrome-focus': {
+    name: 'Monochrome Focus',
+    colors: {
+      primary: '#FFFFFF',
+      secondary: '#D0D0D0',
+      success: '#FFFFFF',
+      warning: '#A0A0A0',
+      error: '#808080',
+      info: '#D0D0D0',
+      background: '#000000',
+      foreground: '#FFFFFF',
+      muted: '#808080',
+      border: '#404040',
+      focusBorder: '#FFFFFF',
+    },
+    accessibility: {
+      highContrast: true,
+      reducedMotion: true,
+      colorblindSafe: true,
+    },
+  },
 };
 
 export function getTheme(name: string): Theme {
   return themes[name] || themes['default'];
+}
+
+export function getAllThemes(): Record<string, Theme> {
+  return { ...themes };
+}
+
+export function getThemesByAccessibility(feature: keyof Theme['accessibility']): Theme[] {
+  return Object.values(themes).filter(theme => theme.accessibility[feature]);
 }
