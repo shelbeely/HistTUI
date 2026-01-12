@@ -349,7 +349,7 @@ HistTUI/
 - [ ] Comparison view (branches, commits)
 - [ ] Performance metrics dashboard
 
-## 🙏 Inspiration
+## 🙏 Inspiration & Attribution
 
 HistTUI draws inspiration from amazing TUI tools:
 
@@ -361,6 +361,12 @@ HistTUI draws inspiration from amazing TUI tools:
 - [wiki-cli](https://github.com/hexrcs/wiki-cli) - Wikipedia in terminal
 - [changelog-view](https://github.com/jdeniau/changelog-view) - Interactive changelog viewer
 - [emoj](https://github.com/sindresorhus/emoj) - Emoji finder
+
+**Code Attribution:**
+- Fuzzy search interaction patterns inspired by [emoj](https://github.com/sindresorhus/emoj) by Sindre Sorhus (MIT License)
+- Changelog parsing logic inspired by [changelog-view](https://github.com/jdeniau/changelog-view) by Julien Deniau (MIT License)
+
+All referenced projects are properly attributed in source code comments where their patterns are used.
 
 ## 📄 License
 

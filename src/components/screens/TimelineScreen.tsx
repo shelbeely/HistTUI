@@ -69,6 +69,7 @@ export function TimelineScreen({ database }: TimelineScreenProps) {
       }
     },
     onHelp: () => setShowHelp(!showHelp),
+    onSearch: () => setScreen('search'),
     onNumber: (num) => {
       if (num === 1) setScreen('timeline');
       else if (num === 2) setScreen('branches');

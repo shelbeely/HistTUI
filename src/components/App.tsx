@@ -10,6 +10,9 @@ import { AppProvider, useApp } from './AppContext';
 import { TimelineScreen } from './screens/TimelineScreen';
 import { CommitDetailScreen } from './screens/CommitDetailScreen';
 import { BranchesScreen } from './screens/BranchesScreen';
+import { FileTreeScreen } from './screens/FileTreeScreen';
+import { FuzzySearchScreen } from './screens/FuzzySearchScreen';
+import { ChangelogViewerScreen } from './screens/ChangelogViewerScreen';
 import { ActivityDashboard } from './dashboards/ActivityDashboard';
 import { ErrorDisplay } from './common/UI';
 import { GitClient } from '../core/git';
@@ -52,9 +55,12 @@ function AppContent({
       return <CommitDetailScreen gitClient={gitClient} />;
     case 'branches':
       return <BranchesScreen database={database} />;
+    case 'files':
+      return <FileTreeScreen gitClient={gitClient} />;
+    case 'search':
+      return <FuzzySearchScreen database={database} />;
     case 'dashboard-activity':
       return <ActivityDashboard database={database} />;
-    // Add more screens as needed
     default:
       return <TimelineScreen database={database} />;
   }
