@@ -1,1 +1,375 @@
-# HistTUI
+# HistTUI 🚀
+
+**Interactive Git History TUI** - Explore repository history like a pro with a beautiful terminal interface.
+
+> Inspired by the best terminal UIs: lazygit, k9s, tig, htop, btop
+
+## ✨ Features
+
+- **📊 Commit Timeline** - Browse commits with vim-style navigation (j/k). Filter by author, date, path, or message.
+- **💬 Commit Details** - View full commit info, file changes, and diffs in a beautiful split view.
+- **🌿 Branch & Tag Explorer** - Navigate all branches and tags with clear indicators for current/remote branches.
+- **📈 Activity Dashboard** - Visualize repository activity, top contributors, and commit patterns.
+- **🔥 File Hotspots** - Identify most-changed files and potential maintenance risks.
+- **⚡ Blazing Fast** - SQLite indexing means instant searches, even in massive repositories.
+- **🔌 Plugin-Ready** - Extensible architecture for custom dashboards and screens.
+- **⌨️ Keyboard-First** - Vim-style navigation (j/k/g/G), quick shortcuts (1-4 for screens), and discoverable help (?).
+- **🔒 Read-Only Safety** - Never writes to your repository. Pure exploration mode.
+- **💾 Smart Caching** - Clone once, explore instantly. Updates on demand.
+
+## 🚀 Quick Start
+
+### For Humans
+
+```bash
+# Run directly with npx (no install needed!)
+npx histtui https://github.com/user/repo
+
+# Or install globally
+npm install -g histtui
+histtui https://github.com/user/repo
+
+# Use a local repository
+histtui /path/to/repo
+```
+
+**First run:** Clones and indexes the repository (takes a moment for large repos)  
+**Subsequent runs:** Lightning fast! Uses cached data.
+
+### Navigation
+
+- **j/k or ↑↓** - Navigate lists
+- **Enter** - View details
+- **1-4** - Switch between screens (Timeline, Branches, Files, Dashboards)
+- **/** - Search
+- **?** - Toggle help
+- **q** - Quit
+
+<details>
+<summary><strong>For AI Agents / LLMs</strong></summary>
+
+**Step 0:** Verify Node.js installation
+```bash
+node --version  # Must be 18.0.0 or higher
+```
+
+**Step 1:** Install HistTUI
+```bash
+npm install -g histtui
+```
+
+**Step 2:** Run with a repository URL
+```bash
+histtui https://github.com/user/repo
+```
+
+**Step 3:** Verify it's working
+- App should display "Cloning..." then show commit timeline
+- Press `j`/`k` to navigate
+- Press `q` to quit
+
+**Common Issues:**
+```bash
+# If clone fails, try with skip-update
+histtui https://github.com/user/repo --skip-update
+
+# Check cache status
+histtui cache --list
+
+# Clear cache if corrupted
+histtui cache --clear
+
+# Enable debug logging
+histtui https://github.com/user/repo --debug
+# Check logs at ~/.histtui/debug.log
+```
+
+**Configuration:**
+```bash
+# View current config
+histtui config
+
+# Custom cache directory
+histtui https://github.com/user/repo --cache-dir /custom/path
+
+# Limit commits indexed (for huge repos)
+histtui https://github.com/user/repo --max-commits 5000
+```
+
+</details>
+
+## ⌨️ Keyboard Shortcuts
+
+### Global
+| Key | Action |
+|-----|--------|
+| `q` or `Ctrl+C` | Quit |
+| `?` or `h` | Toggle help |
+| `/` or `Ctrl+F` | Search |
+| `1` | Commit Timeline |
+| `2` | Branches & Tags |
+| `3` | File Tree |
+| `4` | Dashboards |
+
+### Navigation (Vim-style)
+| Key | Action |
+|-----|--------|
+| `j` or `↓` | Move down |
+| `k` or `↑` | Move up |
+| `h` or `←` | Move left / Go back |
+| `l` or `→` | Move right / Enter |
+| `Ctrl+D` or `PgDn` | Page down |
+| `Ctrl+U` or `PgUp` | Page up |
+| `g` or `Home` | Jump to top |
+| `G` or `End` | Jump to bottom |
+
+### Commit Timeline
+| Key | Action |
+|-----|--------|
+| `Enter` | View commit details |
+| `/` | Filter commits |
+
+### Commit Detail
+| Key | Action |
+|-----|--------|
+| `d` | Toggle diff view |
+| `←` | Back to timeline |
+
+### Branches & Tags
+| Key | Action |
+|-----|--------|
+| `Tab` | Switch between branches and tags |
+
+## 🏗️ Architecture
+
+HistTUI is built with clean layer separation:
+
+```
+┌─────────────────────────────────────────┐
+│           CLI Entry Point               │
+│        (Commander.js + Ink)             │
+└─────────────────────────────────────────┘
+                   │
+        ┌──────────┴──────────┐
+        │                     │
+┌───────▼──────┐    ┌────────▼─────────┐
+│  Git Layer   │    │  Cache Manager   │
+│ (simple-git) │    │ (Repository      │
+│              │    │  Caching)        │
+└──────┬───────┘    └──────────────────┘
+       │
+┌──────▼───────────────────────────────┐
+│         SQLite Database              │
+│    (Indexed Git History)             │
+└──────┬───────────────────────────────┘
+       │
+┌──────▼───────────────────────────────┐
+│      UI Components (Ink/React)       │
+│  • Timeline  • Commit Detail         │
+│  • Branches  • Dashboards            │
+└──────────────────────────────────────┘
+       │
+┌──────▼───────────────────────────────┐
+│       Plugin System (Optional)       │
+│  Custom Screens, Dashboards,         │
+│  Indexers                            │
+└──────────────────────────────────────┘
+```
+
+**Read-Only by Design:** All git operations are read-only (log, show, diff). No commits, pushes, or modifications.
+
+**Async-Friendly:** Large repository support with progress indicators. UI never freezes.
+
+**Extension Points:** Plugin API allows adding custom dashboards, screens, and data indexers.
+
+<details>
+<summary><strong>For AI Agents / LLMs - Detailed Architecture</strong></summary>
+
+**Core Layers:**
+
+1. **CLI Layer** (`src/cli.ts`)
+   - Argument parsing with Commander.js
+   - Launches Ink-based TUI
+   - Configuration management
+
+2. **Git Layer** (`src/core/git/`)
+   - `GitClient`: Wraps simple-git for all git operations
+   - Methods: `clone()`, `getAllCommits()`, `getCommitDetail()`, `getBranches()`, `getTags()`, `getFileTree()`
+   - Read-only operations only
+
+3. **Cache Layer** (`src/core/cache/`)
+   - `CacheManager`: Repository caching in `~/.histtui/cache/`
+   - Stores cloned repos by URL hash
+   - Tracks last updated, commit counts
+
+4. **Database Layer** (`src/core/database/`)
+   - `GitDatabase`: SQLite schema and queries
+   - Tables: `commits`, `branches`, `tags`, `file_changes`, `metadata`, `plugin_tables`
+   - Indexes on date, author for fast queries
+
+5. **Indexer Layer** (`src/core/indexer/`)
+   - `GitIndexer`: Coordinates Git → Database
+   - Batch processing for performance
+   - Progress reporting
+
+6. **UI Layer** (`src/components/`)
+   - React/Ink components
+   - Screens: Timeline, CommitDetail, Branches, ActivityDashboard
+   - Common components: BoxBorder, StatusBar, ListItem, etc.
+   - Custom hooks: useKeyboard, useListNavigation, useSearch
+
+7. **Plugin System** (`src/plugins/`)
+   - `PluginManager`: Loads and manages plugins
+   - `PluginAPI`: Exposed to plugins
+   - Plugins can register: custom screens, dashboards, indexers
+
+**Data Flow:**
+```
+Git Repo → GitClient.clone() → CacheManager (stores local copy)
+           ↓
+GitClient.getAllCommits() → GitIndexer → GitDatabase (SQLite)
+           ↓
+UI Components query GitDatabase → Render with Ink
+```
+
+**Plugin Development:**
+```typescript
+// Example plugin
+export default {
+  name: 'my-plugin',
+  version: '1.0.0',
+  description: 'Custom dashboard',
+  async init(api: PluginAPI) {
+    api.registerDashboard({
+      id: 'my-dashboard',
+      name: 'My Dashboard',
+      async query(db) {
+        return db.prepare('SELECT * FROM commits LIMIT 10').all();
+      },
+      render(data) {
+        return <Box>{/* Custom UI */}</Box>;
+      },
+    });
+  },
+};
+```
+
+</details>
+
+## 🔌 Plugin System
+
+HistTUI is designed for extensibility. Plugins can add:
+
+- **Custom Screens** - New top-level views
+- **Custom Dashboards** - Data visualizations
+- **Custom Indexers** - Additional data extraction from commits
+
+See [PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md) for full documentation.
+
+## 📦 Installation & Development
+
+<details>
+<summary><strong>For Developers</strong></summary>
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Git
+
+### Development Setup
+```bash
+# Clone the repository
+git clone https://github.com/shelbeely/HistTUI.git
+cd HistTUI
+
+# Install dependencies
+npm install
+
+# Run in development mode
+npm run dev -- https://github.com/user/repo
+
+# Build
+npm run build
+
+# Run built version
+node dist/cli.js https://github.com/user/repo
+```
+
+### Project Structure
+```
+HistTUI/
+├── src/
+│   ├── cli.ts                 # CLI entry point
+│   ├── components/            # UI components
+│   │   ├── App.tsx           # Main app
+│   │   ├── AppContext.tsx    # State management
+│   │   ├── common/           # Shared UI components
+│   │   ├── screens/          # Main screens
+│   │   └── dashboards/       # Dashboard screens
+│   ├── core/                 # Core functionality
+│   │   ├── cache/           # Repository caching
+│   │   ├── database/        # SQLite operations
+│   │   ├── git/             # Git operations
+│   │   └── indexer/         # Git history indexing
+│   ├── plugins/             # Plugin system
+│   ├── config/              # Configuration management
+│   ├── utils/               # Utility functions
+│   └── types/               # TypeScript definitions
+├── .github/
+│   └── agents/
+│       └── histtui-maintainer.md  # Custom agent definition
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+### Adding a New Screen
+1. Create component in `src/components/screens/`
+2. Add to AppContext screen type
+3. Register in App.tsx switch statement
+4. Add keyboard shortcut in hooks.ts
+
+### Adding a Dashboard
+1. Create component in `src/components/dashboards/`
+2. Add data query method to GitDatabase
+3. Register in App.tsx
+4. Add to dashboard navigation
+
+</details>
+
+## 🎯 Roadmap
+
+- [ ] File tree navigator with markdown preview
+- [ ] Hotspots & ownership dashboards
+- [ ] Global search and command palette
+- [ ] Interactive rebase visualization (read-only)
+- [ ] Commit graph visualization
+- [ ] Blame view for files
+- [ ] Export reports (PDF, HTML)
+- [ ] Comparison view (branches, commits)
+- [ ] Performance metrics dashboard
+
+## 🙏 Inspiration
+
+HistTUI draws inspiration from amazing TUI tools:
+
+- [lazygit](https://github.com/jesseduffield/lazygit) - Terminal UI for git
+- [k9s](https://github.com/derailed/k9s) - Kubernetes CLI
+- [tig](https://github.com/jonas/tig) - Text-mode interface for git
+- [htop](https://github.com/htop-dev/htop) - Interactive process viewer
+- [btop](https://github.com/aristocratos/btop) - Resource monitor
+- [wiki-cli](https://github.com/hexrcs/wiki-cli) - Wikipedia in terminal
+- [changelog-view](https://github.com/jdeniau/changelog-view) - Interactive changelog viewer
+- [emoj](https://github.com/sindresorhus/emoj) - Emoji finder
+
+## 📄 License
+
+ISC
+
+## 🤝 Contributing
+
+Contributions welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+---
+
+**Made with 🚀 for developers who live in the terminal**

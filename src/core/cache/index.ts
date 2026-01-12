@@ -4,8 +4,8 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { getRepoHash, normalizeRepoUrl, getRepoName } from '../utils';
-import { logger } from '../utils/logger';
+import { getRepoHash, normalizeRepoUrl, getRepoName } from '../../utils';
+import { logger } from '../../utils/logger';
 
 export interface CacheInfo {
   repoUrl: string;

@@ -3,10 +3,10 @@
  * Allows extending functionality with custom screens, dashboards, and indexers
  */
 
-import { Plugin, PluginAPI, CustomScreen, CustomDashboard, CustomIndexer } from '../../types';
-import { GitDatabase } from '../database';
-import { GitClient } from '../git';
-import { logger } from '../../utils/logger';
+import { Plugin, PluginAPI, CustomScreen, CustomDashboard, CustomIndexer } from '../types';
+import { GitDatabase } from '../core/database';
+import { GitClient } from '../core/git';
+import { logger } from '../utils/logger';
 import * as fs from 'fs';
 import * as path from 'path';
 

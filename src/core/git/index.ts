@@ -32,10 +32,9 @@ export class GitClient {
     const git = simpleGit();
 
     // Clone with progress
-    await git.clone(repoUrl, targetPath, {
-      '--depth': null, // Full clone to get all history
-      '--progress': null,
-    });
+    await git.clone(repoUrl, targetPath, [
+      '--progress',
+    ]);
 
     logger.info('Repository cloned successfully');
     onProgress?.('Clone completed');

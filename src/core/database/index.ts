@@ -45,7 +45,7 @@ export class GitDatabase {
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS branches (
         name TEXT PRIMARY KEY,
-        commit TEXT NOT NULL,
+        commit_hash TEXT NOT NULL,
         current INTEGER DEFAULT 0,
         remote INTEGER DEFAULT 0
       );
@@ -55,7 +55,7 @@ export class GitDatabase {
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS tags (
         name TEXT PRIMARY KEY,
-        commit TEXT NOT NULL,
+        commit_hash TEXT NOT NULL,
         message TEXT,
         date INTEGER
       );
@@ -166,7 +166,7 @@ export class GitDatabase {
    */
   insertBranches(branches: Branch[]): void {
     const insert = this.db.prepare(`
-      INSERT OR REPLACE INTO branches (name, commit, current, remote)
+      INSERT OR REPLACE INTO branches (name, commit_hash, current, remote)
       VALUES (?, ?, ?, ?)
     `);
 
@@ -185,7 +185,7 @@ export class GitDatabase {
    */
   insertTags(tags: Tag[]): void {
     const insert = this.db.prepare(`
-      INSERT OR REPLACE INTO tags (name, commit, message, date)
+      INSERT OR REPLACE INTO tags (name, commit_hash, message, date)
       VALUES (?, ?, ?, ?)
     `);
 
@@ -294,7 +294,7 @@ export class GitDatabase {
 
     return rows.map(row => ({
       name: row.name,
-      commit: row.commit,
+      commit: row.commit_hash,
       current: row.current === 1,
       remote: row.remote === 1,
     }));
@@ -308,7 +308,7 @@ export class GitDatabase {
 
     return rows.map(row => ({
       name: row.name,
-      commit: row.commit,
+      commit: row.commit_hash,
       message: row.message || undefined,
       date: row.date ? new Date(row.date) : undefined,
     }));
