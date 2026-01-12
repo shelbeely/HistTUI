@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    // Target Bun's native ES2022 support
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022"],
+    
+    // React configuration
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment",
+    
+    // Output configuration
+    "outDir": "./dist",
+    "rootDir": "./src",
+    
+    // Type checking
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    
+    // Module resolution optimized for Bun
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    
+    // Build options
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "importHelpers": false,
+    
+    // Additional checks
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": false,
+    
+    // Bun-specific optimizations
+    "useDefineForClassFields": true,
+    "isolatedModules": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
+}
