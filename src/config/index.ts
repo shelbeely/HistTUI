@@ -34,6 +34,7 @@ const DEFAULT_CONFIG: AppConfig = {
     },
   },
   theme: {
+    name: 'Default',
     colors: {
       primary: '#61afef',
       secondary: '#56b6c2',
@@ -41,7 +42,38 @@ const DEFAULT_CONFIG: AppConfig = {
       warning: '#e5c07b',
       error: '#e06c75',
       info: '#c678dd',
+      background: '#282c34',
+      foreground: '#abb2bf',
+      muted: '#5c6370',
+      border: '#3e4451',
+      focusBorder: '#61afef',
     },
+    accessibility: {
+      highContrast: false,
+      reducedMotion: false,
+      colorblindSafe: false,
+    },
+  },
+  accessibility: {
+    reducedMotion: false,
+    highContrast: false,
+    focusIndicatorStyle: 'default' as const,
+    screenReaderMode: false,
+    largeText: false,
+  },
+  timeTracking: {
+    enabled: true,
+    idleTimeout: 300,
+    sessionGap: 900,
+    trackFiles: true,
+    trackLanguages: true,
+  },
+  ui: {
+    theme: 'default',
+    showBreadcrumbs: true,
+    showHelpHints: true,
+    progressiveDisclosure: false,
+    animations: 'full' as const,
   },
 };
 

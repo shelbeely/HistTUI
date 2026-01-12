@@ -48,6 +48,117 @@ export interface Tag {
   date?: Date;
 }
 
+// Time Tracking Types
+export interface CodingSession {
+  id: string;
+  repoPath: string;
+  startTime: number;
+  endTime: number | null;
+  duration: number;
+  filePath: string | null;
+  language: string | null;
+  linesAdded: number;
+  linesDeleted: number;
+}
+
+export interface SessionEvent {
+  filePath?: string;
+  linesAdded?: number;
+  linesDeleted?: number;
+}
+
+export interface TimeTrackingConfig {
+  enabled: boolean;
+  idleTimeout: number;
+  sessionGap: number;
+  trackFiles: boolean;
+  trackLanguages: boolean;
+}
+
+export interface DailySummary {
+  date: string;
+  repoPath: string;
+  totalSeconds: number;
+  activeFiles: number;
+  languages: string; // JSON string
+  commits: number;
+  productivityScore: number;
+}
+
+export interface FileActivity {
+  filePath: string;
+  repoPath: string;
+  language: string;
+  totalSeconds: number;
+  editCount: number;
+  lastActive: number;
+}
+
+export interface ProductivityStats {
+  totalSeconds: number;
+  todaySeconds: number;
+  weekSeconds: number;
+  monthSeconds: number;
+  averageDailySeconds: number;
+  topLanguages: LanguageStats[];
+  topFiles: FileStats[];
+  dailyStreak: number;
+  productivityScore: number;
+}
+
+export interface LanguageStats {
+  language: string;
+  seconds: number;
+  percentage: number;
+}
+
+export interface FileStats {
+  filePath: string;
+  language: string;
+  seconds: number;
+  editCount: number;
+  lastActive: number;
+}
+
+// Theme and Accessibility Types
+export interface Theme {
+  name: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    success: string;
+    warning: string;
+    error: string;
+    info: string;
+    background: string;
+    foreground: string;
+    muted: string;
+    border: string;
+    focusBorder: string;
+  };
+  accessibility: {
+    highContrast: boolean;
+    reducedMotion: boolean;
+    colorblindSafe: boolean;
+  };
+}
+
+export interface AccessibilityConfig {
+  reducedMotion: boolean;
+  highContrast: boolean;
+  focusIndicatorStyle: 'default' | 'bold-border' | 'highlight';
+  screenReaderMode: boolean;
+  largeText: boolean;
+}
+
+export interface UIConfig {
+  theme: string;
+  showBreadcrumbs: boolean;
+  showHelpHints: boolean;
+  progressiveDisclosure: boolean;
+  animations: 'full' | 'reduced' | 'none';
+}
+
 export interface FileTreeNode {
   name: string;
   path: string;
@@ -85,6 +196,9 @@ export interface AppConfig {
   defaultBranch?: string;
   keyBindings: KeyBindings;
   theme: Theme;
+  accessibility?: AccessibilityConfig;
+  timeTracking?: TimeTrackingConfig;
+  ui?: UIConfig;
 }
 
 export interface KeyBindings {
@@ -108,17 +222,6 @@ export interface KeyBindings {
     branches: string[];
     files: string[];
     dashboards: string[];
-  };
-}
-
-export interface Theme {
-  colors: {
-    primary: string;
-    secondary: string;
-    success: string;
-    warning: string;
-    error: string;
-    info: string;
   };
 }
 
