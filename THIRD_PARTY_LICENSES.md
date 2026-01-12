@@ -8,8 +8,10 @@ We're grateful to these amazing developers who shared their work:
 
 - **Sindre Sorhus** - Created [emoj](https://github.com/sindresorhus/emoj), which inspired our fuzzy search interaction
 - **Julien Deniau** - Created [changelog-view](https://github.com/jdeniau/changelog-view), which inspired our changelog parsing
+- **Nano Collective** - Created [nanocoder](https://github.com/Nano-Collective/nanocoder), which inspired our AI Assistant plugin
+- **BloopAI** - Created [vibe-kanban](https://github.com/BloopAI/vibe-kanban), which inspired our task orchestration and worktree isolation
 
-Both projects are MIT-licensed, allowing us to learn from and adapt their patterns with proper attribution.
+These projects use MIT, MIT with Attribution, and Apache 2.0 licenses, allowing us to learn from and adapt their patterns with proper attribution.
 
 ## Projects Used
 
@@ -338,3 +340,135 @@ All other code in this project is:
 Copyright (c) 2026 HistTUI Contributors
 
 Licensed under the ISC License (see LICENSE file in the root directory).
+
+### 3. nanocoder by Nano Collective
+
+**What we learned:** AI-powered coding assistant patterns, MCP integration, context-aware assistance  
+**Repository:** https://github.com/Nano-Collective/nanocoder  
+**License:** MIT with Attribution  
+**Files influenced:** 
+- `src/plugins/ai-assistant/index.ts`
+- `src/plugins/ai-assistant/services/AIService.ts`
+- `src/plugins/ai-assistant/screens/AIAssistantScreen.tsx`
+
+**Patterns adopted:**
+- Multi-provider AI support (OpenAI, Anthropic, OpenRouter, Ollama)
+- Streaming text generation for real-time responses
+- Tool-calling architecture for AI actions
+- Repository context awareness
+- AI SDK integration patterns
+
+**Attribution Notice:**
+This plugin is **prominently inspired by nanocoder** by Nano Collective. We have implemented our own version following their architectural patterns while adapting them for HistTUI's git history context.
+
+### 4. vibe-kanban by BloopAI
+
+**What we learned:** Task orchestration, git worktree isolation, coding agent workflows  
+**Repository:** https://github.com/BloopAI/vibe-kanban  
+**License:** Apache License 2.0  
+**Files influenced:** 
+- `src/plugins/ai-assistant/services/WorktreeManager.ts`
+- `src/plugins/ai-assistant/services/TaskManager.ts`
+
+**Patterns adopted:**
+- Isolated git worktrees for each task
+- Safe parallel development without conflicts
+- Task status tracking (todo, in-progress, review, done, blocked)
+- Kanban-style task board UI
+- Worktree cleanup and management
+
+
+---
+
+## Full License Texts
+
+### MIT License (emoj, changelog-view)
+
+```
+MIT License
+
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
+Copyright (c) Julien Deniau
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### MIT with Attribution License (nanocoder)
+
+```
+MIT License with Attribution Requirement
+
+Copyright (c) 2024 Nano Collective
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+1. The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+2. ATTRIBUTION REQUIREMENT: Any public distribution or use of this Software or
+   derivative works must include prominent attribution to "nanocoder by Nano Collective"
+   with a link to https://github.com/Nano-Collective/nanocoder
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### Apache License 2.0 (vibe-kanban)
+
+```
+Apache License
+Version 2.0, January 2004
+http://www.apache.org/licenses/
+
+Copyright 2024 BloopAI
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
+---
+
+## License Compatibility Matrix
+
+| Our License | Their License | Compatible? | Notes |
+|-------------|---------------|-------------|-------|
+| ISC/MIT     | MIT           | ✅ Yes      | Fully compatible |
+| ISC/MIT     | MIT w/ Attribution | ✅ Yes | Must include prominent attribution |
+| ISC/MIT     | Apache 2.0    | ✅ Yes      | Compatible, must preserve notices |
+| ISC/MIT     | GPL-3.0       | ❌ No       | Not used (wiki-cli) |
+

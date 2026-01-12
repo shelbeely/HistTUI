@@ -361,7 +361,7 @@ HistTUI draws inspiration from amazing TUI tools:
 
 ### Code Attribution
 
-HistTUI uses code patterns from these MIT-licensed projects:
+HistTUI uses code patterns from these open-source projects with proper attribution:
 
 **[emoj](https://github.com/sindresorhus/emoj)** by Sindre Sorhus (MIT License)
 - Interactive fuzzy search patterns
@@ -375,7 +375,21 @@ HistTUI uses code patterns from these MIT-licensed projects:
 - Markdown version grouping
 - Used in: `src/utils/changelog.ts`, `src/components/screens/ChangelogViewerScreen.tsx`
 
-**Full license text:** See [THIRD_PARTY_LICENSES.md](./THIRD_PARTY_LICENSES.md)
+**[nanocoder](https://github.com/Nano-Collective/nanocoder)** by Nano Collective (MIT with Attribution)
+- AI-powered coding assistant patterns
+- Multi-provider AI integration (OpenAI, Anthropic, OpenRouter, Ollama)
+- Repository context awareness
+- AI SDK streaming patterns
+- Used in: `src/plugins/ai-assistant/` (AI Assistant Plugin)
+
+**[vibe-kanban](https://github.com/BloopAI/vibe-kanban)** by BloopAI (Apache 2.0)
+- Task orchestration patterns
+- Git worktree isolation for safe parallel development
+- Kanban-style task management
+- Coding agent workflows
+- Used in: `src/plugins/ai-assistant/services/WorktreeManager.ts`, `TaskManager.ts`
+
+**Full license texts:** See [THIRD_PARTY_LICENSES.md](./THIRD_PARTY_LICENSES.md)
 
 <details>
 <summary><strong>For AI Agents / LLMs - CRITICAL Attribution Requirements</strong></summary>
@@ -394,6 +408,11 @@ grep -r "Inspired by\|MIT License" src/
 - `src/components/screens/FuzzySearchScreen.tsx` - emoj patterns
 - `src/utils/changelog.ts` - changelog-view patterns
 - `src/components/screens/ChangelogViewerScreen.tsx` - changelog-view patterns
+- `src/plugins/ai-assistant/index.ts` - nanocoder & vibe-kanban patterns
+- `src/plugins/ai-assistant/services/AIService.ts` - nanocoder patterns
+- `src/plugins/ai-assistant/services/WorktreeManager.ts` - vibe-kanban patterns
+- `src/plugins/ai-assistant/services/TaskManager.ts` - vibe-kanban patterns
+- `src/plugins/ai-assistant/screens/AIAssistantScreen.tsx` - nanocoder patterns
 
 ### Step 2: Preserve File Headers
 **Every file using third-party patterns MUST have this format at the top:**
@@ -498,3 +517,103 @@ Contributions welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guid
 ---
 
 **Made with 🚀 for developers who live in the terminal**
+
+## 🤖 AI Assistant Plugin
+
+HistTUI includes a powerful AI-powered coding assistant that brings agentic coding capabilities directly to your terminal.
+
+**Features:**
+- 💬 **AI Chat** - Ask questions about your repository, get code explanations, refactoring suggestions
+- 📋 **Task Management** - Kanban-style task board for organizing coding work
+- 🌳 **Git Worktrees** - Isolated development environments for each task
+- ⚡ **Command Execution** - Safely run commands with AI assistance
+- 🔌 **Multi-Provider** - OpenAI, Anthropic, OpenRouter, or Ollama
+
+**Quick Start:**
+```bash
+# Set your API key (choose one)
+export OPENROUTER_API_KEY="sk-..."  # Recommended: access to many models
+export OPENAI_API_KEY="sk-..."
+export ANTHROPIC_API_KEY="sk-..."
+
+# Launch HistTUI
+histtui https://github.com/user/repo
+
+# Press 'a' to open AI Assistant
+```
+
+**Keyboard Shortcuts:**
+- `a` - Open AI Assistant
+- `Tab` - Switch between Chat, Tasks, Worktrees, Help
+- `Enter` - Send message (in chat mode)
+- `Esc` - Exit AI Assistant
+
+### Configuration
+
+Create `~/.histtui/ai-config.json`:
+```json
+{
+  "provider": "openrouter",
+  "model": "anthropic/claude-3.5-sonnet",
+  "maxTokens": 4000,
+  "temperature": 0.7
+}
+```
+
+**Supported Providers:**
+- `openrouter` - Access 100+ models (recommended)
+- `openai` - GPT-4, GPT-3.5
+- `anthropic` - Claude 3.5 Sonnet, Claude 3 Opus
+- `ollama` - Local models (Llama 2, Mistral, etc.)
+
+### Task Orchestration
+
+The AI Assistant includes a kanban-style task board inspired by vibe-kanban:
+
+```bash
+# Tasks are organized in columns:
+- 📝 Todo
+- 🔨 In Progress (with worktree)
+- 👀 Review
+- ✅ Done
+- 🚫 Blocked
+```
+
+Each task can have:
+- Isolated git worktree for safe development
+- Associated branch and commits
+- Priority levels (low, medium, high, critical)
+- Tags and assignees
+
+### Git Worktrees
+
+Tasks in "In Progress" status automatically get their own git worktree:
+
+```
+~/.histtui/worktrees/
+  └── task-abc123/          # Isolated worktree
+      ├── .git              # Separate git directory
+      └── src/              # Independent working copy
+```
+
+**Benefits:**
+- Work on multiple tasks in parallel
+- No branch switching conflicts
+- Safe AI-assisted changes
+- Easy cleanup when task is done
+
+### Security & Safety
+
+The AI Assistant includes safety controls:
+
+**File Operations:**
+- ✅ Allowed: `.ts`, `.tsx`, `.js`, `.jsx`, `.json`, `.md`, `.yaml`
+- ❌ Denied: `node_modules/`, `.git/`, `.env`, `dist/`, `build/`
+
+**Command Execution:**
+- ✅ Allowed: `npm`, `node`, `python`, `go`, `git`, `test`
+- ❌ Denied: `rm`, `sudo`, `shutdown`, `format`
+- ⏱️ 30-second timeout on all commands
+
+All operations run in isolated worktrees, never in your main repository.
+
