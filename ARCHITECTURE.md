@@ -13,6 +13,66 @@ HistTUI is a production-grade Terminal User Interface for exploring Git reposito
 5. **Performance** - SQLite indexing enables instant searches even in massive repos.
 6. **Clear Layer Separation** - Independent layers communicate through well-defined interfaces.
 
+<details>
+<summary><strong>For AI Agents / LLMs - Architecture Deep Dive</strong></summary>
+
+## Understanding the Codebase
+
+**Step 0:** Explore the repository structure
+```bash
+cd /path/to/HistTUI
+
+# View project structure
+tree -L 2 src/
+# Expected output:
+# src/
+# ├── cli.ts
+# ├── components/
+# │   ├── App.tsx
+# │   ├── AppContext.tsx
+# │   ├── common/
+# │   ├── dashboards/
+# │   └── screens/
+# ├── config/
+# ├── core/
+# │   ├── cache/
+# │   ├── database/
+# │   ├── git/
+# │   └── indexer/
+# ├── plugins/
+# ├── types/
+# └── utils/
+```
+
+**Step 1:** Understand the data flow
+```bash
+# Entry point
+cat src/cli.ts | grep -A 5 "program.parse"
+
+# Main app orchestration
+cat src/components/App.tsx | grep -A 10 "function App"
+
+# State management
+cat src/components/AppContext.tsx | grep -A 5 "createContext"
+```
+
+**Step 2:** Test the architecture
+```bash
+# Build to verify architecture is sound
+npm run build
+
+# Check for circular dependencies
+npm install -g madge
+madge --circular --extensions ts,tsx src/
+
+# Verify layer separation
+# Core should not import from components
+grep -r "from.*components" src/core/
+# Should return empty (no imports from components layer)
+```
+
+</details>
+
 ## Architecture Layers
 
 ### 1. CLI Layer (`src/cli.ts`)
@@ -26,15 +86,60 @@ HistTUI is a production-grade Terminal User Interface for exploring Git reposito
 - Provide cache and config management commands
 
 **Key APIs:**
-```typescript
-// Main command
+```bash
+# Main command
 histtui <repo-url> [options]
 
-// Subcommands
-histtui config         // View configuration
-histtui cache --list   // List cached repos
-histtui cache --clear  // Clear cache
+# Subcommands
+histtui config         # View configuration
+histtui cache --list   # List cached repos
+histtui cache --clear  # Clear cache
 ```
+
+<details>
+<summary><strong>For AI Agents / LLMs - CLI Layer</strong></summary>
+
+**Step 0:** Understand CLI structure
+```bash
+# View CLI implementation
+cat src/cli.ts
+
+# Check available commands
+node dist/cli.js --help
+
+# Test each command
+node dist/cli.js config
+node dist/cli.js cache --list
+```
+
+**Step 1:** Add a new CLI command
+```bash
+# 1. Edit src/cli.ts
+# 2. Add command definition:
+program
+  .command('new-command')
+  .description('Description')
+  .action(() => {
+    // Implementation
+  });
+
+# 3. Rebuild
+npm run build
+
+# 4. Test
+node dist/cli.js new-command
+```
+
+**Step 2:** Verify command works
+```bash
+# Check command is registered
+node dist/cli.js --help | grep "new-command"
+
+# Test with various inputs
+node dist/cli.js new-command --option value
+```
+
+</details>
 
 ### 2. Configuration Layer (`src/config/`)
 
@@ -55,6 +160,45 @@ histtui cache --clear  // Clear cache
   "theme": { ... }
 }
 ```
+
+<details>
+<summary><strong>For AI Agents / LLMs - Configuration Layer</strong></summary>
+
+**Step 0:** Locate and read config
+```bash
+# Check if config exists
+test -f ~/.histtui/config.json && echo "Config exists" || echo "Using defaults"
+
+# View current config
+cat ~/.histtui/config.json 2>/dev/null || echo "No custom config"
+
+# View default config
+cat config.example.json
+```
+
+**Step 1:** Modify configuration
+```bash
+# Create config directory
+mkdir -p ~/.histtui
+
+# Copy example config
+cp config.example.json ~/.histtui/config.json
+
+# Edit specific values
+# Use jq for JSON manipulation
+jq '.maxCommits = 5000' ~/.histtui/config.json > tmp.json && mv tmp.json ~/.histtui/config.json
+```
+
+**Step 2:** Verify config is loaded
+```bash
+# Run with debug to see config loading
+node dist/cli.js https://github.com/user/repo --debug
+
+# Check debug log
+grep "config" ~/.histtui/debug.log
+```
+
+</details>
 
 ### 3. Cache Layer (`src/core/cache/`)
 
@@ -88,6 +232,50 @@ clearCache(repoUrl): void
 ├── config.json
 └── debug.log
 ```
+
+<details>
+<summary><strong>For AI Agents / LLMs - Cache Layer</strong></summary>
+
+**Step 0:** Inspect cache
+```bash
+# List cached repositories
+ls -la ~/.histtui/cache/
+
+# Check cache info for a repo
+cat ~/.histtui/cache/*/cache-info.json | jq '.'
+
+# See cache sizes
+du -sh ~/.histtui/cache/*
+```
+
+**Step 1:** Manually clear cache
+```bash
+# Clear specific repo cache
+rm -rf ~/.histtui/cache/df6f60522ef7
+
+# Clear all caches
+rm -rf ~/.histtui/cache/*
+
+# Or use CLI command
+node dist/cli.js cache --clear
+```
+
+**Step 2:** Debug cache issues
+```bash
+# Check if repo is cached
+REPO_URL="https://github.com/user/repo"
+node -e "
+const { CacheManager } = require('./dist/core/cache/index.js');
+const cache = new CacheManager();
+console.log('Cached:', cache.isCached('$REPO_URL'));
+console.log('Indexed:', cache.isIndexed('$REPO_URL'));
+"
+
+# Verify database exists
+test -f ~/.histtui/cache/*/histtui.db && echo "DB exists" || echo "No DB"
+```
+
+</details>
 
 ### 4. Git Layer (`src/core/git/`)
 

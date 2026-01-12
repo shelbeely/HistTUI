@@ -358,15 +358,134 @@ HistTUI draws inspiration from amazing TUI tools:
 - [tig](https://github.com/jonas/tig) - Text-mode interface for git
 - [htop](https://github.com/htop-dev/htop) - Interactive process viewer
 - [btop](https://github.com/aristocratos/btop) - Resource monitor
-- [wiki-cli](https://github.com/hexrcs/wiki-cli) - Wikipedia in terminal
-- [changelog-view](https://github.com/jdeniau/changelog-view) - Interactive changelog viewer
-- [emoj](https://github.com/sindresorhus/emoj) - Emoji finder
 
-**Code Attribution:**
-- Fuzzy search interaction patterns inspired by [emoj](https://github.com/sindresorhus/emoj) by Sindre Sorhus (MIT License)
-- Changelog parsing logic inspired by [changelog-view](https://github.com/jdeniau/changelog-view) by Julien Deniau (MIT License)
+### Code Attribution
 
-All referenced projects are properly attributed in source code comments where their patterns are used.
+HistTUI uses code patterns from these MIT-licensed projects:
+
+**[emoj](https://github.com/sindresorhus/emoj)** by Sindre Sorhus (MIT License)
+- Interactive fuzzy search patterns
+- Debounced input handling
+- Number shortcuts (1-9) for quick selection
+- Used in: `src/components/screens/FuzzySearchScreen.tsx`
+
+**[changelog-view](https://github.com/jdeniau/changelog-view)** by Julien Deniau (MIT License)
+- Changelog parsing logic
+- Semantic version extraction
+- Markdown version grouping
+- Used in: `src/utils/changelog.ts`, `src/components/screens/ChangelogViewerScreen.tsx`
+
+**Full license text:** See [THIRD_PARTY_LICENSES.md](./THIRD_PARTY_LICENSES.md)
+
+<details>
+<summary><strong>For AI Agents / LLMs - CRITICAL Attribution Requirements</strong></summary>
+
+## 🚨 IMPORTANT: Attribution Must Be Preserved
+
+**When modifying or extending this codebase, you MUST:**
+
+### Step 1: Identify Files with Attribution
+```bash
+# Find all files with third-party attribution
+grep -r "Inspired by\|MIT License" src/
+```
+
+**Files with attribution that MUST NOT lose their headers:**
+- `src/components/screens/FuzzySearchScreen.tsx` - emoj patterns
+- `src/utils/changelog.ts` - changelog-view patterns
+- `src/components/screens/ChangelogViewerScreen.tsx` - changelog-view patterns
+
+### Step 2: Preserve File Headers
+**Every file using third-party patterns MUST have this format at the top:**
+
+```typescript
+/**
+ * [Component Name]
+ * [Brief description]
+ * 
+ * [Patterns/Code] inspired by [project name] by [author] (MIT License)
+ * https://github.com/[org]/[repo]
+ */
+```
+
+**Example (DO NOT REMOVE):**
+```typescript
+/**
+ * Fuzzy Search Screen
+ * Interactive fuzzy search across commits
+ * 
+ * Search interaction patterns inspired by emoj by Sindre Sorhus (MIT License)
+ * https://github.com/sindresorhus/emoj
+ */
+```
+
+### Step 3: When Adding New Features
+**If you add features to files with attribution:**
+- ✅ KEEP the existing attribution header
+- ✅ Do NOT remove or modify attribution comments
+- ✅ Add your own changes below the header
+- ❌ NEVER remove copyright/license references
+
+### Step 4: Verification Commands
+```bash
+# Verify attribution is intact
+cat src/components/screens/FuzzySearchScreen.tsx | head -10
+cat src/utils/changelog.ts | head -10
+
+# Should output headers like:
+# "Search interaction patterns inspired by emoj by Sindre Sorhus"
+# "Changelog parsing inspired by changelog-view by Julien Deniau"
+```
+
+### Step 5: Required Files
+**These files MUST exist and MUST NOT be deleted:**
+- `THIRD_PARTY_LICENSES.md` - Full MIT license text
+- `README.md` - Attribution section (this section)
+- Source file headers - Attribution comments in files
+
+### Step 6: License Compatibility
+**We use ISC license. Compatible with:**
+- ✅ MIT (emoj, changelog-view) - Used with attribution
+- ✅ MIT with Attribution (nanocoder) - Not yet used, will require credit
+- ❌ GPL-3.0 (wiki-cli) - NOT used, incompatible
+
+**If you add dependencies:**
+```bash
+# Check license before using
+npm info [package] license
+
+# Only use MIT, ISC, BSD, Apache-2.0
+# NEVER use GPL, AGPL, or other copyleft licenses
+```
+
+### Step 7: Attribution Checklist
+Before committing code changes:
+- [ ] File headers with attribution are intact
+- [ ] THIRD_PARTY_LICENSES.md exists and is complete
+- [ ] README.md attribution section is accurate
+- [ ] No GPL-licensed code was copied
+- [ ] New dependencies are license-compatible
+
+### Step 8: Error Recovery
+**If attribution is accidentally removed:**
+```bash
+# Restore from git history
+git log --all --full-history -- src/components/screens/FuzzySearchScreen.tsx
+git checkout [commit-hash] -- src/components/screens/FuzzySearchScreen.tsx
+
+# Or restore the header manually:
+# See THIRD_PARTY_LICENSES.md for correct attribution format
+```
+
+### Why This Matters
+- **Legal compliance** - MIT license requires attribution
+- **Ethical coding** - Credit original authors
+- **Community trust** - Open source depends on proper attribution
+- **License violations** - Removing attribution violates MIT license terms
+
+**REMEMBER:** Attribution is not optional. It is a legal requirement of the MIT License.
+
+</details>
 
 ## 📄 License
 

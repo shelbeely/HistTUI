@@ -25,7 +25,8 @@ Be respectful, inclusive, and constructive. We're all here to build great softwa
 
 ## 💻 Development Workflow
 
-### Running in Development
+### For Humans
+
 ```bash
 # Run with tsx for instant feedback
 npm run dev -- https://github.com/user/repo
@@ -37,6 +38,79 @@ node dist/cli.js https://github.com/user/repo
 # Type checking only
 npm run typecheck
 ```
+
+<details>
+<summary><strong>For AI Agents / LLMs - Development Setup</strong></summary>
+
+**Step 0:** Verify prerequisites
+```bash
+# Check Node.js version (must be 18+)
+node --version
+# Expected: v18.0.0 or higher
+
+# Check npm
+npm --version
+
+# Check git
+git --version
+```
+
+**Step 1:** Clone and install
+```bash
+# Fork on GitHub first, then:
+git clone https://github.com/YOUR_USERNAME/HistTUI.git
+cd HistTUI
+
+# Install dependencies
+npm install
+
+# Verify installation
+npm run build
+# Should complete with zero errors
+```
+
+**Step 2:** Run in development mode
+```bash
+# Option 1: Use tsx (faster, no build step)
+npx tsx src/cli.ts https://github.com/sindresorhus/emoj
+
+# Option 2: Build then run
+npm run build
+node dist/cli.js https://github.com/sindresorhus/emoj
+
+# Option 3: Use npm script
+npm run dev -- https://github.com/sindresorhus/emoj
+```
+
+**Step 3:** Verify changes compile
+```bash
+# Type check only (fast)
+npx tsc --noEmit
+
+# Full build
+npm run build
+
+# Check for errors
+echo $?
+# Should return 0 (success)
+```
+
+**Step 4:** Test with real repositories
+```bash
+# Small repo (fast test)
+npm run dev -- https://github.com/sindresorhus/emoj
+
+# Medium repo
+npm run dev -- https://github.com/jdeniau/changelog-view
+
+# Your changes (use local path)
+npm run dev -- /path/to/local/repo
+
+# Check cache was created
+ls ~/.histtui/cache/
+```
+
+</details>
 
 ### Project Structure
 - `src/cli.ts` - CLI entry point
@@ -64,12 +138,96 @@ Examples:
 **Emoji Reference:**
 - ✨ `feat` - New feature
 - 🐛 `fix` - Bug fix
-- 📚 `docs` - Documentation
+- 📚 `docs` - Documentation changes
 - ♻️ `refactor` - Code refactoring
 - 🧪 `test` - Tests
 - ⚡ `perf` - Performance
 - 🎨 `style` - Code style
 - 🔒 `security` - Security fix
+
+<details>
+<summary><strong>For AI Agents / LLMs - Commit Message Format</strong></summary>
+
+**Step 0:** Determine change type
+```bash
+# Analyze what changed
+git status
+git diff --stat
+
+# Categorize:
+# - New files/features → ✨ feat
+# - Fixed bugs → 🐛 fix
+# - Documentation only → 📚 docs
+# - No functionality change → ♻️ refactor
+# - Test files → 🧪 test
+```
+
+**Step 1:** Write commit message
+```bash
+# Format: <emoji> <type>: <description>
+# 
+# Rules:
+# - Present tense ("Add" not "Added")
+# - Max 72 characters for subject
+# - Capitalize after colon
+# - No period at end
+
+# Examples:
+git commit -m "✨ feat: Add fuzzy search screen"
+git commit -m "🐛 fix: Handle empty commit list gracefully"
+git commit -m "📚 docs: Update ARCHITECTURE with AI agent sections"
+git commit -m "♻️ refactor: Extract keyboard handler to hook"
+```
+
+**Step 2:** Verify commit message format
+```bash
+# Check last commit message
+git log -1 --pretty=%B
+
+# Should match pattern:
+# <emoji> <type>: <description>
+
+# Verify it has emoji
+git log -1 --pretty=%B | grep -E "^[✨🐛📚♻️🧪⚡🎨🔒]"
+echo $?
+# Should return 0 (found emoji)
+```
+
+**Step 3:** Example commit workflow
+```bash
+# Make changes
+echo "export const newFeature = () => {};" >> src/utils/index.ts
+
+# Stage changes
+git add src/utils/index.ts
+
+# Commit with proper format
+git commit -m "✨ feat: Add newFeature utility function"
+
+# Verify
+git log -1 --oneline
+# Should show: "✨ feat: Add newFeature utility function"
+```
+
+**Common Mistakes to Avoid:**
+```bash
+# ❌ WRONG: No emoji
+git commit -m "feat: Add feature"
+
+# ❌ WRONG: Past tense
+git commit -m "✨ feat: Added feature"
+
+# ❌ WRONG: Period at end
+git commit -m "✨ feat: Add feature."
+
+# ❌ WRONG: Not capitalized
+git commit -m "✨ feat: add feature"
+
+# ✅ CORRECT
+git commit -m "✨ feat: Add feature"
+```
+
+</details>
 
 ## 🎨 Code Style
 
@@ -120,6 +278,85 @@ npm run dev -- https://github.com/jesseduffield/lazygit
 npm run dev -- https://github.com/microsoft/vscode
 ```
 
+<details>
+<parameter name="summary"><strong>For AI Agents / LLMs - Testing Procedures</strong></summary>
+
+**Step 0:** Automated testing checklist
+```bash
+# Build without errors
+npm run build
+test $? -eq 0 || echo "Build failed!"
+
+# Type check
+npx tsc --noEmit
+test $? -eq 0 || echo "Type errors found!"
+
+# Check for common issues
+grep -r "console.log" src/ && echo "Warning: console.log found"
+grep -r "any" src/types/ && echo "Warning: 'any' type in types/"
+```
+
+**Step 1:** Test with small repository
+```bash
+# Clear cache first
+rm -rf ~/.histtui/cache/*
+
+# Test with emoj (small, fast)
+timeout 60 npm run dev -- https://github.com/sindresorhus/emoj
+
+# Verify cache created
+test -d ~/.histtui/cache/* && echo "✅ Cache created" || echo "❌ No cache"
+
+# Verify database
+test -f ~/.histtui/cache/*/histtui.db && echo "✅ DB created" || echo "❌ No DB"
+
+# Check database has data
+sqlite3 ~/.histtui/cache/*/histtui.db "SELECT COUNT(*) FROM commits;"
+# Should return number > 0
+```
+
+**Step 2:** Test with medium repository
+```bash
+# Test lazygit (more commits)
+timeout 120 npm run dev -- https://github.com/jesseduffield/lazygit
+
+# Check performance
+time npm run dev -- https://github.com/jesseduffield/lazygit --skip-update
+# Second run should be much faster (cached)
+```
+
+**Step 3:** Test error handling
+```bash
+# Invalid URL
+npm run dev -- https://github.com/invalid/repo-does-not-exist
+# Should show error, not crash
+
+# Local path that doesn't exist
+npm run dev -- /tmp/nonexistent
+# Should show error
+
+# Permission denied
+mkdir /tmp/test-repo && chmod 000 /tmp/test-repo
+npm run dev -- /tmp/test-repo
+# Should handle gracefully
+```
+
+**Step 4:** Integration testing
+```bash
+# Test all commands
+node dist/cli.js --help
+node dist/cli.js config
+node dist/cli.js cache --list
+node dist/cli.js cache --clear
+
+# Test with various options
+node dist/cli.js https://github.com/sindresorhus/emoj --skip-update
+node dist/cli.js https://github.com/sindresorhus/emoj --debug
+node dist/cli.js https://github.com/sindresorhus/emoj --max-commits 100
+```
+
+</details>
+
 ## 📝 Adding Features
 
 ### New Screen
@@ -128,6 +365,85 @@ npm run dev -- https://github.com/microsoft/vscode
 3. Register in `src/components/App.tsx`
 4. Add keyboard shortcut in `src/components/common/hooks.ts`
 5. Update README.md
+
+<details>
+<parameter name="summary"><strong>For AI Agents / LLMs - Adding a New Screen</strong></summary>
+
+**Step 0:** Create the screen component
+```bash
+# Create file
+cat > src/components/screens/MyScreen.tsx << 'EOF'
+/**
+ * My Screen
+ * Description of what this screen does
+ */
+
+import React, { useState, useEffect } from 'react';
+import { Box, Text } from 'ink';
+import { useApp } from '../AppContext';
+import { useKeyboard } from '../common/hooks';
+import { Header, StatusBar } from '../common/UI';
+
+export function MyScreen() {
+  const { setScreen } = useApp();
+
+  useKeyboard({
+    onChar: (char) => {
+      if (char === 'b') setScreen('timeline');
+    },
+  });
+
+  return (
+    <Box flexDirection="column" height="100%">
+      <Header title="My Screen" subtitle="Press 'b' to go back" />
+      <Box flexGrow={1}>
+        <Text>Content here</Text>
+      </Box>
+      <StatusBar left="Info" right="b Back • q Quit" />
+    </Box>
+  );
+}
+EOF
+```
+
+**Step 1:** Add screen type
+```bash
+# Edit src/types/index.ts
+# Find: export type Screen = 
+# Add your screen to the union:
+sed -i "/export type Screen =/a\  | 'my-screen'" src/types/index.ts
+```
+
+**Step 2:** Register in App component
+```bash
+# Edit src/components/App.tsx
+# Add import at top
+sed -i "/import.*Screen.*from/a import { MyScreen } from './screens/MyScreen';" src/components/App.tsx
+
+# Add case in switch statement
+# Find the switch and add:
+#   case 'my-screen':
+#     return <MyScreen />;
+```
+
+**Step 3:** Add keyboard shortcut
+```bash
+# Edit src/components/screens/TimelineScreen.tsx (or main screen)
+# In useKeyboard, add number shortcut:
+#   else if (num === 5) setScreen('my-screen');
+```
+
+**Step 4:** Verify it works
+```bash
+# Rebuild
+npm run build
+
+# Test
+npm run dev -- https://github.com/sindresorhus/emoj
+# Press 5 (or your assigned number) to navigate to new screen
+```
+
+</details>
 
 ### New Dashboard
 1. Create component in `src/components/dashboards/MyDashboard.tsx`
