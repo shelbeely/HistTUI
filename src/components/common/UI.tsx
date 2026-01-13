@@ -169,11 +169,11 @@ interface ListItemProps {
 
 export function ListItem({ selected, children }: ListItemProps) {
   return (
-    <Box>
-      <Text color={selected ? 'cyan' : undefined} backgroundColor={selected ? 'blue' : undefined}>
+    <Box backgroundColor={selected ? 'blue' : undefined}>
+      <Text color={selected ? 'cyan' : undefined}>
         {selected ? '▶ ' : '  '}
-        {children}
       </Text>
+      {children}
     </Box>
   );
 }
