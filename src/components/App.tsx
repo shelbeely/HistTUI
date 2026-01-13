@@ -16,6 +16,7 @@ import { ChangelogViewerScreen } from './screens/ChangelogViewerScreen';
 import { ActivityDashboard } from './dashboards/ActivityDashboard';
 import { ErrorDisplay } from './common/UI';
 import { GenerativeStatusBar } from './common/GenerativeStatusBar';
+import { SetupWizard, SetupConfig } from './common/SetupWizard';
 import { GitClient } from '../core/git';
 import { GitDatabase } from '../core/database';
 import { GitIndexer, IndexProgress } from '../core/indexer';
@@ -113,6 +114,7 @@ function LoadingScreen({ progress }: { progress: IndexProgress }) {
 }
 
 export function App({ repoUrl, skipUpdate = false }: AppProps) {
+  const [showSetup, setShowSetup] = useState(config.isFirstLaunch());
   const [indexProgress, setIndexProgress] = useState<IndexProgress | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -120,6 +122,35 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
   const [database, setDatabase] = useState<GitDatabase | null>(null);
   const [pluginManager, setPluginManager] = useState<PluginManager | null>(null);
   const [repoName, setRepoName] = useState<string>('');
+
+  const handleSetupComplete = (setupConfig: SetupConfig) => {
+    // Save LLM configuration
+    if (setupConfig.llmProvider && setupConfig.llmProvider !== 'none') {
+      config.updateLLMConfig({
+        provider: setupConfig.llmProvider,
+        apiKey: setupConfig.apiKey,
+        model: setupConfig.model,
+        baseUrl: setupConfig.baseUrl,
+      });
+    }
+
+    // Save AG-UI configuration
+    if (setupConfig.enableAGUI) {
+      config.updateAGUIConfig({
+        enabled: true,
+        endpoint: setupConfig.agentEndpoint,
+      });
+    }
+
+    // Hide setup wizard and continue to app
+    setShowSetup(false);
+  };
+
+  const handleSetupSkip = () => {
+    // Mark as configured with defaults
+    config.updateLLMConfig({ provider: 'none' });
+    setShowSetup(false);
+  };
 
   useEffect(() => {
     initializeApp();
@@ -218,6 +249,17 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
     }
   }
 
+  const themeName = typeof config.get().ui.theme === 'string' ? config.get().ui.theme : 'default';
+
+  // Show setup wizard on first launch
+  if (showSetup) {
+    return (
+      <ThemeProvider theme={createInkUITheme(themeName)}>
+        <SetupWizard onComplete={handleSetupComplete} onSkip={handleSetupSkip} />
+      </ThemeProvider>
+    );
+  }
+
   if (error) {
     return (
       <Box flexDirection="column" padding={2}>
@@ -233,7 +275,6 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
   }
 
   if (!isReady || !gitClient || !database || !pluginManager) {
-    const themeName = typeof config.get().ui.theme === 'string' ? config.get().ui.theme : 'default';
     return (
       <ThemeProvider theme={createInkUITheme(themeName)}>
         <LoadingScreen progress={indexProgress || { phase: 'cloning', message: 'Initializing...' }} />
@@ -241,10 +282,9 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
     );
   }
 
-  const themeName = typeof config.get().ui.theme === 'string' ? config.get().ui.theme : 'default';
   return (
     <ThemeProvider theme={createInkUITheme(themeName)}>
-      <AGUIProvider database={database} gitClient={gitClient}>
+      <AGUIProvider database={database} gitClient={gitClient} agentEndpoint={config.get().agui?.endpoint}>
         <AppProvider repoPath={repoUrl}>
           <AppContent 
             gitClient={gitClient} 

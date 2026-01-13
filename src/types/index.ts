@@ -199,6 +199,20 @@ export interface AppConfig {
   accessibility?: AccessibilityConfig;
   timeTracking?: TimeTrackingConfig;
   ui?: UIConfig;
+  llm?: LLMConfig;
+  agui?: AGUIConfig;
+}
+
+export interface LLMConfig {
+  provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'none';
+  apiKey?: string;
+  model?: string;
+  baseUrl?: string;
+}
+
+export interface AGUIConfig {
+  enabled: boolean;
+  endpoint?: string;
 }
 
 export interface KeyBindings {

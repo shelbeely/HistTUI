@@ -129,6 +129,32 @@ export class ConfigManager {
       fs.mkdirSync(this.config.cacheDir, { recursive: true });
     }
   }
+
+  public isFirstLaunch(): boolean {
+    // Check if config file exists and has LLM configuration
+    return !fs.existsSync(this.configPath) || !this.config.llm;
+  }
+
+  public updateLLMConfig(llmConfig: {
+    provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'none';
+    apiKey?: string;
+    model?: string;
+    baseUrl?: string;
+  }): void {
+    this.config = {
+      ...this.config,
+      llm: llmConfig,
+    };
+    this.saveConfig();
+  }
+
+  public updateAGUIConfig(aguiConfig: { enabled: boolean; endpoint?: string }): void {
+    this.config = {
+      ...this.config,
+      agui: aguiConfig,
+    };
+    this.saveConfig();
+  }
 }
 
 export const config = new ConfigManager();
