@@ -433,7 +433,7 @@ components/
 │   ├── BranchesScreen.tsx
 │   └── ... (future screens)
 └── dashboards/         # Dashboard screens
-    ├── ActivityDashboard.tsx
+    ├── ActivityDashboard.tsx (default first screen)
     └── ... (future dashboards)
 ```
 
@@ -539,9 +539,14 @@ App initializes:
       - Insert into GitDatabase
   → PluginManager loads plugins
     ↓
-App renders → TimelineScreen (default)
+App renders → ActivityDashboard (default)
     ↓
-TimelineScreen:
+ActivityDashboard:
+  → GitDatabase.getDashboardActivity()
+  → Renders repository statistics, top contributors, activity patterns
+  → User can press '1' to navigate to Timeline
+    ↓
+TimelineScreen (accessible via '1' key):
   → GitDatabase.getCommits(filter)
   → Renders list with useListNavigation
   → Handles keyboard with useKeyboard

@@ -1,10 +1,12 @@
 /**
  * Activity Dashboard
- * Shows repository activity statistics
+ * Shows repository activity statistics with Material Design 3 expressive styling
  */
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text } from 'ink';
+import Gradient from 'ink-gradient';
+import chalk from 'chalk';
 import { useApp } from '../AppContext';
 import { useKeyboard } from '../common/hooks';
 import { Header, StatusBar, Loading, BoxBorder } from '../common/UI';
@@ -16,14 +18,24 @@ interface ActivityDashboardProps {
   database: GitDatabase;
 }
 
+// Constants for ADHD-friendly focus cycling
+const FOCUS_SECTIONS = ['overview', 'activity', 'contributors', 'hotspots'] as const;
+type FocusSection = typeof FOCUS_SECTIONS[number];
+
+// Medal colors for top contributors
+const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'] as const; // Gold, Silver, Bronze
+
 export function ActivityDashboard({ database }: ActivityDashboardProps) {
   const { setScreen } = useApp();
   const [data, setData] = useState<DashboardData | null>(null);
   const [hotspots, setHotspots] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [animationStep, setAnimationStep] = useState(0);
+  const [focusSection, setFocusSection] = useState<FocusSection>('overview');
 
   useEffect(() => {
     setLoading(true);
+    setAnimationStep(0); // Reset animation on data load
     try {
       const activityData = database.getDashboardActivity();
       const hotspotsData = database.getFileHotspots(10);
@@ -34,12 +46,27 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
     }
   }, [database]);
 
+  // Progressive animation effect for bars
+  useEffect(() => {
+    if (!loading && data && animationStep < 100) {
+      const timer = setInterval(() => {
+        setAnimationStep(prev => Math.min(100, prev + 5));
+      }, 30);
+      return () => clearInterval(timer);
+    }
+  }, [loading, data, animationStep]);
+
   useKeyboard({
     onNumber: (num) => {
       if (num === 1) setScreen('timeline');
       else if (num === 2) setScreen('branches');
       else if (num === 3) setScreen('files');
       else if (num === 4) setScreen('dashboard-activity');
+    },
+    onTab: () => {
+      // Cycle through sections for focus
+      const currentIndex = FOCUS_SECTIONS.indexOf(focusSection);
+      setFocusSection(FOCUS_SECTIONS[(currentIndex + 1) % FOCUS_SECTIONS.length]);
     },
   });
 
@@ -55,64 +82,91 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
   const totalInsertions = data.topAuthors.reduce((sum, a) => sum + a.insertions, 0);
   const totalDeletions = data.topAuthors.reduce((sum, a) => sum + a.deletions, 0);
 
+  // Helper to create animated progress bars with colors
+  const createColorBar = (value: number, maxValue: number, color: 'green' | 'blue' | 'magenta' | 'cyan') => {
+    const percentage = Math.min(100, (value / maxValue) * 100);
+    const animatedPercentage = (percentage * animationStep) / 100;
+    const barLength = Math.floor((animatedPercentage / 100) * 30);
+    
+    const colorMap = {
+      green: chalk.hex('#00C853'), // M3 Green
+      blue: chalk.hex('#2979FF'),  // M3 Blue
+      magenta: chalk.hex('#D500F9'), // M3 Magenta
+      cyan: chalk.hex('#00E5FF'),   // M3 Cyan
+    };
+    
+    return barLength > 0 ? colorMap[color]('█'.repeat(barLength)) : '';
+  };
+
+  // Get max commits for scaling
+  const maxHourlyCommits = Math.max(...data.activityByHour.map(h => h.commits), 1);
+
   return (
     <Box flexDirection="column" height="100%">
-      <Header title="📈 Activity Dashboard" subtitle="Press 1-4 to switch screens" />
+      {/* ADHD-Friendly: Clear header with focus indicator */}
+      <Box marginBottom={1}>
+        <Gradient name="rainbow">
+          <Text bold>🚀 Activity Dashboard</Text>
+        </Gradient>
+        <Text dimColor> Press 1-4 to switch screens • Tab to cycle sections</Text>
+      </Box>
 
+      {/* ADHD-Friendly: Quick Glance Summary Box */}
+      <Box borderStyle="double" borderColor="cyan" padding={1} marginBottom={1}>
+        <Box flexDirection="column" gap={0}>
+          <Text bold color="cyan">⚡ Quick Glance</Text>
+          <Box marginTop={0}>
+            <Text>📦 {formatNumber(totalCommits)} commits •</Text>
+            <Text color="green"> +{formatNumber(totalInsertions)}</Text>
+            <Text color="red"> -{formatNumber(totalDeletions)}</Text>
+            <Text> • 👥 {data.topAuthors.length} contributors</Text>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Top row: Overview and Activity */}
       <Box flexDirection="row" gap={2}>
-        <BoxBorder title="Overview" borderColor="cyan" width="50%">
-          <Box flexDirection="column">
-            <Text>
-              <Text bold>Total Commits:</Text> {formatNumber(totalCommits)}
-            </Text>
-            <Text>
-              <Text bold color="green">
-                Insertions:
-              </Text>{' '}
-              +{formatNumber(totalInsertions)}
-            </Text>
-            <Text>
-              <Text bold color="red">
-                Deletions:
-              </Text>{' '}
-              -{formatNumber(totalDeletions)}
-            </Text>
-            <Text>
-              <Text bold>Contributors:</Text> {data.topAuthors.length}
-            </Text>
+        <BoxBorder 
+          title={focusSection === 'overview' ? '▶️ 📊 Overview' : '📊 Overview'} 
+          borderColor={focusSection === 'overview' ? 'magentaBright' : 'magenta'} 
+          width="50%"
+        >
+          <Box flexDirection="column" gap={1}>
+            <Box>
+              <Text bold color="cyan">💫 Commits: </Text>
+              <Text color="magenta" bold>{formatNumber(totalCommits)}</Text>
+            </Box>
+            <Box>
+              <Text bold color="greenBright">✨ Added: </Text>
+              <Text color="green" bold>+{formatNumber(totalInsertions)}</Text>
+            </Box>
+            <Box>
+              <Text bold color="redBright">🔥 Removed: </Text>
+              <Text color="red" bold>-{formatNumber(totalDeletions)}</Text>
+            </Box>
+            <Box>
+              <Text bold color="yellow">👥 People: </Text>
+              <Text color="yellowBright" bold>{data.topAuthors.length}</Text>
+            </Box>
           </Box>
         </BoxBorder>
 
-        <BoxBorder title="Activity by Hour" borderColor="blue" width="50%">
-          <Box flexDirection="column">
+        <BoxBorder 
+          title={focusSection === 'activity' ? '▶️ ⏰ Activity by Hour' : '⏰ Activity by Hour'} 
+          borderColor={focusSection === 'activity' ? 'cyanBright' : 'cyan'} 
+          width="50%"
+        >
+          <Box flexDirection="column" gap={0}>
             {data.activityByHour.slice(0, 8).map(({ hour, commits }) => (
-              <Text key={hour}>
-                <Text dimColor>{hour.toString().padStart(2, '0')}:00</Text> {'█'.repeat(Math.max(1, Math.floor(commits / 10)))} {commits}
-              </Text>
-            ))}
-          </Box>
-        </BoxBorder>
-      </Box>
-
-      <Box marginTop={1}>
-        <BoxBorder title="Top Contributors" borderColor="green" width="100%">
-          <Box flexDirection="column">
-            {data.topAuthors.slice(0, 10).map((author, index) => (
-              <Box key={index}>
-                <Box width="3%">
-                  <Text color="yellow">{index + 1}.</Text>
-                </Box>
-                <Box width="40%">
-                  <Text>{author.author}</Text>
-                </Box>
+              <Box key={hour} marginBottom={0}>
                 <Box width="15%">
-                  <Text dimColor>{author.commits} commits</Text>
+                  <Text color="blueBright" bold>{hour.toString().padStart(2, '0')}:00</Text>
                 </Box>
-                <Box width="21%">
-                  <Text color="green">+{formatNumber(author.insertions)}</Text>
+                <Box width="60%">
+                  {createColorBar(commits, maxHourlyCommits, 'cyan')}
                 </Box>
-                <Box width="21%">
-                  <Text color="red">-{formatNumber(author.deletions)}</Text>
+                <Box width="25%">
+                  <Text color="cyan"> {commits}</Text>
                 </Box>
               </Box>
             ))}
@@ -120,30 +174,95 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
         </BoxBorder>
       </Box>
 
-      <Box marginTop={1}>
-        <BoxBorder title="File Hotspots (Most Changed)" borderColor="yellow" width="100%">
-          <Box flexDirection="column">
-            {hotspots.slice(0, 10).map((file, index) => (
-              <Box key={index}>
-                <Box width="3%">
-                  <Text color="yellow">{index + 1}.</Text>
+      {/* ADHD-Friendly: Visual separator */}
+      <Box marginY={1}>
+        <Text dimColor>{'─'.repeat(80)}</Text>
+      </Box>
+
+      {/* Top Contributors section with focus */}
+      <Box marginBottom={1}>
+        <BoxBorder 
+          title={focusSection === 'contributors' ? '▶️ 🏆 Top Contributors (Top 5)' : '🏆 Top Contributors (Top 5)'} 
+          borderColor={focusSection === 'contributors' ? 'yellowBright' : 'yellow'} 
+          width="100%"
+        >
+          <Box flexDirection="column" gap={0}>
+            {data.topAuthors.slice(0, 5).map((author, index) => {
+              const rankColor = index < 3 ? chalk.hex(MEDAL_COLORS[index]) : chalk.yellow;
+              const medals = ['🥇', '🥈', '🥉'];
+              const medal = index < 3 ? medals[index] : '🎖️';
+              
+              return (
+                <Box key={index} marginBottom={0}>
+                  <Box width="5%">
+                    <Text>{medal}</Text>
+                  </Box>
+                  <Box width="3%">
+                    <Text>{rankColor(String(index + 1))}</Text>
+                  </Box>
+                  <Box width="38%">
+                    <Text bold color="white">{author.author}</Text>
+                  </Box>
+                  <Box width="16%">
+                    <Text color="gray">{author.commits} commits</Text>
+                  </Box>
+                  <Box width="19%">
+                    <Text color="greenBright">+{formatNumber(author.insertions)}</Text>
+                  </Box>
+                  <Box width="19%">
+                    <Text color="redBright">-{formatNumber(author.deletions)}</Text>
+                  </Box>
                 </Box>
-                <Box width="70%">
-                  <Text>{file.path}</Text>
-                </Box>
-                <Box width="15%">
-                  <Text dimColor>{file.changes} changes</Text>
-                </Box>
-                <Box width="12%">
-                  <Text dimColor>{file.authors} authors</Text>
-                </Box>
-              </Box>
-            ))}
+              );
+            })}
           </Box>
         </BoxBorder>
       </Box>
 
-      <StatusBar left="Dashboard" right="1-4 Switch Screen • ? Help • q Quit" />
+      {/* File Hotspots section with focus */}
+      <Box>
+        <BoxBorder 
+          title={focusSection === 'hotspots' ? '▶️ 🔥 File Hotspots (Top 5 Most Changed)' : '🔥 File Hotspots (Top 5 Most Changed)'} 
+          borderColor={focusSection === 'hotspots' ? 'redBright' : 'red'} 
+          width="100%"
+        >
+          <Box flexDirection="column" gap={0}>
+            {hotspots.slice(0, 5).map((file, index) => {
+              const heatColors = [
+                chalk.hex('#FF1744'), // Hot red
+                chalk.hex('#FF5722'), // Deep orange
+                chalk.hex('#FF9800'), // Orange
+                chalk.hex('#FFC107'), // Amber
+                chalk.hex('#FFEB3B'), // Yellow
+              ];
+              const colorIndex = Math.min(index, heatColors.length - 1);
+              
+              return (
+                <Box key={index} marginBottom={0}>
+                  <Box width="4%">
+                    <Text>{heatColors[colorIndex](`${index + 1}.`)}</Text>
+                  </Box>
+                  <Box width="68%">
+                    <Text color="white">{file.path}</Text>
+                  </Box>
+                  <Box width="16%">
+                    <Text color="magenta">{file.changes} changes</Text>
+                  </Box>
+                  <Box width="12%">
+                    <Text color="cyan">{file.authors} authors</Text>
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
+        </BoxBorder>
+      </Box>
+
+      {/* ADHD-Friendly: Prominent keyboard shortcuts */}
+      <StatusBar 
+        left={chalk.hex('#BB86FC')('🎨 Dashboard • Tab: ' + focusSection.toUpperCase())} 
+        right="1️⃣ Timeline • 2️⃣ Branches • 3️⃣ Files • 4️⃣ Dashboard • ❓ Help • 🚪 q" 
+      />
     </Box>
   );
 }

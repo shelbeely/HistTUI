@@ -6,10 +6,10 @@
 
 ## ✨ Features
 
+- **📈 Activity Dashboard** - First screen on launch! Visualize repository activity, top contributors, and commit patterns at a glance.
 - **📊 Commit Timeline** - Browse commits with vim-style navigation (j/k). Filter by author, date, path, or message.
 - **💬 Commit Details** - View full commit info, file changes, and diffs in a beautiful split view.
 - **🌿 Branch & Tag Explorer** - Navigate all branches and tags with clear indicators for current/remote branches.
-- **📈 Activity Dashboard** - Visualize repository activity, top contributors, and commit patterns.
 - **🔥 File Hotspots** - Identify most-changed files and potential maintenance risks.
 - **⚡ Blazing Fast** - Native Bun SQLite indexing means instant searches, even in massive repositories.
 - **🔌 Plugin-Ready** - Extensible architecture for custom dashboards and screens.
@@ -40,7 +40,10 @@ histtui /path/to/repo
 
 - **j/k or ↑↓** - Navigate lists
 - **Enter** - View details
-- **1-4** - Switch between screens (Timeline, Branches, Files, Dashboards)
+- **1** - Timeline screen
+- **2** - Branches & Tags
+- **3** - File Tree
+- **4** - Activity Dashboard (default)
 - **/** - Search
 - **?** - Toggle help
 - **q** - Quit
@@ -64,8 +67,8 @@ histtui https://github.com/user/repo
 ```
 
 **Step 3:** Verify it's working
-- App should display "Cloning..." then show commit timeline
-- Press `j`/`k` to navigate
+- App should display "Cloning..." then show Activity Dashboard (repository statistics and overview)
+- Press `j`/`k` to navigate, press `1` to view Timeline
 - Press `q` to quit
 
 **Common Issues:**
@@ -109,7 +112,7 @@ histtui https://github.com/user/repo --max-commits 5000
 | `1` | Commit Timeline |
 | `2` | Branches & Tags |
 | `3` | File Tree |
-| `4` | Dashboards |
+| `4` | Activity Dashboard (default) |
 
 ### Navigation (Vim-style)
 | Key | Action |
@@ -217,7 +220,8 @@ HistTUI is built with clean layer separation:
 
 6. **UI Layer** (`src/components/`)
    - React/Ink components
-   - Screens: Timeline, CommitDetail, Branches, ActivityDashboard
+   - Screens: Timeline, CommitDetail, Branches
+   - Dashboards: ActivityDashboard (default first screen), others
    - Common components: BoxBorder, StatusBar, ListItem, etc.
    - Custom hooks: useKeyboard, useListNavigation, useSearch
 
