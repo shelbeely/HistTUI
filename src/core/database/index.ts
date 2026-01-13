@@ -2,18 +2,18 @@
  * SQLite database for indexing git history
  */
 
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import { Commit, Branch, Tag, FileChange, DashboardData, OwnershipData } from '../../types';
 import { logger } from '../../utils/logger';
 import { format } from 'date-fns';
 
 export class GitDatabase {
-  private db: Database.Database;
+  private db: Database;
 
   constructor(dbPath: string) {
     this.db = new Database(dbPath);
-    this.db.pragma('journal_mode = WAL');
-    this.db.pragma('synchronous = NORMAL');
+    this.db.exec('PRAGMA journal_mode = WAL');
+    this.db.exec('PRAGMA synchronous = NORMAL');
     this.initSchema();
   }
 
@@ -500,7 +500,7 @@ export class GitDatabase {
   /**
    * Get database instance for plugins
    */
-  getDatabase(): Database.Database {
+  getDatabase(): Database {
     return this.db;
   }
 

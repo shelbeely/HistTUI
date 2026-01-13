@@ -2,15 +2,15 @@
  * TimeDatabase - SQLite database for time tracking
  */
 
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import type { CodingSession, DailySummary, FileActivity } from '../../types/index.js';
 
 export class TimeDatabase {
-  private db: Database.Database;
+  private db: Database;
 
   constructor(dbPath: string) {
     this.db = new Database(dbPath);
-    this.db.pragma('journal_mode = WAL');
+    this.db.exec('PRAGMA journal_mode = WAL');
     this.initializeSchema();
   }
 
