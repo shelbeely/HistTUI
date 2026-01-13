@@ -3,6 +3,7 @@
     "target": "ES2020",
     "module": "ESNext",
     "lib": ["ES2020"],
+    "types": ["bun-types"],
     "jsx": "react",
     "outDir": "./dist",
     "rootDir": "./src",

@@ -5,7 +5,7 @@
  * Perfect for ADHD developers who benefit from contextual assistance.
  */
 
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import { EventEmitter } from 'events';
 
 export interface Memory {
@@ -53,7 +53,7 @@ export interface MemorySuggestion {
 }
 
 export class MemorySystem extends EventEmitter {
-  private db: Database.Database;
+  private db: Database;
   private learningEnabled: boolean = true;
   private shortTermMemory: Map<string, Memory> = new Map();
 
