@@ -27,9 +27,10 @@ import { config } from '../config';
 import { getRepoName, normalizeRepoUrl } from '../utils';
 import { logger } from '../utils/logger';
 import { createInkUITheme } from '../config/inkui-theme';
+import { RepoInputScreen } from './common/RepoInputScreen';
 
 interface AppProps {
-  repoUrl: string;
+  repoUrl?: string;
   skipUpdate?: boolean;
 }
 
@@ -113,8 +114,10 @@ function LoadingScreen({ progress }: { progress: IndexProgress }) {
   );
 }
 
-export function App({ repoUrl, skipUpdate = false }: AppProps) {
+export function App({ repoUrl: initialRepoUrl, skipUpdate = false }: AppProps) {
   const [showSetup, setShowSetup] = useState(config.isFirstLaunch());
+  const [repoUrl, setRepoUrl] = useState<string | undefined>(initialRepoUrl);
+  const [showRepoInput, setShowRepoInput] = useState(!initialRepoUrl);
   const [indexProgress, setIndexProgress] = useState<IndexProgress | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -122,6 +125,11 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
   const [database, setDatabase] = useState<GitDatabase | null>(null);
   const [pluginManager, setPluginManager] = useState<PluginManager | null>(null);
   const [repoName, setRepoName] = useState<string>('');
+
+  const handleRepoSubmit = (url: string) => {
+    setRepoUrl(url);
+    setShowRepoInput(false);
+  };
 
   const handleSetupComplete = (setupConfig: SetupConfig) => {
     // Save LLM configuration
@@ -153,10 +161,13 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
   };
 
   useEffect(() => {
-    initializeApp();
-  }, []);
+    if (repoUrl && !showSetup) {
+      initializeApp();
+    }
+  }, [repoUrl, showSetup]);
 
   async function initializeApp() {
+    if (!repoUrl) return;
     try {
       const normalizedUrl = normalizeRepoUrl(repoUrl);
       const name = getRepoName(normalizedUrl);
@@ -251,7 +262,16 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
 
   const themeName = typeof config.get().ui.theme === 'string' ? config.get().ui.theme : 'default';
 
-  // Show setup wizard on first launch
+  // Show repository input if no URL provided
+  if (showRepoInput) {
+    return (
+      <ThemeProvider theme={createInkUITheme(themeName)}>
+        <RepoInputScreen onSubmit={handleRepoSubmit} />
+      </ThemeProvider>
+    );
+  }
+
+  // Show setup wizard on first launch (after repo input)
   if (showSetup) {
     return (
       <ThemeProvider theme={createInkUITheme(themeName)}>

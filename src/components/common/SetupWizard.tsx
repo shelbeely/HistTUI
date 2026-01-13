@@ -133,17 +133,30 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
             <Text>
               Let's configure HistTUI with generative AI capabilities powered by AG-UI.
             </Text>
-            <Text dimColor>
-              You can configure:
-            </Text>
+            
+            <Box marginTop={1}>
+              <Text bold color="cyan">✨ What you'll get:</Text>
+            </Box>
+            <Box marginLeft={2} flexDirection="column">
+              <Text>• 🤖 AI-powered insights and code analysis</Text>
+              <Text>• 💬 Interactive generative UI with real-time streaming</Text>
+              <Text>• 🎨 Beautiful terminal interface with @inkjs/ui</Text>
+              <Text>• 📊 Dynamic visualizations and recommendations</Text>
+              <Text>• 🔍 Intelligent search and navigation</Text>
+            </Box>
+            
+            <Box marginTop={1}>
+              <Text dimColor bold>Configure:</Text>
+            </Box>
             <Box marginLeft={2} flexDirection="column">
               <Text>• LLM Provider (OpenAI, Anthropic, OpenRouter, Ollama)</Text>
               <Text>• API Keys for cloud providers</Text>
+              <Text>• Model selection (OpenRouter: 12+ models)</Text>
               <Text>• AG-UI Agent endpoint (optional)</Text>
             </Box>
             <Box marginTop={1}>
               <Alert variant="info">
-                You can skip this setup and configure later in settings.
+                You can skip this setup and configure later with: histtui config
               </Alert>
             </Box>
           </Box>
