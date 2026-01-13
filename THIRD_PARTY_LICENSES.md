@@ -6,6 +6,7 @@ HistTUI uses code patterns from MIT-licensed open-source projects. This document
 
 We're grateful to these amazing developers who shared their work:
 
+- **Vadim Demedes** - Created [@inkjs/ui](https://github.com/vadimdemedes/ink-ui), providing comprehensive UI components for terminal applications
 - **Sindre Sorhus** - Created [emoj](https://github.com/sindresorhus/emoj), which inspired our fuzzy search interaction
 - **Julien Deniau** - Created [changelog-view](https://github.com/jdeniau/changelog-view), which inspired our changelog parsing
 - **Nano Collective** - Created [nanocoder](https://github.com/Nano-Collective/nanocoder), which inspired our AI Assistant plugin
@@ -15,7 +16,32 @@ These projects use MIT, MIT with Attribution, and Apache 2.0 licenses, allowing 
 
 ## Projects Used
 
-### 1. emoj by Sindre Sorhus
+### 1. @inkjs/ui by Vadim Demedes
+
+**What we use:** Complete UI component library for Ink-based terminal applications  
+**Repository:** https://github.com/vadimdemedes/ink-ui  
+**License:** MIT License  
+**Files influenced:** 
+- `src/components/App.tsx` (ThemeProvider wrapper)
+- `src/components/common/UI.tsx` (Badge, Alert, StatusMessage exports)
+- `src/components/common/Loading.tsx` (Spinner component)
+- `src/components/common/ErrorDisplay.tsx` (Alert component)
+- `src/components/screens/FuzzySearchScreen.tsx` (TextInput component)
+- `src/plugins/ai-assistant/screens/AIAssistantScreen.tsx` (TextInput component)
+- `src/config/inkui-theme.ts` (Theme customization)
+
+**Components used:**
+- TextInput - Enhanced text input with autocomplete support
+- Spinner - Beautiful loading indicators (dots, line, arc, bounce)
+- Badge - Status badges for labels and tags
+- StatusMessage - Informative status messages with borders
+- Alert - Attention-grabbing alerts
+- ProgressBar - Visual progress tracking (available for plugins)
+- Select/MultiSelect - Interactive menus (available for plugins)
+- ConfirmInput - Y/n prompts (available for plugins)
+- UnorderedList/OrderedList - Formatted lists (available for plugins)
+
+### 2. emoj by Sindre Sorhus
 
 **What we learned:** Interactive search with live filtering, debounced input, number shortcuts  
 **Repository:** https://github.com/sindresorhus/emoj  
@@ -29,7 +55,7 @@ These projects use MIT, MIT with Attribution, and Apache 2.0 licenses, allowing 
 - Number shortcuts (1-9) for quick selection
 - Escape key to exit search mode
 
-### 2. changelog-view by Julien Deniau
+### 3. changelog-view by Julien Deniau
 
 **What we learned:** Parsing markdown changelogs to extract semantic versions  
 **Repository:** https://github.com/jdeniau/changelog-view  
@@ -60,15 +86,31 @@ When working with this codebase, you MUST:
 **Step 1: Identify attributed files**
 ```bash
 # Find files with third-party attribution
-grep -rn "Inspired by\|MIT License" src/ --include="*.ts" --include="*.tsx"
+grep -rn "Inspired by\|MIT License\|@inkjs/ui" src/ --include="*.ts" --include="*.tsx"
 
-# Expected output:
-# src/components/screens/FuzzySearchScreen.tsx:4: * Search interaction patterns inspired by emoj by Sindre Sorhus (MIT License)
-# src/utils/changelog.ts:4: * Inspired by changelog-view by jdeniau (MIT License)
-# src/components/screens/ChangelogViewerScreen.tsx:4: * Changelog parsing inspired by changelog-view by jdeniau (MIT License)
+# Expected output includes:
+# - Files using @inkjs/ui components (import statements from '@inkjs/ui')
+# - src/components/screens/FuzzySearchScreen.tsx: emoj patterns
+# - src/utils/changelog.ts: changelog-view patterns
+# - src/components/screens/ChangelogViewerScreen.tsx: changelog-view patterns
+# - src/plugins/ai-assistant/*: nanocoder and vibe-kanban patterns
 ```
 
-**Step 2: Verify attribution headers exist**
+**Step 2: Verify @inkjs/ui usage is documented**
+```bash
+# Check for @inkjs/ui imports (these are MIT-licensed dependencies)
+grep -r "from '@inkjs/ui'" src/ --include="*.ts" --include="*.tsx"
+
+# Files using @inkjs/ui (no header needed - npm dependency attribution in package.json):
+# - src/components/App.tsx (ThemeProvider)
+# - src/components/common/UI.tsx (Badge, Alert, StatusMessage)
+# - src/components/common/Loading.tsx (Spinner)
+# - src/components/common/ErrorDisplay.tsx (Alert)
+# - src/components/screens/FuzzySearchScreen.tsx (TextInput)
+# - src/plugins/ai-assistant/screens/AIAssistantScreen.tsx (TextInput)
+```
+
+**Step 3: Verify attribution headers exist (for pattern-inspired files only)**
 ```bash
 # Check FuzzySearchScreen header
 head -10 src/components/screens/FuzzySearchScreen.tsx
@@ -121,16 +163,34 @@ import React, { useState, useEffect } from 'react';
 
 | File | Attribution Required | Why |
 |------|---------------------|-----|
+| `package.json` | ✅ YES | Lists @inkjs/ui as MIT dependency |
+| `THIRD_PARTY_LICENSES.md` | ✅ YES | Full @inkjs/ui license text |
+| `README.md` (Attribution section) | ✅ YES | Credits @inkjs/ui by Vadim Demedes |
 | `src/components/screens/FuzzySearchScreen.tsx` | ✅ YES | Uses emoj interaction patterns |
 | `src/utils/changelog.ts` | ✅ YES | Uses changelog-view parsing logic |
 | `src/components/screens/ChangelogViewerScreen.tsx` | ✅ YES | Uses changelog-view patterns |
-| `THIRD_PARTY_LICENSES.md` | ✅ YES | Legal requirement - full license text |
-| `README.md` (Attribution section) | ✅ YES | User-facing attribution |
+
+**Note:** Files importing from '@inkjs/ui' are covered by npm dependency attribution (package.json + THIRD_PARTY_LICENSES.md). No additional file headers needed for library usage.
 
 **Step 5: When modifying attributed files**
 
 ```typescript
-// ✅ CORRECT: Add your code, keep attribution
+// ✅ CORRECT: Using @inkjs/ui components (npm dependency - no header needed)
+import { Spinner, Badge, Alert } from '@inkjs/ui';
+import { Box, Text } from 'ink';
+
+function MyComponent() {
+  return (
+    <Box>
+      <Spinner type="dots" label="Loading..." />
+      <Badge variant="success">Done</Badge>
+    </Box>
+  );
+}
+```
+
+```typescript
+// ✅ CORRECT: Pattern-inspired file keeps attribution header
 /**
  * Fuzzy Search Screen
  * Interactive fuzzy search across commits
@@ -140,6 +200,7 @@ import React, { useState, useEffect } from 'react';
  */
 
 // Your new imports
+import { TextInput } from '@inkjs/ui'; // This is fine - separate dependency
 import { newFeature } from './new-module';
 
 // Original imports (can be rearranged)
@@ -163,7 +224,15 @@ import React, { useState, useEffect } from 'react';
 Before committing changes to attributed files:
 
 ```bash
-# Verify FuzzySearchScreen attribution
+# Verify @inkjs/ui is in package.json
+grep -c "@inkjs/ui" package.json
+# Should return: 1 or more
+
+# Verify @inkjs/ui license documentation exists
+grep -c "vadimdemedes/ink-ui\|Vadim Demedes" THIRD_PARTY_LICENSES.md README.md
+# Should return: 2+ (documented in both files)
+
+# Verify FuzzySearchScreen attribution (emoj patterns)
 grep -A 3 "Fuzzy Search Screen" src/components/screens/FuzzySearchScreen.tsx | grep "emoj"
 # Must return: "Search interaction patterns inspired by emoj by Sindre Sorhus (MIT License)"
 
@@ -198,25 +267,31 @@ git checkout [commit-hash] -- src/components/screens/FuzzySearchScreen.tsx
 If you integrate new third-party code:
 
 ```bash
-# 1. Check license
+# 1. Check license (for npm packages)
 npm info [package-name] license
+bun pm ls [package-name] # Check installed package license
+
+# For GitHub projects
 curl https://raw.githubusercontent.com/[org]/[repo]/main/LICENSE
 
 # 2. Only use compatible licenses:
 # ✅ MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0
 # ❌ GPL-2.0, GPL-3.0, AGPL-3.0 (copyleft - incompatible)
 
-# 3. Add to THIRD_PARTY_LICENSES.md:
-# - Project name and author
-# - Repository URL
-# - License type
-# - Full license text
-# - Files influenced
+# 3. For npm dependencies (like @inkjs/ui):
+#    - Add to package.json (via bun install)
+#    - Add to THIRD_PARTY_LICENSES.md (full license text)
+#    - Add to README.md attribution section
+#    - No file headers needed (npm dependency attribution sufficient)
 
-# 4. Add header to source files:
-# See Step 3 format
+# 4. For pattern-inspired code (like emoj, changelog-view):
+#    - Add to THIRD_PARTY_LICENSES.md
+#    - Add to README.md attribution section
+#    - Add JSDoc header to each influenced file (see Step 3 format)
 
-# 5. Update README.md attribution section
+# 5. Usage distinction:
+#    - npm dependency (import from package) → package.json + docs only
+#    - Pattern inspiration (learned from code) → file headers + docs
 ```
 
 **Step 9: License compatibility matrix**
@@ -239,10 +314,9 @@ curl https://raw.githubusercontent.com/[org]/[repo]/main/LICENSE
 - Can result in: Legal action, DMCA takedowns, loss of license rights
 
 **What counts as attribution:**
-- ✅ File header comments with author name, project link, license type
-- ✅ THIRD_PARTY_LICENSES.md with full license text
-- ✅ README.md mention of dependencies
-- ❌ Just having the license file in node_modules (not sufficient)
+- ✅ For npm dependencies: package.json entry + THIRD_PARTY_LICENSES.md + README.md mention
+- ✅ For pattern-inspired code: File header comments + THIRD_PARTY_LICENSES.md + README.md mention
+- ❌ Just having the license file in node_modules (not sufficient for either case)
 
 **Best practices:**
 1. Over-attribute rather than under-attribute
@@ -257,18 +331,24 @@ Before any commit that modifies attributed files:
 ```bash
 # Run this checklist
 echo "Attribution Verification Checklist:"
-echo "1. File headers intact?"
+
+echo "1. npm dependencies documented?"
+grep -c "@inkjs/ui" package.json THIRD_PARTY_LICENSES.md
+# Should return: 2 (in package.json and license doc)
+
+echo "2. Pattern-inspired file headers intact?"
 grep -c "Inspired by\|MIT License" src/components/screens/FuzzySearchScreen.tsx src/utils/changelog.ts src/components/screens/ChangelogViewerScreen.tsx
 # Should return: 3 (one per file)
 
-echo "2. THIRD_PARTY_LICENSES.md exists?"
+echo "3. THIRD_PARTY_LICENSES.md exists?"
 test -f THIRD_PARTY_LICENSES.md && echo "✅ Yes" || echo "❌ NO - RESTORE IT"
 
-echo "3. README attribution section exists?"
+echo "4. README attribution section exists?"
 grep -c "Code Attribution" README.md
 # Should return: 1 or more
 
-echo "4. All required text present?"
+echo "5. All required attributions present?"
+grep -c "Vadim Demedes" README.md THIRD_PARTY_LICENSES.md
 grep -c "Sindre Sorhus" README.md THIRD_PARTY_LICENSES.md
 grep -c "Julien Deniau" README.md THIRD_PARTY_LICENSES.md
 # Each should return: 2 (once in README, once in THIRD_PARTY_LICENSES)
@@ -341,7 +421,7 @@ Copyright (c) 2026 HistTUI Contributors
 
 Licensed under the ISC License (see LICENSE file in the root directory).
 
-### 3. nanocoder by Nano Collective
+### 4. nanocoder by Nano Collective
 
 **What we learned:** AI-powered coding assistant patterns, MCP integration, context-aware assistance  
 **Repository:** https://github.com/Nano-Collective/nanocoder  
@@ -361,7 +441,7 @@ Licensed under the ISC License (see LICENSE file in the root directory).
 **Attribution Notice:**
 This plugin is **prominently inspired by nanocoder** by Nano Collective. We have implemented our own version following their architectural patterns while adapting them for HistTUI's git history context.
 
-### 4. vibe-kanban by BloopAI
+### 5. vibe-kanban by BloopAI
 
 **What we learned:** Task orchestration, git worktree isolation, coding agent workflows  
 **Repository:** https://github.com/BloopAI/vibe-kanban  
@@ -381,6 +461,37 @@ This plugin is **prominently inspired by nanocoder** by Nano Collective. We have
 ---
 
 ## Full License Texts
+
+### MIT License (@inkjs/ui)
+
+**Repository:** https://github.com/vadimdemedes/ink-ui  
+**License:** MIT License  
+**Usage:** UI component library (TextInput, Spinner, Badge, Alert, StatusMessage, etc.)  
+**Files influenced:** `src/components/`, `src/config/inkui-theme.ts`
+
+```
+MIT License
+
+Copyright (c) Vadim Demedes <vdemedes@gmail.com> (github.com/vadimdemedes)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
 ### MIT License (emoj, changelog-view)
 

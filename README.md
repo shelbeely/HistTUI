@@ -168,6 +168,7 @@ HistTUI is built with clean layer separation:
        │
 ┌──────▼───────────────────────────────┐
 │      UI Components (Ink/React)       │
+│  Built with @inkjs/ui + Custom       │
 │  • Timeline  • Commit Detail         │
 │  • Branches  • Dashboards            │
 └──────────────────────────────────────┘
@@ -185,7 +186,31 @@ HistTUI is built with clean layer separation:
 
 **Async-Friendly:** Large repository support with progress indicators. UI never freezes.
 
+**UI Components:** Built with [Ink](https://github.com/vadimdemedes/ink) (React for CLIs) and [@inkjs/ui](https://github.com/vadimdemedes/ink-ui) (comprehensive component library) for a polished terminal experience.
+
 **Extension Points:** Plugin API allows adding custom dashboards, screens, and data indexers.
+
+### 🎨 UI Components
+
+HistTUI uses **[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** - a comprehensive collection of customizable UI components for terminal interfaces. All components are themed to match HistTUI's neurodiversity-friendly color schemes.
+
+**Available Components:**
+
+- **TextInput** - Enhanced text input with autocomplete support and placeholder text
+- **Spinner** - Beautiful loading indicators (dots, line, arc, bounce styles)
+- **ProgressBar** - Visual progress tracking for long operations
+- **Badge** - Status badges and labels (success, error, warning, info)
+- **StatusMessage** - Informative bordered status messages
+- **Alert** - Bold attention-grabbing alerts for critical information
+- **Select & MultiSelect** - Interactive selection menus with keyboard navigation
+- **ConfirmInput** - Y/n confirmation prompts for user actions
+- **UnorderedList & OrderedList** - Formatted lists with custom markers
+
+**Benefits:**
+- **Consistent Design** - All components follow the same visual language
+- **Themed** - Automatically adapt to HistTUI's color schemes (default, high-contrast, dyslexia-friendly)
+- **Accessible** - High contrast ratios and clear visual feedback
+- **Keyboard-First** - Full keyboard navigation support
 
 <details>
 <summary><strong>For AI Agents / LLMs - Detailed Architecture</strong></summary>
@@ -220,9 +245,11 @@ HistTUI is built with clean layer separation:
 
 6. **UI Layer** (`src/components/`)
    - React/Ink components
+   - Uses @inkjs/ui component library (v2.0.0)
+   - Theme provider in `src/config/inkui-theme.ts` maps HistTUI themes to @inkjs/ui
    - Screens: Timeline, CommitDetail, Branches
    - Dashboards: ActivityDashboard (default first screen), others
-   - Common components: BoxBorder, StatusBar, ListItem, etc.
+   - Common components: BoxBorder, StatusBar, ListItem, Badge, Alert, etc.
    - Custom hooks: useKeyboard, useListNavigation, useSearch
 
 7. **Plugin System** (`src/plugins/`)
@@ -259,6 +286,60 @@ export default {
     });
   },
 };
+```
+
+**Using @inkjs/ui Components:**
+
+HistTUI integrates [@inkjs/ui](https://github.com/vadimdemedes/ink-ui) for consistent UI components. Import from '@inkjs/ui':
+
+```typescript
+import { TextInput, Spinner, Badge, Alert, StatusMessage } from '@inkjs/ui';
+import { ThemeProvider } from '@inkjs/ui';
+import { createInkUITheme } from './config/inkui-theme.js';
+
+// Components are themed automatically via ThemeProvider in App.tsx
+function MyComponent() {
+  return (
+    <>
+      <Spinner type="dots" label="Loading..." />
+      <Badge variant="success">Complete</Badge>
+      <Alert variant="info" title="Notice">
+        This is an informational alert
+      </Alert>
+      <TextInput 
+        placeholder="Search commits..." 
+        value={value}
+        onChange={setValue}
+      />
+    </>
+  );
+}
+```
+
+**Available @inkjs/ui components:**
+- `<TextInput>` - Text input with autocomplete
+- `<Spinner type="dots|line|arc|bounce">` - Loading indicators
+- `<ProgressBar value={0.5}>` - Progress tracking
+- `<Badge variant="success|error|warning|info">` - Status badges
+- `<StatusMessage variant="...">` - Bordered messages
+- `<Alert variant="..." title="...">` - Bold alerts
+- `<Select>` / `<MultiSelect>` - Selection menus
+- `<ConfirmInput>` - Y/n prompts
+- `<UnorderedList>` / `<OrderedList>` - Lists
+
+**Theme Integration:**
+
+All @inkjs/ui components are themed via `src/config/inkui-theme.ts`:
+```typescript
+import { createInkUITheme } from './config/inkui-theme.js';
+
+// Theme maps HistTUI colors to @inkjs/ui components:
+// - primary → spinner/badges/highlights
+// - success/error/warning/info → status variants
+// - foreground/background → text and containers
+// - border → input borders and boxes
+
+const theme = createInkUITheme('default'); // or 'high-contrast', 'dyslexia-friendly'
 ```
 
 </details>
@@ -368,6 +449,12 @@ HistTUI draws inspiration from amazing TUI tools:
 ### Code Attribution
 
 HistTUI uses code patterns from these open-source projects with proper attribution:
+
+**[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** by Vadim Demedes (MIT License)
+- Comprehensive UI component library for Ink-based terminal applications
+- Components: TextInput, Spinner, ProgressBar, Badge, Alert, Select, StatusMessage
+- Custom theming integration for neurodiversity-friendly color schemes
+- Used throughout: `src/components/`, themed via `src/config/inkui-theme.ts`
 
 **[emoj](https://github.com/sindresorhus/emoj)** by Sindre Sorhus (MIT License)
 - Interactive fuzzy search patterns
