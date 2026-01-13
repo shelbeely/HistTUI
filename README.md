@@ -11,7 +11,7 @@
 - **🌿 Branch & Tag Explorer** - Navigate all branches and tags with clear indicators for current/remote branches.
 - **📈 Activity Dashboard** - Visualize repository activity, top contributors, and commit patterns.
 - **🔥 File Hotspots** - Identify most-changed files and potential maintenance risks.
-- **⚡ Blazing Fast** - SQLite indexing means instant searches, even in massive repositories.
+- **⚡ Blazing Fast** - Native Bun SQLite indexing means instant searches, even in massive repositories.
 - **🔌 Plugin-Ready** - Extensible architecture for custom dashboards and screens.
 - **⌨️ Keyboard-First** - Vim-style navigation (j/k/g/G), quick shortcuts (1-4 for screens), and discoverable help (?).
 - **🔒 Read-Only Safety** - Never writes to your repository. Pure exploration mode.
@@ -22,11 +22,11 @@
 ### For Humans
 
 ```bash
-# Run directly with npx (no install needed!)
-npx histtui https://github.com/user/repo
+# Run directly with bunx (no install needed!)
+bunx histtui https://github.com/user/repo
 
 # Or install globally
-npm install -g histtui
+bun install -g histtui
 histtui https://github.com/user/repo
 
 # Use a local repository
@@ -48,14 +48,14 @@ histtui /path/to/repo
 <details>
 <summary><strong>For AI Agents / LLMs</strong></summary>
 
-**Step 0:** Verify Node.js installation
+**Step 0:** Verify Bun installation
 ```bash
-node --version  # Must be 18.0.0 or higher
+bun --version  # Must be 1.3.5 or higher
 ```
 
 **Step 1:** Install HistTUI
 ```bash
-npm install -g histtui
+bun install -g histtui
 ```
 
 **Step 2:** Run with a repository URL
@@ -178,6 +178,8 @@ HistTUI is built with clean layer separation:
 
 **Read-Only by Design:** All git operations are read-only (log, show, diff). No commits, pushes, or modifications.
 
+**Native Bun Support:** Uses bun:sqlite (Bun's native SQLite implementation) for optimal performance.
+
 **Async-Friendly:** Large repository support with progress indicators. UI never freezes.
 
 **Extension Points:** Plugin API allows adding custom dashboards, screens, and data indexers.
@@ -204,6 +206,7 @@ HistTUI is built with clean layer separation:
 
 4. **Database Layer** (`src/core/database/`)
    - `GitDatabase`: SQLite schema and queries
+   - Uses bun:sqlite (Bun's native SQLite implementation)
    - Tables: `commits`, `branches`, `tags`, `file_changes`, `metadata`, `plugin_tables`
    - Indexes on date, author for fast queries
 
@@ -272,8 +275,7 @@ See [PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md) for full documentation.
 <summary><strong>For Developers</strong></summary>
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
+- Bun 1.3.5+ 
 - Git
 
 ### Development Setup
@@ -283,16 +285,16 @@ git clone https://github.com/shelbeely/HistTUI.git
 cd HistTUI
 
 # Install dependencies
-npm install
+bun install
 
 # Run in development mode
-npm run dev -- https://github.com/user/repo
+bun run dev -- https://github.com/user/repo
 
 # Build
-npm run build
+bun run build
 
 # Run built version
-node dist/cli.js https://github.com/user/repo
+bun dist/cli.js https://github.com/user/repo
 ```
 
 ### Project Structure
