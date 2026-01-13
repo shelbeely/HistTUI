@@ -302,9 +302,16 @@ export class GitClient {
   private formatOptions(options: Record<string, any>): string[] {
     const args: string[] = [];
     for (const [key, value] of Object.entries(options)) {
-      args.push(key);
       if (value !== null) {
-        args.push(String(value));
+        // For --format option, combine with = to avoid ambiguity
+        if (key === '--format') {
+          args.push(`${key}=${value}`);
+        } else {
+          args.push(key);
+          args.push(String(value));
+        }
+      } else {
+        args.push(key);
       }
     }
     return args;
