@@ -1,6 +1,7 @@
 /**
  * Activity Dashboard
  * Shows repository activity statistics with Material Design 3 expressive styling
+ * Enhanced with AG-UI for generative insights and recommendations
  */
 
 import React, { useState, useEffect } from 'react';
@@ -9,7 +10,8 @@ import Gradient from 'ink-gradient';
 import chalk from 'chalk';
 import { useApp } from '../AppContext';
 import { useKeyboard } from '../common/hooks';
-import { Header, StatusBar, Loading, BoxBorder } from '../common/UI';
+import { Header, StatusBar, Loading, BoxBorder, Badge, StatusMessage } from '../common/UI';
+import { useAgentState } from '../../core/ag-ui';
 import { DashboardData } from '../../types';
 import { GitDatabase } from '../../core/database';
 import { formatNumber } from '../../utils';
@@ -27,6 +29,7 @@ const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'] as const; // Gold, Silver
 
 export function ActivityDashboard({ database }: ActivityDashboardProps) {
   const { setScreen } = useApp();
+  const agentState = useAgentState();
   const [data, setData] = useState<DashboardData | null>(null);
   const [hotspots, setHotspots] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -257,6 +260,32 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
           </Box>
         </BoxBorder>
       </Box>
+
+      {/* AG-UI Generative Insights Section */}
+      {agentState.isAgentActive && agentState.generatedComponents.length > 0 && (
+        <Box marginBottom={1}>
+          <BoxBorder 
+            title="🤖 AI Insights (Generative)" 
+            borderColor="green" 
+            width="100%"
+          >
+            <Box flexDirection="column" gap={1}>
+              {agentState.generatedComponents.map((component, index) => (
+                <Box key={index}>{component}</Box>
+              ))}
+            </Box>
+          </BoxBorder>
+        </Box>
+      )}
+
+      {/* Show agent status if streaming */}
+      {agentState.streamingContent && (
+        <Box marginBottom={1}>
+          <StatusMessage variant="info">
+            🤖 {agentState.streamingContent}
+          </StatusMessage>
+        </Box>
+      )}
 
       {/* ADHD-Friendly: Prominent keyboard shortcuts */}
       <StatusBar 
