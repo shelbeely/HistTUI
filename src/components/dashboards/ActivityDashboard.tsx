@@ -27,6 +27,7 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
 
   useEffect(() => {
     setLoading(true);
+    setAnimationStep(0); // Reset animation on data load
     try {
       const activityData = database.getDashboardActivity();
       const hotspotsData = database.getFileHotspots(10);
@@ -39,19 +40,13 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
 
   // Progressive animation effect for bars
   useEffect(() => {
-    if (!loading && data) {
+    if (!loading && data && animationStep < 100) {
       const timer = setInterval(() => {
-        setAnimationStep(prev => {
-          if (prev >= 100) {
-            clearInterval(timer);
-            return 100;
-          }
-          return prev + 5;
-        });
+        setAnimationStep(prev => Math.min(100, prev + 5));
       }, 30);
       return () => clearInterval(timer);
     }
-  }, [loading, data]);
+  }, [loading, data, animationStep]);
 
   useKeyboard({
     onNumber: (num) => {
@@ -78,7 +73,7 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
   const createColorBar = (value: number, maxValue: number, color: 'green' | 'blue' | 'magenta' | 'cyan') => {
     const percentage = Math.min(100, (value / maxValue) * 100);
     const animatedPercentage = (percentage * animationStep) / 100;
-    const barLength = Math.max(1, Math.floor((animatedPercentage / 100) * 30));
+    const barLength = Math.floor((animatedPercentage / 100) * 30);
     
     const colorMap = {
       green: chalk.hex('#00C853'), // M3 Green
@@ -87,7 +82,7 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
       cyan: chalk.hex('#00E5FF'),   // M3 Cyan
     };
     
-    return colorMap[color]('█'.repeat(barLength));
+    return barLength > 0 ? colorMap[color]('█'.repeat(barLength)) : '';
   };
 
   // Get max commits for scaling
