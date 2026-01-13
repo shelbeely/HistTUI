@@ -24,6 +24,7 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
   const [hotspots, setHotspots] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [animationStep, setAnimationStep] = useState(0);
+  const [focusSection, setFocusSection] = useState<'overview' | 'activity' | 'contributors' | 'hotspots'>('overview');
 
   useEffect(() => {
     setLoading(true);
@@ -54,6 +55,12 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
       else if (num === 2) setScreen('branches');
       else if (num === 3) setScreen('files');
       else if (num === 4) setScreen('dashboard-activity');
+    },
+    onTab: () => {
+      // Cycle through sections for focus
+      const sections: Array<'overview' | 'activity' | 'contributors' | 'hotspots'> = ['overview', 'activity', 'contributors', 'hotspots'];
+      const currentIndex = sections.indexOf(focusSection);
+      setFocusSection(sections[(currentIndex + 1) % sections.length]);
     },
   });
 
@@ -90,39 +97,62 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
 
   return (
     <Box flexDirection="column" height="100%">
+      {/* ADHD-Friendly: Clear header with focus indicator */}
       <Box marginBottom={1}>
         <Gradient name="rainbow">
           <Text bold>🚀 Activity Dashboard</Text>
         </Gradient>
-        <Text dimColor> Press 1-4 to switch screens</Text>
+        <Text dimColor> Press 1-4 to switch screens • Tab to cycle sections</Text>
       </Box>
 
+      {/* ADHD-Friendly: Quick Glance Summary Box */}
+      <Box borderStyle="double" borderColor="cyan" padding={1} marginBottom={1}>
+        <Box flexDirection="column" gap={0}>
+          <Text bold color="cyan">⚡ Quick Glance</Text>
+          <Box marginTop={0}>
+            <Text>📦 {formatNumber(totalCommits)} commits • </Text>
+            <Text color="green">+{formatNumber(totalInsertions)} </Text>
+            <Text color="red">-{formatNumber(totalDeletions)} </Text>
+            <Text>• 👥 {data.topAuthors.length} contributors</Text>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Top row: Overview and Activity */}
       <Box flexDirection="row" gap={2}>
-        <BoxBorder title="📊 Overview" borderColor="magenta" width="50%">
-          <Box flexDirection="column" gap={0}>
+        <BoxBorder 
+          title={focusSection === 'overview' ? '▶️ 📊 Overview' : '📊 Overview'} 
+          borderColor={focusSection === 'overview' ? 'magentaBright' : 'magenta'} 
+          width="50%"
+        >
+          <Box flexDirection="column" gap={1}>
             <Box>
-              <Text bold color="cyan">💫 Total Commits: </Text>
+              <Text bold color="cyan">💫 Commits: </Text>
               <Text color="magenta" bold>{formatNumber(totalCommits)}</Text>
             </Box>
-            <Box marginTop={0}>
-              <Text bold color="greenBright">✨ Insertions: </Text>
+            <Box>
+              <Text bold color="greenBright">✨ Added: </Text>
               <Text color="green" bold>+{formatNumber(totalInsertions)}</Text>
             </Box>
-            <Box marginTop={0}>
-              <Text bold color="redBright">🔥 Deletions: </Text>
+            <Box>
+              <Text bold color="redBright">🔥 Removed: </Text>
               <Text color="red" bold>-{formatNumber(totalDeletions)}</Text>
             </Box>
-            <Box marginTop={0}>
-              <Text bold color="yellow">👥 Contributors: </Text>
+            <Box>
+              <Text bold color="yellow">👥 People: </Text>
               <Text color="yellowBright" bold>{data.topAuthors.length}</Text>
             </Box>
           </Box>
         </BoxBorder>
 
-        <BoxBorder title="⏰ Activity by Hour" borderColor="cyan" width="50%">
-          <Box flexDirection="column">
+        <BoxBorder 
+          title={focusSection === 'activity' ? '▶️ ⏰ Activity by Hour' : '⏰ Activity by Hour'} 
+          borderColor={focusSection === 'activity' ? 'cyanBright' : 'cyan'} 
+          width="50%"
+        >
+          <Box flexDirection="column" gap={0}>
             {data.activityByHour.slice(0, 8).map(({ hour, commits }) => (
-              <Box key={hour}>
+              <Box key={hour} marginBottom={0}>
                 <Box width="15%">
                   <Text color="blueBright" bold>{hour.toString().padStart(2, '0')}:00</Text>
                 </Box>
@@ -138,33 +168,43 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
         </BoxBorder>
       </Box>
 
-      <Box marginTop={1}>
-        <BoxBorder title="🏆 Top Contributors" borderColor="yellow" width="100%">
-          <Box flexDirection="column">
-            {data.topAuthors.slice(0, 10).map((author, index) => {
+      {/* ADHD-Friendly: Visual separator */}
+      <Box marginY={1}>
+        <Text dimColor>{'─'.repeat(80)}</Text>
+      </Box>
+
+      {/* Top Contributors section with focus */}
+      <Box marginBottom={1}>
+        <BoxBorder 
+          title={focusSection === 'contributors' ? '▶️ 🏆 Top Contributors (Top 5)' : '🏆 Top Contributors (Top 5)'} 
+          borderColor={focusSection === 'contributors' ? 'yellowBright' : 'yellow'} 
+          width="100%"
+        >
+          <Box flexDirection="column" gap={0}>
+            {data.topAuthors.slice(0, 5).map((author, index) => {
               const medalColors = ['#FFD700', '#C0C0C0', '#CD7F32']; // Gold, Silver, Bronze
               const rankColor = index < 3 ? chalk.hex(medalColors[index]) : chalk.yellow;
               const medals = ['🥇', '🥈', '🥉'];
               const medal = index < 3 ? medals[index] : '🎖️';
               
               return (
-                <Box key={index}>
-                  <Box width="4%">
+                <Box key={index} marginBottom={0}>
+                  <Box width="5%">
                     <Text>{medal}</Text>
                   </Box>
                   <Box width="3%">
                     <Text>{rankColor(String(index + 1))}</Text>
                   </Box>
-                  <Box width="35%">
+                  <Box width="38%">
                     <Text bold color="white">{author.author}</Text>
                   </Box>
-                  <Box width="15%">
+                  <Box width="16%">
                     <Text color="gray">{author.commits} commits</Text>
                   </Box>
-                  <Box width="21%">
+                  <Box width="19%">
                     <Text color="greenBright">+{formatNumber(author.insertions)}</Text>
                   </Box>
-                  <Box width="22%">
+                  <Box width="19%">
                     <Text color="redBright">-{formatNumber(author.deletions)}</Text>
                   </Box>
                 </Box>
@@ -174,10 +214,15 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
         </BoxBorder>
       </Box>
 
-      <Box marginTop={1}>
-        <BoxBorder title="🔥 File Hotspots (Most Changed)" borderColor="red" width="100%">
-          <Box flexDirection="column">
-            {hotspots.slice(0, 10).map((file, index) => {
+      {/* File Hotspots section with focus */}
+      <Box>
+        <BoxBorder 
+          title={focusSection === 'hotspots' ? '▶️ 🔥 File Hotspots (Top 5 Most Changed)' : '🔥 File Hotspots (Top 5 Most Changed)'} 
+          borderColor={focusSection === 'hotspots' ? 'redBright' : 'red'} 
+          width="100%"
+        >
+          <Box flexDirection="column" gap={0}>
+            {hotspots.slice(0, 5).map((file, index) => {
               const heatColors = [
                 chalk.hex('#FF1744'), // Hot red
                 chalk.hex('#FF5722'), // Deep orange
@@ -188,17 +233,17 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
               const colorIndex = Math.min(index, heatColors.length - 1);
               
               return (
-                <Box key={index}>
-                  <Box width="3%">
+                <Box key={index} marginBottom={0}>
+                  <Box width="4%">
                     <Text>{heatColors[colorIndex](`${index + 1}.`)}</Text>
                   </Box>
-                  <Box width="65%">
+                  <Box width="68%">
                     <Text color="white">{file.path}</Text>
                   </Box>
-                  <Box width="17%">
+                  <Box width="16%">
                     <Text color="magenta">{file.changes} changes</Text>
                   </Box>
-                  <Box width="15%">
+                  <Box width="12%">
                     <Text color="cyan">{file.authors} authors</Text>
                   </Box>
                 </Box>
@@ -208,9 +253,10 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
         </BoxBorder>
       </Box>
 
+      {/* ADHD-Friendly: Prominent keyboard shortcuts */}
       <StatusBar 
-        left={chalk.hex('#BB86FC')('🎨 Dashboard')} 
-        right="1️⃣-4️⃣ Switch Screen • ❓ Help • 🚪 q Quit" 
+        left={chalk.hex('#BB86FC')('🎨 Dashboard • Tab: ' + focusSection.toUpperCase())} 
+        right="1️⃣ Timeline • 2️⃣ Branches • 3️⃣ Files • 4️⃣ Dashboard • ❓ Help • 🚪 q" 
       />
     </Box>
   );
