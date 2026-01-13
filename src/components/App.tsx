@@ -15,11 +15,13 @@ import { FuzzySearchScreen } from './screens/FuzzySearchScreen';
 import { ChangelogViewerScreen } from './screens/ChangelogViewerScreen';
 import { ActivityDashboard } from './dashboards/ActivityDashboard';
 import { ErrorDisplay } from './common/UI';
+import { GenerativeStatusBar } from './common/GenerativeStatusBar';
 import { GitClient } from '../core/git';
 import { GitDatabase } from '../core/database';
 import { GitIndexer, IndexProgress } from '../core/indexer';
 import { CacheManager } from '../core/cache';
 import { PluginManager } from '../plugins';
+import { AGUIProvider } from '../core/ag-ui';
 import { config } from '../config';
 import { getRepoName, normalizeRepoUrl } from '../utils';
 import { logger } from '../utils/logger';
@@ -34,37 +36,54 @@ function AppContent({
   gitClient,
   database,
   pluginManager,
+  repoName,
 }: {
   gitClient: GitClient;
   database: GitDatabase;
   pluginManager: PluginManager;
+  repoName: string;
 }) {
   const { screen, error, setError } = useApp();
 
+  const getScreenName = (screenId: string) => {
+    const screenNames: Record<string, string> = {
+      'timeline': 'Timeline',
+      'commit-detail': 'Commit Details',
+      'branches': 'Branches & Tags',
+      'files': 'File Tree',
+      'search': 'Search',
+      'dashboard-activity': 'Activity Dashboard',
+    };
+    return screenNames[screenId] || 'Dashboard';
+  };
+
   if (error) {
     return (
-      <Box flexDirection="column" padding={1}>
-        <ErrorDisplay error={error} onDismiss={() => setError(undefined)} />
+      <Box flexDirection="column" height="100%">
+        <GenerativeStatusBar repoName={repoName} currentScreen="Error" />
+        <Box flexDirection="column" padding={1} flexGrow={1}>
+          <ErrorDisplay error={error} onDismiss={() => setError(undefined)} />
+        </Box>
       </Box>
     );
   }
 
-  switch (screen) {
-    case 'timeline':
-      return <TimelineScreen database={database} />;
-    case 'commit-detail':
-      return <CommitDetailScreen gitClient={gitClient} />;
-    case 'branches':
-      return <BranchesScreen database={database} />;
-    case 'files':
-      return <FileTreeScreen gitClient={gitClient} />;
-    case 'search':
-      return <FuzzySearchScreen database={database} />;
-    case 'dashboard-activity':
-      return <ActivityDashboard database={database} />;
-    default:
-      return <ActivityDashboard database={database} />;
-  }
+  return (
+    <Box flexDirection="column" height="100%">
+      <GenerativeStatusBar repoName={repoName} currentScreen={getScreenName(screen)} />
+      <Box flexGrow={1}>
+        {screen === 'timeline' && <TimelineScreen database={database} />}
+        {screen === 'commit-detail' && <CommitDetailScreen gitClient={gitClient} />}
+        {screen === 'branches' && <BranchesScreen database={database} />}
+        {screen === 'files' && <FileTreeScreen gitClient={gitClient} />}
+        {screen === 'search' && <FuzzySearchScreen database={database} />}
+        {screen === 'dashboard-activity' && <ActivityDashboard database={database} />}
+        {!['timeline', 'commit-detail', 'branches', 'files', 'search', 'dashboard-activity'].includes(screen) && (
+          <ActivityDashboard database={database} />
+        )}
+      </Box>
+    </Box>
+  );
 }
 
 function LoadingScreen({ progress }: { progress: IndexProgress }) {
@@ -100,6 +119,7 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
   const [gitClient, setGitClient] = useState<GitClient | null>(null);
   const [database, setDatabase] = useState<GitDatabase | null>(null);
   const [pluginManager, setPluginManager] = useState<PluginManager | null>(null);
+  const [repoName, setRepoName] = useState<string>('');
 
   useEffect(() => {
     initializeApp();
@@ -108,9 +128,10 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
   async function initializeApp() {
     try {
       const normalizedUrl = normalizeRepoUrl(repoUrl);
-      const repoName = getRepoName(normalizedUrl);
+      const name = getRepoName(normalizedUrl);
+      setRepoName(name);
 
-      logger.info('Initializing HistTUI for:', repoName);
+      logger.info('Initializing HistTUI for:', name);
 
       // Initialize cache manager
       config.ensureCacheDir();
@@ -138,7 +159,7 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
         // Save cache info
         cacheManager.saveCacheInfo(normalizedUrl, {
           repoUrl: normalizedUrl,
-          repoName,
+          repoName: name,
           lastUpdated: new Date(),
           commitCount: 0,
         });
@@ -174,7 +195,7 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
         const stats = await client.getStats();
         cacheManager.saveCacheInfo(normalizedUrl, {
           repoUrl: normalizedUrl,
-          repoName,
+          repoName: name,
           lastUpdated: new Date(),
           commitCount: stats.totalCommits,
         });
@@ -223,9 +244,16 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
   const themeName = typeof config.get().ui.theme === 'string' ? config.get().ui.theme : 'default';
   return (
     <ThemeProvider theme={createInkUITheme(themeName)}>
-      <AppProvider repoPath={repoUrl}>
-        <AppContent gitClient={gitClient} database={database} pluginManager={pluginManager} />
-      </AppProvider>
+      <AGUIProvider database={database} gitClient={gitClient}>
+        <AppProvider repoPath={repoUrl}>
+          <AppContent 
+            gitClient={gitClient} 
+            database={database} 
+            pluginManager={pluginManager} 
+            repoName={repoName}
+          />
+        </AppProvider>
+      </AGUIProvider>
     </ThemeProvider>
   );
 }
