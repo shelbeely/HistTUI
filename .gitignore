@@ -8,3 +8,5 @@ dist/
 *.db-journal
 coverage/
 .nyc_output/
+~/.bun/
+bun.lock

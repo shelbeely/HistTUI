@@ -16,7 +16,7 @@ exact = false
 
 [run]
 # Shell for running scripts
-shell = "bash"
+shell = "system"
 
 # Don't silence output
 silent = false
