@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text } from 'ink';
-import Spinner from 'ink-spinner';
+import { Spinner, ThemeProvider, ProgressBar } from '@inkjs/ui';
 import { AppProvider, useApp } from './AppContext';
 import { TimelineScreen } from './screens/TimelineScreen';
 import { CommitDetailScreen } from './screens/CommitDetailScreen';
@@ -23,6 +23,7 @@ import { PluginManager } from '../plugins';
 import { config } from '../config';
 import { getRepoName, normalizeRepoUrl } from '../utils';
 import { logger } from '../utils/logger';
+import { createInkUITheme } from '../config/inkui-theme';
 
 interface AppProps {
   repoUrl: string;
@@ -74,23 +75,18 @@ function LoadingScreen({ progress }: { progress: IndexProgress }) {
           HistTUI - Git History Explorer
         </Text>
       </Box>
-      <Box>
-        <Text color="cyan">
-          <Spinner type="dots" />
-        </Text>
-        <Text> {progress.message}</Text>
+      <Box gap={1}>
+        <Spinner label={progress.message} />
       </Box>
       {progress.progress !== undefined && (
-        <Box marginTop={1}>
-          <Text>
-            Progress: {progress.progress.toFixed(1)}%
-            {progress.current !== undefined && progress.total !== undefined && (
-              <Text dimColor>
-                {' '}
-                ({progress.current}/{progress.total})
-              </Text>
-            )}
-          </Text>
+        <Box marginTop={1} flexDirection="column" width={50}>
+          <ProgressBar value={progress.progress} />
+          {progress.current !== undefined && progress.total !== undefined && (
+            <Text dimColor>
+              {' '}
+              ({progress.current}/{progress.total})
+            </Text>
+          )}
         </Box>
       )}
     </Box>
@@ -216,12 +212,20 @@ export function App({ repoUrl, skipUpdate = false }: AppProps) {
   }
 
   if (!isReady || !gitClient || !database || !pluginManager) {
-    return <LoadingScreen progress={indexProgress || { phase: 'cloning', message: 'Initializing...' }} />;
+    const themeName = typeof config.get().ui.theme === 'string' ? config.get().ui.theme : 'default';
+    return (
+      <ThemeProvider theme={createInkUITheme(themeName)}>
+        <LoadingScreen progress={indexProgress || { phase: 'cloning', message: 'Initializing...' }} />
+      </ThemeProvider>
+    );
   }
 
+  const themeName = typeof config.get().ui.theme === 'string' ? config.get().ui.theme : 'default';
   return (
-    <AppProvider repoPath={repoUrl}>
-      <AppContent gitClient={gitClient} database={database} pluginManager={pluginManager} />
-    </AppProvider>
+    <ThemeProvider theme={createInkUITheme(themeName)}>
+      <AppProvider repoPath={repoUrl}>
+        <AppContent gitClient={gitClient} database={database} pluginManager={pluginManager} />
+      </AppProvider>
+    </ThemeProvider>
   );
 }

@@ -8,7 +8,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
-import TextInput from 'ink-text-input';
+import { TextInput } from '@inkjs/ui';
 import Fuse from 'fuse.js';
 import { useApp } from '../AppContext';
 import { Header, StatusBar, ListItem } from '../common/UI';
@@ -112,10 +112,11 @@ export function FuzzySearchScreen({ database }: FuzzySearchScreenProps) {
           <Box marginTop={1}>
             <Text color="cyan">❯ </Text>
             <TextInput
-              value={query}
+              defaultValue={query}
               onChange={setQuery}
               onSubmit={handleSubmit}
               placeholder="author, message, hash..."
+              isDisabled={false}
             />
           </Box>
         </Box>
