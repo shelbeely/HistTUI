@@ -18,13 +18,20 @@ interface ActivityDashboardProps {
   database: GitDatabase;
 }
 
+// Constants for ADHD-friendly focus cycling
+const FOCUS_SECTIONS = ['overview', 'activity', 'contributors', 'hotspots'] as const;
+type FocusSection = typeof FOCUS_SECTIONS[number];
+
+// Medal colors for top contributors
+const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'] as const; // Gold, Silver, Bronze
+
 export function ActivityDashboard({ database }: ActivityDashboardProps) {
   const { setScreen } = useApp();
   const [data, setData] = useState<DashboardData | null>(null);
   const [hotspots, setHotspots] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [animationStep, setAnimationStep] = useState(0);
-  const [focusSection, setFocusSection] = useState<'overview' | 'activity' | 'contributors' | 'hotspots'>('overview');
+  const [focusSection, setFocusSection] = useState<FocusSection>('overview');
 
   useEffect(() => {
     setLoading(true);
@@ -58,9 +65,8 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
     },
     onTab: () => {
       // Cycle through sections for focus
-      const sections: Array<'overview' | 'activity' | 'contributors' | 'hotspots'> = ['overview', 'activity', 'contributors', 'hotspots'];
-      const currentIndex = sections.indexOf(focusSection);
-      setFocusSection(sections[(currentIndex + 1) % sections.length]);
+      const currentIndex = FOCUS_SECTIONS.indexOf(focusSection);
+      setFocusSection(FOCUS_SECTIONS[(currentIndex + 1) % FOCUS_SECTIONS.length]);
     },
   });
 
@@ -110,10 +116,10 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
         <Box flexDirection="column" gap={0}>
           <Text bold color="cyan">⚡ Quick Glance</Text>
           <Box marginTop={0}>
-            <Text>📦 {formatNumber(totalCommits)} commits • </Text>
-            <Text color="green">+{formatNumber(totalInsertions)} </Text>
-            <Text color="red">-{formatNumber(totalDeletions)} </Text>
-            <Text>• 👥 {data.topAuthors.length} contributors</Text>
+            <Text>📦 {formatNumber(totalCommits)} commits •</Text>
+            <Text color="green"> +{formatNumber(totalInsertions)}</Text>
+            <Text color="red"> -{formatNumber(totalDeletions)}</Text>
+            <Text> • 👥 {data.topAuthors.length} contributors</Text>
           </Box>
         </Box>
       </Box>
@@ -182,8 +188,7 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
         >
           <Box flexDirection="column" gap={0}>
             {data.topAuthors.slice(0, 5).map((author, index) => {
-              const medalColors = ['#FFD700', '#C0C0C0', '#CD7F32']; // Gold, Silver, Bronze
-              const rankColor = index < 3 ? chalk.hex(medalColors[index]) : chalk.yellow;
+              const rankColor = index < 3 ? chalk.hex(MEDAL_COLORS[index]) : chalk.yellow;
               const medals = ['🥇', '🥈', '🥉'];
               const medal = index < 3 ? medals[index] : '🎖️';
               
