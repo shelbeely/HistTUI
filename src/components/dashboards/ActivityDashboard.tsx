@@ -65,6 +65,7 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
       else if (num === 2) setScreen('branches');
       else if (num === 3) setScreen('files');
       else if (num === 4) setScreen('dashboard-activity');
+      else if (num === 5) setScreen('repo-manager');
     },
     onTab: () => {
       // Cycle through sections for focus
@@ -290,7 +291,7 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
       {/* ADHD-Friendly: Prominent keyboard shortcuts */}
       <StatusBar 
         left={chalk.hex('#BB86FC')('🎨 Dashboard • Tab: ' + focusSection.toUpperCase())} 
-        right="1️⃣ Timeline • 2️⃣ Branches • 3️⃣ Files • 4️⃣ Dashboard • ❓ Help • 🚪 q" 
+        right="1️⃣ Timeline • 2️⃣ Branches • 3️⃣ Files • 4️⃣ Dashboard • 5️⃣ Repos • ❓ Help • 🚪 q" 
       />
     </Box>
   );

@@ -248,7 +248,8 @@ export type Screen =
   | 'dashboard-hotspots'
   | 'dashboard-ownership'
   | 'search'
-  | 'help';
+  | 'help'
+  | 'repo-manager';
 
 export interface AppState {
   screen: Screen;

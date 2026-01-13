@@ -13,6 +13,7 @@ import { BranchesScreen } from './screens/BranchesScreen';
 import { FileTreeScreen } from './screens/FileTreeScreen';
 import { FuzzySearchScreen } from './screens/FuzzySearchScreen';
 import { ChangelogViewerScreen } from './screens/ChangelogViewerScreen';
+import { RepoManagerScreen } from './screens/RepoManagerScreen';
 import { ActivityDashboard } from './dashboards/ActivityDashboard';
 import { ErrorDisplay } from './common/UI';
 import { GenerativeStatusBar } from './common/GenerativeStatusBar';
@@ -39,13 +40,17 @@ function AppContent({
   database,
   pluginManager,
   repoName,
+  currentRepoUrl,
+  onSwitchRepo,
 }: {
   gitClient: GitClient;
   database: GitDatabase;
   pluginManager: PluginManager;
   repoName: string;
+  currentRepoUrl: string;
+  onSwitchRepo: (repoUrl: string) => void;
 }) {
-  const { screen, error, setError } = useApp();
+  const { screen, error, setError, setScreen } = useApp();
 
   const getScreenName = (screenId: string) => {
     const screenNames: Record<string, string> = {
@@ -55,6 +60,7 @@ function AppContent({
       'files': 'File Tree',
       'search': 'Search',
       'dashboard-activity': 'Activity Dashboard',
+      'repo-manager': 'Repository Manager',
     };
     return screenNames[screenId] || 'Dashboard';
   };
@@ -80,7 +86,14 @@ function AppContent({
         {screen === 'files' && <FileTreeScreen gitClient={gitClient} />}
         {screen === 'search' && <FuzzySearchScreen database={database} />}
         {screen === 'dashboard-activity' && <ActivityDashboard database={database} />}
-        {!['timeline', 'commit-detail', 'branches', 'files', 'search', 'dashboard-activity'].includes(screen) && (
+        {screen === 'repo-manager' && (
+          <RepoManagerScreen 
+            currentRepoUrl={currentRepoUrl}
+            onSelectRepo={onSwitchRepo}
+            onBack={() => setScreen('dashboard-activity')}
+          />
+        )}
+        {!['timeline', 'commit-detail', 'branches', 'files', 'search', 'dashboard-activity', 'repo-manager'].includes(screen) && (
           <ActivityDashboard database={database} />
         )}
       </Box>
@@ -129,6 +142,16 @@ export function App({ repoUrl: initialRepoUrl, skipUpdate = false }: AppProps) {
   const handleRepoSubmit = (url: string) => {
     setRepoUrl(url);
     setShowRepoInput(false);
+  };
+
+  const handleRepoSwitch = (url: string) => {
+    // Reset state and reinitialize with new repo
+    setIsReady(false);
+    setGitClient(null);
+    setDatabase(null);
+    setPluginManager(null);
+    setRepoUrl(url);
+    setError(null);
   };
 
   const handleSetupComplete = (setupConfig: SetupConfig) => {
@@ -311,6 +334,8 @@ export function App({ repoUrl: initialRepoUrl, skipUpdate = false }: AppProps) {
             database={database} 
             pluginManager={pluginManager} 
             repoName={repoName}
+            currentRepoUrl={repoUrl}
+            onSwitchRepo={handleRepoSwitch}
           />
         </AppProvider>
       </AGUIProvider>
