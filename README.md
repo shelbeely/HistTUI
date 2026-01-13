@@ -192,9 +192,19 @@ HistTUI is built with clean layer separation:
 
 ### 🎨 UI Components
 
-HistTUI uses **[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** - a comprehensive collection of customizable UI components for terminal interfaces. All components are themed to match HistTUI's neurodiversity-friendly color schemes.
+HistTUI is built with **[Ink](https://github.com/vadimdemedes/ink)** - a React renderer for terminal interfaces - and now includes **[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** for enhanced UI components.
 
-**Available Components:**
+**What is Ink?**
+- React framework for building terminal UIs (you write JSX, it renders in the terminal)
+- Provides core primitives: `<Box>`, `<Text>`, layout with Flexbox
+- Powers the entire HistTUI interface
+
+**What is @inkjs/ui?**
+- Component library built **on top** of Ink
+- Pre-built, customizable components (like Material-UI, but for terminals)
+- All components are themed to match HistTUI's neurodiversity-friendly color schemes
+
+**Available @inkjs/ui Components:**
 
 - **TextInput** - Enhanced text input with autocomplete support and placeholder text
 - **Spinner** - Beautiful loading indicators (dots, line, arc, bounce styles)
@@ -244,8 +254,8 @@ HistTUI uses **[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** - a compreh
    - Progress reporting
 
 6. **UI Layer** (`src/components/`)
-   - React/Ink components
-   - Uses @inkjs/ui component library (v2.0.0)
+   - Built with React and **Ink** (React renderer for terminal UIs)
+   - Enhanced with **@inkjs/ui** component library (v2.0.0)
    - Theme provider in `src/config/inkui-theme.ts` maps HistTUI themes to @inkjs/ui
    - Screens: Timeline, CommitDetail, Branches
    - Dashboards: ActivityDashboard (default first screen), others
