@@ -1,0 +1,49 @@
+# Bun configuration for HistTUI
+# https://bun.sh/docs/runtime/bunfig
+
+[install]
+# Enable peer dependency resolution
+peer = true
+
+# Use lockfile for reproducible installs
+lockfile = true
+
+# Cache location
+cache = "~/.bun/install/cache"
+
+# Don't save exact versions
+exact = false
+
+[run]
+# Shell for running scripts
+shell = "bash"
+
+# Don't silence output
+silent = false
+
+# Prefer local binaries
+prefer = "local"
+
+[test]
+# Enable coverage
+coverage = true
+
+# Test file patterns
+preload = []
+
+[build]
+# Target Bun runtime
+target = "bun"
+
+# Output format
+format = "esm"
+
+# Minify in production
+minify = false
+
+# Generate sourcemaps
+sourcemap = "inline"
+
+[define]
+# Environment variables available at compile time
+"process.env.NODE_ENV" = "production"

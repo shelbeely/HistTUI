@@ -1,0 +1,37 @@
+{
+  "cacheDir": "~/.histtui/cache",
+  "maxCommits": 10000,
+  "keyBindings": {
+    "quit": ["q", "ctrl+c"],
+    "help": ["?", "h"],
+    "search": ["/", "ctrl+f"],
+    "navigate": {
+      "up": ["k", "up"],
+      "down": ["j", "down"],
+      "left": ["h", "left"],
+      "right": ["l", "right"],
+      "pageUp": ["ctrl+u", "pageup"],
+      "pageDown": ["ctrl+d", "pagedown"],
+      "home": ["g", "home"],
+      "end": ["G", "end"]
+    },
+    "tabs": {
+      "next": ["tab", "ctrl+n"],
+      "prev": ["shift+tab", "ctrl+p"],
+      "timeline": ["1"],
+      "branches": ["2"],
+      "files": ["3"],
+      "dashboards": ["4"]
+    }
+  },
+  "theme": {
+    "colors": {
+      "primary": "#61afef",
+      "secondary": "#56b6c2",
+      "success": "#98c379",
+      "warning": "#e5c07b",
+      "error": "#e06c75",
+      "info": "#c678dd"
+    }
+  }
+}
