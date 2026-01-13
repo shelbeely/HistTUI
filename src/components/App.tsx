@@ -62,7 +62,7 @@ function AppContent({
     case 'dashboard-activity':
       return <ActivityDashboard database={database} />;
     default:
-      return <TimelineScreen database={database} />;
+      return <ActivityDashboard database={database} />;
   }
 }
 

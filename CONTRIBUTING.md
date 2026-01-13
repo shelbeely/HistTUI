@@ -428,7 +428,8 @@ sed -i "/import.*Screen.*from/a import { MyScreen } from './screens/MyScreen';" 
 
 **Step 3:** Add keyboard shortcut
 ```bash
-# Edit src/components/screens/TimelineScreen.tsx (or main screen)
+# Edit src/components/dashboards/ActivityDashboard.tsx (default first screen)
+# Or edit src/components/screens/TimelineScreen.tsx (accessible via '1' key)
 # In useKeyboard, add number shortcut:
 #   else if (num === 5) setScreen('my-screen');
 ```

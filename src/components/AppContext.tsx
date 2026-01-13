@@ -20,7 +20,7 @@ interface AppContextValue extends AppState {
 const AppContext = createContext<AppContextValue | null>(null);
 
 export function AppProvider({ children, repoPath }: { children: ReactNode; repoPath: string }) {
-  const [screen, setScreen] = useState<Screen>('timeline');
+  const [screen, setScreen] = useState<Screen>('dashboard-activity');
   const [selectedCommit, setSelectedCommit] = useState<Commit | undefined>();
   const [selectedBranch, setSelectedBranch] = useState<string | undefined>();
   const [selectedFile, setSelectedFile] = useState<string | undefined>();
