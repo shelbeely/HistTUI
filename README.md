@@ -1,86 +1,140 @@
-# HistTUI 🚀
+<div align="center">
 
-**Interactive Git History TUI** - Explore repository history like a pro with a beautiful terminal interface.
+# 🚀 HistTUI
 
-> Inspired by the best terminal UIs: lazygit, k9s, tig, htop, btop
+### Interactive Git History TUI with Generative AI
 
-## ✨ Features
+**Explore repository history like a pro with a beautiful terminal interface**
 
-### Core Features
-- **📈 Activity Dashboard** - First screen on launch! Visualize repository activity, top contributors, and commit patterns at a glance.
-- **📊 Commit Timeline** - Browse commits with vim-style navigation (j/k). Filter by author, date, path, or message.
-- **💬 Commit Details** - View full commit info, file changes, and diffs in a beautiful split view.
-- **🌿 Branch & Tag Explorer** - Navigate all branches and tags with clear indicators for current/remote branches.
-- **🔥 File Hotspots** - Identify most-changed files and potential maintenance risks.
-- **📚 Multi-Repo Manager** - View and switch between cached repositories without restarting (press '5').
-- **⚡ Blazing Fast** - Native Bun SQLite indexing means instant searches, even in massive repositories.
-- **🔌 Plugin-Ready** - Extensible architecture for custom dashboards and screens.
-- **⌨️ Keyboard-First** - Vim-style navigation (j/k/g/G), quick shortcuts (1-5 for screens), and discoverable help (?).
-- **🔒 Read-Only Safety** - Never writes to your repository. Pure exploration mode.
-- **💾 Smart Caching** - Clone once, explore instantly. Updates on demand.
+[![Version](https://img.shields.io/badge/version-1.1.0-6750A4.svg)](https://github.com/shelbeely/HistTUI/releases)
+[![License](https://img.shields.io/badge/license-ISC-green.svg)](./LICENSE)
+[![Bun](https://img.shields.io/badge/bun-%3E%3D1.3.5-black.svg)](https://bun.sh)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
+[![Ink](https://img.shields.io/badge/Ink-6.6-purple.svg)](https://github.com/vadimdemedes/ink)
+[![AG-UI](https://img.shields.io/badge/AG--UI-Enabled-orange.svg)](https://github.com/ag-ui/ag-ui)
 
-### 🤖 Generative AI Features (with AG-UI)
-- **💬 Real-Time AI Insights** - Get intelligent analysis of commits, patterns, and code quality streamed live.
-- **🎨 Dynamic UI Generation** - AI can generate contextual UI components (badges, alerts, suggestions).
-- **📊 Smart Recommendations** - Proactive suggestions for code improvements and repository health.
-- **🔄 Streaming Updates** - Watch AI analysis happen in real-time in the status bar.
-- **🎯 Context-Aware** - AI understands your repository structure, history, and current focus.
-- **🛠️ Multi-Provider Support** - Works with OpenAI, Anthropic, OpenRouter, or local Ollama models.
-- **🚀 One-Command Launch** - `bun run launch` starts both agent server and TUI together.
+![HistTUI Demo](https://via.placeholder.com/800x400/6750A4/FFFFFF?text=HistTUI+Demo+GIF)
+
+</div>
+
+---
+
+## ✨ Highlights
+
+<table>
+<tr>
+<td width="33%" align="center">
+
+### 🤖 **AI-Powered**
+Generative UI with AG-UI protocol  
+Real-time insights & analysis
+
+</td>
+<td width="33%" align="center">
+
+### ⚡ **Blazing Fast**
+Native Bun SQLite indexing  
+Instant searches in massive repos
+
+</td>
+<td width="33%" align="center">
+
+### 🎨 **Beautiful**
+Material Design 3 theming  
+Built with @inkjs/ui components
+
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+
+### ⌨️ **Keyboard-First**
+Vim-style navigation  
+One-key screen switching
+
+</td>
+<td width="33%" align="center">
+
+### 🚀 **One Command**
+`bun run launch`  
+Auto-setup wizard included
+
+</td>
+<td width="33%" align="center">
+
+### 💾 **Multi-Repo**
+Clone once, switch instantly  
+Smart caching system
+
+</td>
+</tr>
+</table>
+
+> 💡 Inspired by the best terminal UIs: [lazygit](https://github.com/jesseduffield/lazygit), [k9s](https://github.com/derailed/k9s), [tig](https://github.com/jonas/tig), [htop](https://github.com/htop-dev/htop), [btop](https://github.com/aristocratos/btop)
+
+---
+
+## 📑 Table of Contents
+
+- [Quick Start](#-quick-start)
+- [Features](#-features)
+- [Screenshots](#-screenshots)
+- [Installation](#-installation)
+- [Keyboard Shortcuts](#️-keyboard-shortcuts)
+- [Architecture](#️-architecture)
+- [Plugin System](#-plugin-system)
+- [AI Assistant](#-ai-assistant-plugin)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
 
 ## 🚀 Quick Start
 
-### Launch with AG-UI (Generative AI Features)
+### Launch with AG-UI (Recommended)
+
+The fastest way to experience HistTUI with AI-powered features:
 
 ```bash
 # Single command to launch everything!
 bun run launch
 
-# Pass repository URL as argument
-bun run launch https://github.com/user/repo
-
-# Or launch from local directory
-bun run launch /path/to/repo
+# Or with a specific repository
+bun run launch https://github.com/facebook/react
 ```
 
-This starts:
-1. ✅ AG-UI Agent Server (on port 3001)
-2. ✅ HistTUI with full generative UI capabilities
+**✨ What happens:**
+1. 🚀 AG-UI Agent Server starts on port 3001
+2. 🎨 HistTUI launches with full generative UI capabilities
+3. 🤖 First-launch setup wizard (if needed):
+   - LLM provider selection (OpenAI, Anthropic, OpenRouter, Ollama)
+   - API key configuration (securely masked input)
+   - Model selection (12+ models available)
+   - Settings saved to `~/.histtui/config.json`
 
-**First Launch:** Interactive setup wizard will configure LLM provider and AG-UI settings.
-
-### Standard Launch (Without Agent)
+### Standard Installation
 
 ```bash
-# Run directly with bunx (no install needed!)
-bunx histtui https://github.com/user/repo
+# Using bunx (no installation required)
+bunx histtui https://github.com/torvalds/linux
 
 # Or install globally
 bun install -g histtui
-histtui https://github.com/user/repo
+histtui https://github.com/vercel/next.js
 
-# Use a local repository
+# Local repository
 histtui /path/to/repo
-
-# Or launch without URL (paste interactively)
-histtui
 ```
 
-**First run:** Clones and indexes the repository (takes a moment for large repos)  
-**Subsequent runs:** Lightning fast! Uses cached data.
-
-### Navigation
-
-- **j/k or ↑↓** - Navigate lists
-- **Enter** - View details
-- **1** - Timeline screen
-- **2** - Branches & Tags
-- **3** - File Tree
-- **4** - Activity Dashboard (default)
-- **5** - Repository Manager (switch repos)
-- **/** - Search
-- **?** - Toggle help
-- **q** - Quit
+**🎯 Navigation Basics:**
+```
+j/k or ↑↓     → Navigate lists
+1-5           → Switch screens instantly
+/             → Search
+?             → Toggle help
+q             → Quit
+```
 
 <details>
 <summary><strong>For AI Agents / LLMs</strong></summary>
@@ -101,7 +155,7 @@ histtui https://github.com/user/repo
 ```
 
 **Step 3:** Verify it's working
-- App should display "Cloning..." then show Activity Dashboard (repository statistics and overview)
+- App should display "Cloning..." then show Activity Dashboard
 - Press `j`/`k` to navigate, press `1` to view Timeline
 - Press `q` to quit
 
@@ -118,143 +172,335 @@ histtui cache --clear
 
 # Enable debug logging
 histtui https://github.com/user/repo --debug
-# Check logs at ~/.histtui/debug.log
-```
-
-**Configuration:**
-```bash
-# View current config
-histtui config
-
-# Custom cache directory
-histtui https://github.com/user/repo --cache-dir /custom/path
-
-# Limit commits indexed (for huge repos)
-histtui https://github.com/user/repo --max-commits 5000
 ```
 
 </details>
 
+---
+
+## ✨ Features
+
+### 🎯 Core Features
+
+<table>
+<tr>
+<td width="50%">
+
+#### 📈 Activity Dashboard
+- 🏠 **Default first screen** on launch
+- 📊 Repository statistics and insights
+- 👥 Top contributors visualization
+- 📅 Commit patterns and trends
+- 🔥 Recent activity timeline
+
+#### 📊 Commit Timeline
+- 📜 **Browse all commits** with infinite scroll
+- ⌨️ **Vim-style navigation** (j/k/g/G)
+- 🔍 **Smart filtering** by author, date, path, message
+- ⚡ **Instant search** powered by SQLite FTS
+
+#### 💬 Commit Details
+- 📄 **Full commit information** display
+- 📝 **File changes** with diff viewer
+- 🎨 **Syntax-highlighted** diffs
+- ↔️ **Split view** layout
+
+</td>
+<td width="50%">
+
+#### 🌿 Branch & Tag Explorer
+- 🔀 **Navigate all branches** and tags
+- 🎯 **Current branch** indicator
+- 🌐 **Remote tracking** status
+- 🏷️ **Tag annotations** visible
+
+#### 💾 Multi-Repo Manager
+- 📚 **Switch between repositories** instantly
+- 🗂️ **Smart caching** system
+- 🔄 **Update on demand**
+- 💨 **No restart required** (press '5')
+
+#### 🔥 File Hotspots
+- 🎯 **Identify most-changed files**
+- ⚠️ **Maintenance risk detection**
+- 📈 **Change frequency analysis**
+- 🗺️ **Codebase heatmap**
+
+</td>
+</tr>
+</table>
+
+### 🤖 Generative AI Features (AG-UI Protocol)
+
+<div align="center">
+
+![AG-UI Enabled](https://img.shields.io/badge/Powered%20by-AG--UI-orange?style=for-the-badge)
+![Material Design 3](https://img.shields.io/badge/Theme-Material%20Design%203-6750A4?style=for-the-badge)
+
+</div>
+
+HistTUI integrates the **AG-UI protocol** for true generative terminal UI:
+
+| Feature | Description |
+|---------|-------------|
+| 💬 **Real-Time AI Insights** | Get intelligent analysis of commits, patterns, and code quality streamed live |
+| 🎨 **Dynamic UI Generation** | AI generates contextual components (badges, alerts, suggestions) on-the-fly |
+| 📊 **Smart Recommendations** | Proactive suggestions for code improvements and repository health |
+| 🔄 **Streaming Updates** | Watch AI analysis happen in real-time in the status bar |
+| 🎯 **Context-Aware** | AI understands your repository structure, history, and current focus |
+| 🛠️ **Multi-Provider Support** | Works with OpenAI, Anthropic, OpenRouter, or local Ollama models |
+| 🚀 **One-Command Launch** | `bun run launch` starts both agent server and TUI together |
+
+### 🎨 Design & UX
+
+- **Material Design 3** theming with primary color `#6750A4`
+- **[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** component library integration
+- **Neurodiversity-friendly** color schemes (default, high-contrast, dyslexia-friendly)
+- **Keyboard-first** navigation with Vim-style bindings
+- **Read-only safety** - Never writes to your repository
+
+### ⚡ Performance
+
+- **Native Bun SQLite** indexing for maximum speed
+- **Smart caching** - Clone once, explore forever
+- **Async-friendly** - Never freezes, even with massive repos
+- **Instant searches** with full-text search indexing
+
+---
+
+## 📸 Screenshots
+
+<div align="center">
+
+### 📈 Activity Dashboard (Default Screen)
+![Activity Dashboard](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Activity+Dashboard+-+Repository+Stats+%26+Contributors)
+
+*View repository statistics, top contributors, and recent activity at a glance*
+
+---
+
+### 📊 Commit Timeline
+![Commit Timeline](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Commit+Timeline+-+Browse+History+with+Vim+Navigation)
+
+*Browse commits with instant filtering and vim-style navigation*
+
+---
+
+### 💬 Commit Details & Diff Viewer
+![Commit Details](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Commit+Details+-+Full+Diff+View+with+Syntax+Highlighting)
+
+*View full commit information with syntax-highlighted diffs*
+
+---
+
+### 🤖 AI Assistant (AG-UI Powered)
+![AI Assistant](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=AI+Assistant+-+Real-time+Insights+%26+Code+Analysis)
+
+*Get AI-powered insights and code analysis in real-time*
+
+</div>
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+
+- **Bun** 1.3.5 or higher ([Install Bun](https://bun.sh))
+- **Git** (for repository cloning)
+
+### Global Installation
+
+```bash
+# Install globally with bun
+bun install -g histtui
+
+# Run from anywhere
+histtui https://github.com/user/repo
+```
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/shelbeely/HistTUI.git
+cd HistTUI
+
+# Install dependencies
+bun install
+
+# Run in development mode
+bun run dev -- https://github.com/user/repo
+
+# Build for production
+bun run build
+
+# Run built version
+bun dist/cli.js https://github.com/user/repo
+```
+
+### First-Launch Wizard
+
+When launching with `bun run launch` for the first time, you'll see an interactive setup wizard:
+
+```
+🚀 HistTUI Setup Wizard
+
+1️⃣  Select LLM Provider:
+    ○ OpenAI (GPT-4, GPT-3.5)
+    ● Anthropic (Claude 3.5 Sonnet)
+    ○ OpenRouter (100+ models)
+    ○ Ollama (Local models)
+
+2️⃣  API Key: ****************** (securely masked)
+
+3️⃣  Model Selection:
+    ● claude-3-5-sonnet-20241022
+    ○ claude-3-opus-20240229
+    ○ gpt-4-turbo
+
+4️⃣  Configuration saved to ~/.histtui/config.json ✓
+```
+
+---
+
 ## ⌨️ Keyboard Shortcuts
 
-### Global
-| Key | Action |
-|-----|--------|
-| `q` or `Ctrl+C` | Quit |
-| `?` or `h` | Toggle help |
-| `/` or `Ctrl+F` | Search |
-| `1` | Commit Timeline |
-| `2` | Branches & Tags |
-| `3` | File Tree |
-| `4` | Activity Dashboard (default) |
+### 🌐 Global Shortcuts
 
-### Navigation (Vim-style)
-| Key | Action |
-|-----|--------|
-| `j` or `↓` | Move down |
-| `k` or `↑` | Move up |
-| `h` or `←` | Move left / Go back |
-| `l` or `→` | Move right / Enter |
-| `Ctrl+D` or `PgDn` | Page down |
-| `Ctrl+U` or `PgUp` | Page up |
-| `g` or `Home` | Jump to top |
-| `G` or `End` | Jump to bottom |
+| Key | Action | Description |
+|-----|--------|-------------|
+| `q` or `Ctrl+C` | **Quit** | Exit HistTUI |
+| `?` or `h` | **Help** | Toggle help overlay |
+| `/` or `Ctrl+F` | **Search** | Open search/filter |
+| `1` | **Timeline** | Jump to Commit Timeline |
+| `2` | **Branches** | Jump to Branches & Tags |
+| `3` | **File Tree** | Jump to File Tree Explorer |
+| `4` | **Dashboard** | Jump to Activity Dashboard (default) |
+| `5` | **Repos** | Jump to Repository Manager |
 
-### Commit Timeline
+### ⌨️ Navigation (Vim-Style)
+
+| Key | Action | Description |
+|-----|--------|-------------|
+| `j` or `↓` | **Move Down** | Move cursor down |
+| `k` or `↑` | **Move Up** | Move cursor up |
+| `h` or `←` | **Back/Left** | Go back or move left |
+| `l` or `→` | **Enter/Right** | Select item or move right |
+| `Ctrl+D` or `PgDn` | **Page Down** | Scroll down one page |
+| `Ctrl+U` or `PgUp` | **Page Up** | Scroll up one page |
+| `g` or `Home` | **Jump to Top** | Go to first item |
+| `G` or `End` | **Jump to Bottom** | Go to last item |
+
+### 📊 Screen-Specific Shortcuts
+
+#### Commit Timeline
 | Key | Action |
 |-----|--------|
 | `Enter` | View commit details |
-| `/` | Filter commits |
+| `/` | Filter commits (author, date, message) |
 
-### Commit Detail
+#### Commit Detail
 | Key | Action |
 |-----|--------|
-| `d` | Toggle diff view |
-| `←` | Back to timeline |
+| `d` | Toggle diff view mode |
+| `←` or `Esc` | Back to timeline |
 
-### Branches & Tags
+#### Branches & Tags
 | Key | Action |
 |-----|--------|
 | `Tab` | Switch between branches and tags |
+| `Enter` | Checkout branch (view-only) |
+
+---
 
 ## 🏗️ Architecture
 
-HistTUI is built with clean layer separation:
+<details>
+<summary><strong>📐 System Architecture Overview</strong></summary>
+
+HistTUI is built with clean layer separation for maintainability and extensibility:
 
 ```
-┌─────────────────────────────────────────┐
-│           CLI Entry Point               │
-│        (Commander.js + Ink)             │
-└─────────────────────────────────────────┘
-                   │
-        ┌──────────┴──────────┐
-        │                     │
-┌───────▼──────┐    ┌────────▼─────────┐
-│  Git Layer   │    │  Cache Manager   │
-│ (simple-git) │    │ (Repository      │
-│              │    │  Caching)        │
-└──────┬───────┘    └──────────────────┘
-       │
-┌──────▼───────────────────────────────┐
-│         SQLite Database              │
-│    (Indexed Git History)             │
-└──────┬───────────────────────────────┘
-       │
-┌──────▼───────────────────────────────┐
-│      UI Components (Ink/React)       │
-│  Built with @inkjs/ui + Custom       │
-│  • Timeline  • Commit Detail         │
-│  • Branches  • Dashboards            │
-└──────────────────────────────────────┘
-       │
-┌──────▼───────────────────────────────┐
-│       Plugin System (Optional)       │
-│  Custom Screens, Dashboards,         │
-│  Indexers                            │
-└──────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                     CLI Entry Point                         │
+│              (Commander.js + Ink + Bun)                     │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+         ┌───────────────┴───────────────┐
+         │                               │
+┌────────▼──────────┐          ┌────────▼─────────────┐
+│   Git Layer       │          │   Cache Manager      │
+│  (simple-git)     │          │  (Repository Cache)  │
+│  - clone()        │          │  ~/.histtui/cache/   │
+│  - getAllCommits()│          │  - Smart hashing     │
+│  - getBranches()  │          │  - Update tracking   │
+└────────┬──────────┘          └──────────────────────┘
+         │
+┌────────▼────────────────────────────────────────────────────┐
+│              SQLite Database (Bun Native)                   │
+│  Tables: commits, branches, tags, file_changes, metadata   │
+│  Indexes: date, author, message (FTS), path                │
+└────────┬────────────────────────────────────────────────────┘
+         │
+┌────────▼────────────────────────────────────────────────────┐
+│              Indexer (Git → Database)                       │
+│  - Batch processing for performance                         │
+│  - Progress reporting                                       │
+│  - Incremental updates                                      │
+└────────┬────────────────────────────────────────────────────┘
+         │
+┌────────▼────────────────────────────────────────────────────┐
+│           UI Layer (Ink + React + @inkjs/ui)                │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ ThemeProvider (Material Design 3 - #6750A4)          │   │
+│  │  ┌────────────────────────────────────────────────┐  │   │
+│  │  │ AGUIProvider (Generative UI Protocol)          │  │   │
+│  │  │  ┌──────────────────────────────────────────┐  │  │   │
+│  │  │  │ Screens:                                 │  │  │   │
+│  │  │  │  • Timeline        • CommitDetail        │  │  │   │
+│  │  │  │  • Branches        • FileTree            │  │  │   │
+│  │  │  │  • ActivityDashboard (default)          │  │  │   │
+│  │  │  │  • RepositoryManager                    │  │  │   │
+│  │  │  └──────────────────────────────────────────┘  │  │   │
+│  │  └────────────────────────────────────────────────┘  │   │
+│  └──────────────────────────────────────────────────────┘   │
+└────────┬────────────────────────────────────────────────────┘
+         │
+┌────────▼────────────────────────────────────────────────────┐
+│           Plugin System (Optional Extensions)               │
+│  - Custom screens and dashboards                            │
+│  - Custom indexers                                          │
+│  - Plugin API with hooks                                    │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**Read-Only by Design:** All git operations are read-only (log, show, diff). No commits, pushes, or modifications.
+### 🔑 Key Principles
 
-**Native Bun Support:** Uses bun:sqlite (Bun's native SQLite implementation) for optimal performance.
+- **Read-Only by Design**: All git operations are read-only (log, show, diff). No commits, pushes, or modifications.
+- **Native Bun Performance**: Uses `bun:sqlite` for optimal performance without native dependencies.
+- **Async-Friendly**: Large repository support with progress indicators. UI never freezes.
+- **Component-Based UI**: Built with [Ink](https://github.com/vadimdemedes/ink) (React for CLIs) and [@inkjs/ui](https://github.com/vadimdemedes/ink-ui).
+- **Extensible**: Plugin API allows adding custom dashboards, screens, and data indexers.
 
-**Async-Friendly:** Large repository support with progress indicators. UI never freezes.
+### 🎨 UI Component Library
 
-**UI Components:** Built with [Ink](https://github.com/vadimdemedes/ink) (React for CLIs) and [@inkjs/ui](https://github.com/vadimdemedes/ink-ui) (comprehensive component library) for a polished terminal experience.
+HistTUI uses **[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** for consistent, themed components:
 
-**Extension Points:** Plugin API allows adding custom dashboards, screens, and data indexers.
+| Component | Usage |
+|-----------|-------|
+| `<TextInput>` | Enhanced text input with autocomplete |
+| `<Spinner>` | Loading indicators (dots, line, arc, bounce) |
+| `<ProgressBar>` | Visual progress tracking |
+| `<Badge>` | Status badges (success, error, warning, info) |
+| `<StatusMessage>` | Bordered status messages |
+| `<Alert>` | Bold attention-grabbing alerts |
+| `<Select>` / `<MultiSelect>` | Interactive selection menus |
+| `<ConfirmInput>` | Y/n confirmation prompts |
 
-### 🎨 UI Components
+All components are automatically themed to match HistTUI's **Material Design 3** color scheme (`#6750A4`) and neurodiversity-friendly palettes.
 
-HistTUI is built with **[Ink](https://github.com/vadimdemedes/ink)** - a React renderer for terminal interfaces - and now includes **[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** for enhanced UI components.
-
-**What is Ink?**
-- React framework for building terminal UIs (you write JSX, it renders in the terminal)
-- Provides core primitives: `<Box>`, `<Text>`, layout with Flexbox
-- Powers the entire HistTUI interface
-
-**What is @inkjs/ui?**
-- Component library built **on top** of Ink
-- Pre-built, customizable components (like Material-UI, but for terminals)
-- All components are themed to match HistTUI's neurodiversity-friendly color schemes
-
-**Available @inkjs/ui Components:**
-
-- **TextInput** - Enhanced text input with autocomplete support and placeholder text
-- **Spinner** - Beautiful loading indicators (dots, line, arc, bounce styles)
-- **ProgressBar** - Visual progress tracking for long operations
-- **Badge** - Status badges and labels (success, error, warning, info)
-- **StatusMessage** - Informative bordered status messages
-- **Alert** - Bold attention-grabbing alerts for critical information
-- **Select & MultiSelect** - Interactive selection menus with keyboard navigation
-- **ConfirmInput** - Y/n confirmation prompts for user actions
-- **UnorderedList & OrderedList** - Formatted lists with custom markers
-
-**Benefits:**
-- **Consistent Design** - All components follow the same visual language
-- **Themed** - Automatically adapt to HistTUI's color schemes (default, high-contrast, dyslexia-friendly)
-- **Accessible** - High contrast ratios and clear visual feedback
-- **Keyboard-First** - Full keyboard navigation support
+</details>
 
 <details>
 <summary><strong>For AI Agents / LLMs - Detailed Architecture</strong></summary>
@@ -310,34 +556,10 @@ GitClient.getAllCommits() → GitIndexer → GitDatabase (SQLite)
 UI Components query GitDatabase → Render with Ink
 ```
 
-**Plugin Development:**
-```typescript
-// Example plugin
-export default {
-  name: 'my-plugin',
-  version: '1.0.0',
-  description: 'Custom dashboard',
-  async init(api: PluginAPI) {
-    api.registerDashboard({
-      id: 'my-dashboard',
-      name: 'My Dashboard',
-      async query(db) {
-        return db.prepare('SELECT * FROM commits LIMIT 10').all();
-      },
-      render(data) {
-        return <Box>{/* Custom UI */}</Box>;
-      },
-    });
-  },
-};
-```
-
 **Using @inkjs/ui Components:**
 
-HistTUI integrates [@inkjs/ui](https://github.com/vadimdemedes/ink-ui) for consistent UI components. Import from '@inkjs/ui':
-
 ```typescript
-import { TextInput, Spinner, Badge, Alert, StatusMessage } from '@inkjs/ui';
+import { TextInput, Spinner, Badge, Alert } from '@inkjs/ui';
 import { ThemeProvider } from '@inkjs/ui';
 import { createInkUITheme } from './config/inkui-theme.js';
 
@@ -350,176 +572,293 @@ function MyComponent() {
       <Alert variant="info" title="Notice">
         This is an informational alert
       </Alert>
-      <TextInput 
-        placeholder="Search commits..." 
-        value={value}
-        onChange={setValue}
-      />
     </>
   );
 }
 ```
 
-**Available @inkjs/ui components:**
-- `<TextInput>` - Text input with autocomplete
-- `<Spinner type="dots|line|arc|bounce">` - Loading indicators
-- `<ProgressBar value={0.5}>` - Progress tracking
-- `<Badge variant="success|error|warning|info">` - Status badges
-- `<StatusMessage variant="...">` - Bordered messages
-- `<Alert variant="..." title="...">` - Bold alerts
-- `<Select>` / `<MultiSelect>` - Selection menus
-- `<ConfirmInput>` - Y/n prompts
-- `<UnorderedList>` / `<OrderedList>` - Lists
-
-**Theme Integration:**
-
-All @inkjs/ui components are themed via `src/config/inkui-theme.ts`:
-```typescript
-import { createInkUITheme } from './config/inkui-theme.js';
-
-// Theme maps HistTUI colors to @inkjs/ui components:
-// - primary → spinner/badges/highlights
-// - success/error/warning/info → status variants
-// - foreground/background → text and containers
-// - border → input borders and boxes
-
-const theme = createInkUITheme('default'); // or 'high-contrast', 'dyslexia-friendly'
-```
-
 </details>
+
+---
 
 ## 🔌 Plugin System
 
-HistTUI is designed for extensibility. Plugins can add:
+<div align="center">
 
-- **Custom Screens** - New top-level views
-- **Custom Dashboards** - Data visualizations
-- **Custom Indexers** - Additional data extraction from commits
+![Extensible](https://img.shields.io/badge/Extensible-Plugin%20API-brightgreen)
 
-See [PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md) for full documentation.
+</div>
 
-## 📦 Installation & Development
+HistTUI is designed for extensibility. Create custom plugins to extend functionality:
 
-<details>
-<summary><strong>For Developers</strong></summary>
+### 📦 What Can Plugins Do?
 
-### Prerequisites
-- Bun 1.3.5+ 
-- Git
+<table>
+<tr>
+<td width="33%">
 
-### Development Setup
+#### 🖥️ Custom Screens
+Add new top-level views accessible via keyboard shortcuts
+
+</td>
+<td width="33%">
+
+#### 📊 Custom Dashboards
+Create data visualizations and analytics views
+
+</td>
+<td width="33%">
+
+#### 🔍 Custom Indexers
+Extract additional data from commits and repository history
+
+</td>
+</tr>
+</table>
+
+### 🚀 Quick Plugin Example
+
+```typescript
+// my-plugin.ts
+export default {
+  name: 'my-dashboard-plugin',
+  version: '1.0.0',
+  description: 'Custom repository analytics',
+  
+  async init(api: PluginAPI) {
+    api.registerDashboard({
+      id: 'custom-analytics',
+      name: 'Analytics Dashboard',
+      
+      async query(db) {
+        return db.prepare(`
+          SELECT 
+            author,
+            COUNT(*) as commits,
+            SUM(files_changed) as files
+          FROM commits
+          GROUP BY author
+          ORDER BY commits DESC
+          LIMIT 10
+        `).all();
+      },
+      
+      render(data) {
+        return (
+          <Box flexDirection="column">
+            <Text bold>📊 Top Contributors</Text>
+            {data.map(row => (
+              <Text key={row.author}>
+                {row.author}: {row.commits} commits, {row.files} files
+              </Text>
+            ))}
+          </Box>
+        );
+      }
+    });
+  }
+};
+```
+
+### 📚 Documentation
+
+For complete plugin development guide, see **[PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md)**
+
+---
+
+## 🤖 AI Assistant Plugin
+
+<div align="center">
+
+![AI Powered](https://img.shields.io/badge/AI-Powered-orange)
+![Multi-Provider](https://img.shields.io/badge/Multi--Provider-OpenAI%20%7C%20Anthropic%20%7C%20Ollama-blue)
+
+</div>
+
+HistTUI includes a powerful **AI-powered coding assistant** that brings agentic coding capabilities directly to your terminal.
+
+### ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| 💬 **AI Chat** | Ask questions about your repository, get code explanations, refactoring suggestions |
+| 📋 **Task Management** | Kanban-style task board for organizing coding work |
+| 🌳 **Git Worktrees** | Isolated development environments for each task |
+| ⚡ **Command Execution** | Safely run commands with AI assistance |
+| 🔌 **Multi-Provider** | Works with OpenAI, Anthropic, OpenRouter, or Ollama |
+
+### 🚀 Quick Start
+
 ```bash
-# Clone the repository
-git clone https://github.com/shelbeely/HistTUI.git
-cd HistTUI
+# Set your API key (choose one)
+export OPENROUTER_API_KEY="sk-..."  # Recommended: access to many models
+export OPENAI_API_KEY="sk-..."
+export ANTHROPIC_API_KEY="sk-..."
 
-# Install dependencies
-bun install
+# Launch HistTUI
+bun run launch https://github.com/user/repo
 
-# Run in development mode
-bun run dev -- https://github.com/user/repo
-
-# Build
-bun run build
-
-# Run built version
-bun dist/cli.js https://github.com/user/repo
+# Press 'a' to open AI Assistant
 ```
 
-### Project Structure
-```
-HistTUI/
-├── src/
-│   ├── cli.ts                 # CLI entry point
-│   ├── components/            # UI components
-│   │   ├── App.tsx           # Main app
-│   │   ├── AppContext.tsx    # State management
-│   │   ├── common/           # Shared UI components
-│   │   ├── screens/          # Main screens
-│   │   └── dashboards/       # Dashboard screens
-│   ├── core/                 # Core functionality
-│   │   ├── cache/           # Repository caching
-│   │   ├── database/        # SQLite operations
-│   │   ├── git/             # Git operations
-│   │   └── indexer/         # Git history indexing
-│   ├── plugins/             # Plugin system
-│   ├── config/              # Configuration management
-│   ├── utils/               # Utility functions
-│   └── types/               # TypeScript definitions
-├── .github/
-│   └── agents/
-│       └── histtui-maintainer.md  # Custom agent definition
-├── package.json
-├── tsconfig.json
-└── README.md
+### ⌨️ AI Assistant Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `a` | Open AI Assistant |
+| `Tab` | Switch between Chat, Tasks, Worktrees, Help |
+| `Enter` | Send message (in chat mode) |
+| `Esc` | Exit AI Assistant |
+
+### ⚙️ Configuration
+
+Create `~/.histtui/ai-config.json`:
+
+```json
+{
+  "provider": "openrouter",
+  "model": "anthropic/claude-3.5-sonnet",
+  "maxTokens": 4000,
+  "temperature": 0.7
+}
 ```
 
-### Adding a New Screen
-1. Create component in `src/components/screens/`
-2. Add to AppContext screen type
-3. Register in App.tsx switch statement
-4. Add keyboard shortcut in hooks.ts
+**Supported Providers:**
+- `openrouter` - Access 100+ models (recommended)
+- `openai` - GPT-4, GPT-3.5
+- `anthropic` - Claude 3.5 Sonnet, Claude 3 Opus
+- `ollama` - Local models (Llama 2, Mistral, etc.)
 
-### Adding a Dashboard
-1. Create component in `src/components/dashboards/`
-2. Add data query method to GitDatabase
-3. Register in App.tsx
-4. Add to dashboard navigation
+### 📋 Task Orchestration
 
-</details>
+The AI Assistant includes a **kanban-style task board** inspired by [vibe-kanban](https://github.com/BloopAI/vibe-kanban):
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  📝 Todo  │  🔨 In Progress  │  👀 Review  │  ✅ Done  │
+├───────────┼──────────────────┼─────────────┼───────────┤
+│ Task 1    │ Task 2           │ Task 3      │ Task 4    │
+│ Task 5    │ (+ worktree)     │             │ Task 6    │
+└───────────┴──────────────────┴─────────────┴───────────┘
+```
+
+Each task can have:
+- 🌳 Isolated git worktree for safe development
+- 🔀 Associated branch and commits
+- 🎯 Priority levels (low, medium, high, critical)
+- 🏷️ Tags and assignees
+
+### 🌳 Git Worktrees
+
+Tasks in "In Progress" status automatically get their own git worktree:
+
+```
+~/.histtui/worktrees/
+  └── task-abc123/          # Isolated worktree
+      ├── .git              # Separate git directory
+      └── src/              # Independent working copy
+```
+
+**Benefits:**
+- ✅ Work on multiple tasks in parallel
+- ✅ No branch switching conflicts
+- ✅ Safe AI-assisted changes
+- ✅ Easy cleanup when task is done
+
+### 🔒 Security & Safety
+
+The AI Assistant includes safety controls:
+
+**File Operations:**
+- ✅ **Allowed:** `.ts`, `.tsx`, `.js`, `.jsx`, `.json`, `.md`, `.yaml`
+- ❌ **Denied:** `node_modules/`, `.git/`, `.env`, `dist/`, `build/`
+
+**Command Execution:**
+- ✅ **Allowed:** `npm`, `node`, `python`, `go`, `git`, `test`
+- ❌ **Denied:** `rm`, `sudo`, `shutdown`, `format`
+- ⏱️ **30-second timeout** on all commands
+
+All operations run in **isolated worktrees**, never in your main repository.
+
+---
 
 ## 🎯 Roadmap
 
-- [ ] File tree navigator with markdown preview
-- [ ] Hotspots & ownership dashboards
-- [ ] Global search and command palette
-- [ ] Interactive rebase visualization (read-only)
-- [ ] Commit graph visualization
-- [ ] Blame view for files
-- [ ] Export reports (PDF, HTML)
-- [ ] Comparison view (branches, commits)
-- [ ] Performance metrics dashboard
+### 🚧 In Progress
+
+- [ ] **File tree navigator** with markdown preview
+- [ ] **Hotspots dashboard** - Identify high-churn files
+- [ ] **Ownership dashboard** - Code ownership and bus factor analysis
+- [ ] **Global search** and command palette (`Ctrl+P`)
+
+### 🔮 Planned Features
+
+- [ ] **Interactive rebase visualization** (read-only preview)
+- [ ] **Commit graph visualization** with ASCII art
+- [ ] **Blame view** for files
+- [ ] **Export reports** (PDF, HTML, Markdown)
+- [ ] **Comparison view** (branches, commits, tags)
+- [ ] **Performance metrics** dashboard
+- [ ] **Code complexity** analysis
+- [ ] **Dependency graph** visualization
+
+### 💡 Ideas & Experiments
+
+- [ ] **Collaborative features** - Share repository views
+- [ ] **Custom themes** with live preview
+- [ ] **Plugin marketplace** for community extensions
+- [ ] **Integration with GitHub/GitLab** APIs
+- [ ] **Time-travel debugging** for code evolution
+
+---
 
 ## 🙏 Inspiration & Attribution
 
+<div align="center">
+
 HistTUI draws inspiration from amazing TUI tools:
 
-- [lazygit](https://github.com/jesseduffield/lazygit) - Terminal UI for git
-- [k9s](https://github.com/derailed/k9s) - Kubernetes CLI
-- [tig](https://github.com/jonas/tig) - Text-mode interface for git
-- [htop](https://github.com/htop-dev/htop) - Interactive process viewer
-- [btop](https://github.com/aristocratos/btop) - Resource monitor
+[![lazygit](https://img.shields.io/badge/lazygit-Terminal%20UI%20for%20git-blue)](https://github.com/jesseduffield/lazygit)
+[![k9s](https://img.shields.io/badge/k9s-Kubernetes%20CLI-blue)](https://github.com/derailed/k9s)
+[![tig](https://img.shields.io/badge/tig-Text%20mode%20git-blue)](https://github.com/jonas/tig)
+[![htop](https://img.shields.io/badge/htop-Process%20viewer-blue)](https://github.com/htop-dev/htop)
+[![btop](https://img.shields.io/badge/btop-Resource%20monitor-blue)](https://github.com/aristocratos/btop)
 
-### Code Attribution
+</div>
+
+### 📜 Code Attribution
 
 HistTUI uses code patterns from these open-source projects with proper attribution:
 
-**[@inkjs/ui](https://github.com/vadimdemedes/ink-ui)** by Vadim Demedes (MIT License)
+<details>
+<summary><strong>📦 Third-Party Components</strong></summary>
+
+#### [@inkjs/ui](https://github.com/vadimdemedes/ink-ui) by Vadim Demedes (MIT License)
 - Comprehensive UI component library for Ink-based terminal applications
 - Components: TextInput, Spinner, ProgressBar, Badge, Alert, Select, StatusMessage
 - Custom theming integration for neurodiversity-friendly color schemes
 - Used throughout: `src/components/`, themed via `src/config/inkui-theme.ts`
 
-**[emoj](https://github.com/sindresorhus/emoj)** by Sindre Sorhus (MIT License)
+#### [emoj](https://github.com/sindresorhus/emoj) by Sindre Sorhus (MIT License)
 - Interactive fuzzy search patterns
 - Debounced input handling
 - Number shortcuts (1-9) for quick selection
 - Used in: `src/components/screens/FuzzySearchScreen.tsx`
 
-**[changelog-view](https://github.com/jdeniau/changelog-view)** by Julien Deniau (MIT License)
+#### [changelog-view](https://github.com/jdeniau/changelog-view) by Julien Deniau (MIT License)
 - Changelog parsing logic
 - Semantic version extraction
 - Markdown version grouping
 - Used in: `src/utils/changelog.ts`, `src/components/screens/ChangelogViewerScreen.tsx`
 
-**[nanocoder](https://github.com/Nano-Collective/nanocoder)** by Nano Collective (MIT with Attribution)
+#### [nanocoder](https://github.com/Nano-Collective/nanocoder) by Nano Collective (MIT with Attribution)
 - AI-powered coding assistant patterns
 - Multi-provider AI integration (OpenAI, Anthropic, OpenRouter, Ollama)
 - Repository context awareness
 - AI SDK streaming patterns
 - Used in: `src/plugins/ai-assistant/` (AI Assistant Plugin)
 
-**[vibe-kanban](https://github.com/BloopAI/vibe-kanban)** by BloopAI (Apache 2.0)
+#### [vibe-kanban](https://github.com/BloopAI/vibe-kanban) by BloopAI (Apache 2.0)
 - Task orchestration patterns
 - Git worktree isolation for safe parallel development
 - Kanban-style task management
@@ -527,6 +866,8 @@ HistTUI uses code patterns from these open-source projects with proper attributi
 - Used in: `src/plugins/ai-assistant/services/WorktreeManager.ts`, `TaskManager.ts`
 
 **Full license texts:** See [THIRD_PARTY_LICENSES.md](./THIRD_PARTY_LICENSES.md)
+
+</details>
 
 <details>
 <summary><strong>For AI Agents / LLMs - CRITICAL Attribution Requirements</strong></summary>
@@ -549,10 +890,9 @@ grep -r "Inspired by\|MIT License" src/
 - `src/plugins/ai-assistant/services/AIService.ts` - nanocoder patterns
 - `src/plugins/ai-assistant/services/WorktreeManager.ts` - vibe-kanban patterns
 - `src/plugins/ai-assistant/services/TaskManager.ts` - vibe-kanban patterns
-- `src/plugins/ai-assistant/screens/AIAssistantScreen.tsx` - nanocoder patterns
 
 ### Step 2: Preserve File Headers
-**Every file using third-party patterns MUST have this format at the top:**
+Every file using third-party patterns MUST have this format at the top:
 
 ```typescript
 /**
@@ -564,193 +904,143 @@ grep -r "Inspired by\|MIT License" src/
  */
 ```
 
-**Example (DO NOT REMOVE):**
-```typescript
-/**
- * Fuzzy Search Screen
- * Interactive fuzzy search across commits
- * 
- * Search interaction patterns inspired by emoj by Sindre Sorhus (MIT License)
- * https://github.com/sindresorhus/emoj
- */
-```
-
-### Step 3: When Adding New Features
-**If you add features to files with attribution:**
-- ✅ KEEP the existing attribution header
-- ✅ Do NOT remove or modify attribution comments
-- ✅ Add your own changes below the header
-- ❌ NEVER remove copyright/license references
-
-### Step 4: Verification Commands
+### Step 3: Verification Commands
 ```bash
 # Verify attribution is intact
 cat src/components/screens/FuzzySearchScreen.tsx | head -10
 cat src/utils/changelog.ts | head -10
-
-# Should output headers like:
-# "Search interaction patterns inspired by emoj by Sindre Sorhus"
-# "Changelog parsing inspired by changelog-view by Julien Deniau"
 ```
-
-### Step 5: Required Files
-**These files MUST exist and MUST NOT be deleted:**
-- `THIRD_PARTY_LICENSES.md` - Full MIT license text
-- `README.md` - Attribution section (this section)
-- Source file headers - Attribution comments in files
-
-### Step 6: License Compatibility
-**We use ISC license. Compatible with:**
-- ✅ MIT (emoj, changelog-view) - Used with attribution
-- ✅ MIT with Attribution (nanocoder) - Not yet used, will require credit
-- ❌ GPL-3.0 (wiki-cli) - NOT used, incompatible
-
-**If you add dependencies:**
-```bash
-# Check license before using
-npm info [package] license
-
-# Only use MIT, ISC, BSD, Apache-2.0
-# NEVER use GPL, AGPL, or other copyleft licenses
-```
-
-### Step 7: Attribution Checklist
-Before committing code changes:
-- [ ] File headers with attribution are intact
-- [ ] THIRD_PARTY_LICENSES.md exists and is complete
-- [ ] README.md attribution section is accurate
-- [ ] No GPL-licensed code was copied
-- [ ] New dependencies are license-compatible
-
-### Step 8: Error Recovery
-**If attribution is accidentally removed:**
-```bash
-# Restore from git history
-git log --all --full-history -- src/components/screens/FuzzySearchScreen.tsx
-git checkout [commit-hash] -- src/components/screens/FuzzySearchScreen.tsx
-
-# Or restore the header manually:
-# See THIRD_PARTY_LICENSES.md for correct attribution format
-```
-
-### Why This Matters
-- **Legal compliance** - MIT license requires attribution
-- **Ethical coding** - Credit original authors
-- **Community trust** - Open source depends on proper attribution
-- **License violations** - Removing attribution violates MIT license terms
 
 **REMEMBER:** Attribution is not optional. It is a legal requirement of the MIT License.
 
 </details>
 
-## 📄 License
-
-ISC
+---
 
 ## 🤝 Contributing
 
-Contributions welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+<div align="center">
+
+We welcome contributions! 🎉
+
+[![Contributors](https://img.shields.io/badge/Contributors-Welcome-brightgreen)](./CONTRIBUTING.md)
+[![Good First Issue](https://img.shields.io/badge/Good%20First%20Issue-Available-blue)](https://github.com/shelbeely/HistTUI/labels/good%20first%20issue)
+
+</div>
+
+### 🚀 Quick Contribution Guide
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Make your changes** and test thoroughly
+4. **Commit with emoji** (✨ feat: Add amazing feature)
+5. **Push to your fork** (`git push origin feature/amazing-feature`)
+6. **Open a Pull Request**
+
+### 📝 Contribution Areas
+
+<table>
+<tr>
+<td width="33%">
+
+#### 🐛 Bug Fixes
+Help us squash bugs and improve stability
+
+</td>
+<td width="33%">
+
+#### ✨ New Features
+Add new screens, dashboards, or capabilities
+
+</td>
+<td width="33%">
+
+#### 📚 Documentation
+Improve guides, examples, and tutorials
+
+</td>
+</tr>
+<tr>
+<td width="33%">
+
+#### 🔌 Plugins
+Create and share custom plugins
+
+</td>
+<td width="33%">
+
+#### 🎨 UI/UX
+Enhance visual design and usability
+
+</td>
+<td width="33%">
+
+#### 🧪 Testing
+Write tests and improve coverage
+
+</td>
+</tr>
+</table>
+
+### 📚 Development Docs
+
+For detailed development setup and guidelines, see **[CONTRIBUTING.md](./CONTRIBUTING.md)**
 
 ---
 
+## 📄 License
+
+<div align="center">
+
+**ISC License**
+
+Copyright (c) 2026 HistTUI Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+
+See [LICENSE](./LICENSE) for full text.
+
+</div>
+
+---
+
+## 🌟 Star History
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=shelbeely/HistTUI&type=Date)](https://star-history.com/#shelbeely/HistTUI&Date)
+
+</div>
+
+---
+
+## 📞 Connect & Support
+
+<div align="center">
+
+### Found a bug? Have a feature request?
+
+[![Issues](https://img.shields.io/badge/Issues-Report%20Here-red)](https://github.com/shelbeely/HistTUI/issues)
+[![Discussions](https://img.shields.io/badge/Discussions-Join%20Community-blue)](https://github.com/shelbeely/HistTUI/discussions)
+
+### Show your support
+
+If you like HistTUI, consider:
+- ⭐ **Starring the repository**
+- 🐦 **Sharing on social media**
+- 💬 **Spreading the word**
+
+</div>
+
+---
+
+<div align="center">
+
 **Made with 🚀 for developers who live in the terminal**
 
-## 🤖 AI Assistant Plugin
+![Built with Bun](https://img.shields.io/badge/Built%20with-Bun-black?logo=bun)
+![Built with Ink](https://img.shields.io/badge/Built%20with-Ink-purple)
+![Powered by TypeScript](https://img.shields.io/badge/Powered%20by-TypeScript-blue?logo=typescript)
 
-HistTUI includes a powerful AI-powered coding assistant that brings agentic coding capabilities directly to your terminal.
-
-**Features:**
-- 💬 **AI Chat** - Ask questions about your repository, get code explanations, refactoring suggestions
-- 📋 **Task Management** - Kanban-style task board for organizing coding work
-- 🌳 **Git Worktrees** - Isolated development environments for each task
-- ⚡ **Command Execution** - Safely run commands with AI assistance
-- 🔌 **Multi-Provider** - OpenAI, Anthropic, OpenRouter, or Ollama
-
-**Quick Start:**
-```bash
-# Set your API key (choose one)
-export OPENROUTER_API_KEY="sk-..."  # Recommended: access to many models
-export OPENAI_API_KEY="sk-..."
-export ANTHROPIC_API_KEY="sk-..."
-
-# Launch HistTUI
-histtui https://github.com/user/repo
-
-# Press 'a' to open AI Assistant
-```
-
-**Keyboard Shortcuts:**
-- `a` - Open AI Assistant
-- `Tab` - Switch between Chat, Tasks, Worktrees, Help
-- `Enter` - Send message (in chat mode)
-- `Esc` - Exit AI Assistant
-
-### Configuration
-
-Create `~/.histtui/ai-config.json`:
-```json
-{
-  "provider": "openrouter",
-  "model": "anthropic/claude-3.5-sonnet",
-  "maxTokens": 4000,
-  "temperature": 0.7
-}
-```
-
-**Supported Providers:**
-- `openrouter` - Access 100+ models (recommended)
-- `openai` - GPT-4, GPT-3.5
-- `anthropic` - Claude 3.5 Sonnet, Claude 3 Opus
-- `ollama` - Local models (Llama 2, Mistral, etc.)
-
-### Task Orchestration
-
-The AI Assistant includes a kanban-style task board inspired by vibe-kanban:
-
-```bash
-# Tasks are organized in columns:
-- 📝 Todo
-- 🔨 In Progress (with worktree)
-- 👀 Review
-- ✅ Done
-- 🚫 Blocked
-```
-
-Each task can have:
-- Isolated git worktree for safe development
-- Associated branch and commits
-- Priority levels (low, medium, high, critical)
-- Tags and assignees
-
-### Git Worktrees
-
-Tasks in "In Progress" status automatically get their own git worktree:
-
-```
-~/.histtui/worktrees/
-  └── task-abc123/          # Isolated worktree
-      ├── .git              # Separate git directory
-      └── src/              # Independent working copy
-```
-
-**Benefits:**
-- Work on multiple tasks in parallel
-- No branch switching conflicts
-- Safe AI-assisted changes
-- Easy cleanup when task is done
-
-### Security & Safety
-
-The AI Assistant includes safety controls:
-
-**File Operations:**
-- ✅ Allowed: `.ts`, `.tsx`, `.js`, `.jsx`, `.json`, `.md`, `.yaml`
-- ❌ Denied: `node_modules/`, `.git/`, `.env`, `dist/`, `build/`
-
-**Command Execution:**
-- ✅ Allowed: `npm`, `node`, `python`, `go`, `git`, `test`
-- ❌ Denied: `rm`, `sudo`, `shutdown`, `format`
-- ⏱️ 30-second timeout on all commands
-
-All operations run in isolated worktrees, never in your main repository.
+</div>
 
