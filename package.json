@@ -10,7 +10,11 @@
     "build": "bun build src/cli.ts --outdir dist --target bun --format esm --define 'process.env.NODE_ENV=\"development\"'",
     "start": "bun dist/cli.js",
     "dev": "bun --watch src/cli.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "agent": "bun agent-server/server.ts",
+    "agent:dev": "bun --watch agent-server/server.ts",
+    "launch": "bun launch-with-agent.ts",
+    "launch:dev": "bun build && bun launch-with-agent.ts"
   },
   "keywords": [
     "git",

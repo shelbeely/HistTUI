@@ -6,20 +6,50 @@
 
 ## ✨ Features
 
+### Core Features
 - **📈 Activity Dashboard** - First screen on launch! Visualize repository activity, top contributors, and commit patterns at a glance.
 - **📊 Commit Timeline** - Browse commits with vim-style navigation (j/k). Filter by author, date, path, or message.
 - **💬 Commit Details** - View full commit info, file changes, and diffs in a beautiful split view.
 - **🌿 Branch & Tag Explorer** - Navigate all branches and tags with clear indicators for current/remote branches.
 - **🔥 File Hotspots** - Identify most-changed files and potential maintenance risks.
+- **📚 Multi-Repo Manager** - View and switch between cached repositories without restarting (press '5').
 - **⚡ Blazing Fast** - Native Bun SQLite indexing means instant searches, even in massive repositories.
 - **🔌 Plugin-Ready** - Extensible architecture for custom dashboards and screens.
-- **⌨️ Keyboard-First** - Vim-style navigation (j/k/g/G), quick shortcuts (1-4 for screens), and discoverable help (?).
+- **⌨️ Keyboard-First** - Vim-style navigation (j/k/g/G), quick shortcuts (1-5 for screens), and discoverable help (?).
 - **🔒 Read-Only Safety** - Never writes to your repository. Pure exploration mode.
 - **💾 Smart Caching** - Clone once, explore instantly. Updates on demand.
 
+### 🤖 Generative AI Features (with AG-UI)
+- **💬 Real-Time AI Insights** - Get intelligent analysis of commits, patterns, and code quality streamed live.
+- **🎨 Dynamic UI Generation** - AI can generate contextual UI components (badges, alerts, suggestions).
+- **📊 Smart Recommendations** - Proactive suggestions for code improvements and repository health.
+- **🔄 Streaming Updates** - Watch AI analysis happen in real-time in the status bar.
+- **🎯 Context-Aware** - AI understands your repository structure, history, and current focus.
+- **🛠️ Multi-Provider Support** - Works with OpenAI, Anthropic, OpenRouter, or local Ollama models.
+- **🚀 One-Command Launch** - `bun run launch` starts both agent server and TUI together.
+
 ## 🚀 Quick Start
 
-### For Humans
+### Launch with AG-UI (Generative AI Features)
+
+```bash
+# Single command to launch everything!
+bun run launch
+
+# Pass repository URL as argument
+bun run launch https://github.com/user/repo
+
+# Or launch from local directory
+bun run launch /path/to/repo
+```
+
+This starts:
+1. ✅ AG-UI Agent Server (on port 3001)
+2. ✅ HistTUI with full generative UI capabilities
+
+**First Launch:** Interactive setup wizard will configure LLM provider and AG-UI settings.
+
+### Standard Launch (Without Agent)
 
 ```bash
 # Run directly with bunx (no install needed!)
@@ -31,6 +61,9 @@ histtui https://github.com/user/repo
 
 # Use a local repository
 histtui /path/to/repo
+
+# Or launch without URL (paste interactively)
+histtui
 ```
 
 **First run:** Clones and indexes the repository (takes a moment for large repos)  
@@ -44,6 +77,7 @@ histtui /path/to/repo
 - **2** - Branches & Tags
 - **3** - File Tree
 - **4** - Activity Dashboard (default)
+- **5** - Repository Manager (switch repos)
 - **/** - Search
 - **?** - Toggle help
 - **q** - Quit
