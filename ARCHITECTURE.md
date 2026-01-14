@@ -1,8 +1,12 @@
 # HistTUI Architecture Guide
 
+> **💡 Looking for the complete technical reference?** See **[SPECIFICATION.md](./SPECIFICATION.md)** for comprehensive documentation of all systems, APIs, data models, and integration points.
+
 ## Overview
 
 HistTUI is a production-grade Terminal User Interface for exploring Git repository history. Built with Ink (React for terminals) and TypeScript, it provides a fast, keyboard-driven interface inspired by tools like lazygit, k9s, and tig.
+
+**This document focuses on architectural patterns and layer interactions. For complete API reference, database schemas, and component specifications, see [SPECIFICATION.md](./SPECIFICATION.md).**
 
 ## Design Principles
 
@@ -885,7 +889,21 @@ npm run dev -- https://github.com/microsoft/vscode
 
 ---
 
-For more information, see:
-- [README.md](./README.md) - User documentation
-- [CONTRIBUTING.md](./CONTRIBUTING.md) - Contribution guidelines
-- [PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md) - Plugin development (TODO)
+## 📚 Related Documentation
+
+For comprehensive technical details, see:
+
+- **[📋 SPECIFICATION.md](./SPECIFICATION.md)** - ⭐ Complete technical specification (authoritative reference)
+  - All systems architecture
+  - Complete API reference  
+  - Database schemas
+  - Component catalog
+  - Integration points
+  - Security & performance
+- **[README.md](./README.md)** - User documentation and quick start
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines
+- **[PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md)** - Plugin development
+- **[CONFIGURATION.md](./CONFIGURATION.md)** - Configuration options
+- **[CODE_PLANNER.md](./CODE_PLANNER.md)** - Code planning system
+- **[AGUI_INTEGRATION.md](./AGUI_INTEGRATION.md)** - AG-UI protocol integration
+- **[MATERIAL_DESIGN_3.md](./MATERIAL_DESIGN_3.md)** - Material Design 3 theming

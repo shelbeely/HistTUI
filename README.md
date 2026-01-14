@@ -85,6 +85,7 @@ Smart caching system
 - [Architecture](#️-architecture)
 - [Plugin System](#-plugin-system)
 - [AI Assistant](#-ai-assistant-plugin)
+- [Technical Specification](#-technical-specification)
 - [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
 - [License](#-license)
@@ -917,6 +918,92 @@ The AI Assistant includes safety controls:
 - ⏱️ **30-second timeout** on all commands
 
 All operations run in **isolated worktrees**, never in your main repository.
+
+---
+
+## 📋 Technical Specification
+
+<div align="center">
+
+[![Complete Specification](https://img.shields.io/badge/Complete-Technical%20Specification-6750A4)](./SPECIFICATION.md)
+
+</div>
+
+For developers, contributors, and integrators, HistTUI provides a **comprehensive technical specification document** that serves as the authoritative reference for the entire project.
+
+### What's Inside SPECIFICATION.md
+
+📖 **[Read the Complete Specification →](./SPECIFICATION.md)**
+
+The specification covers:
+
+<table>
+<tr>
+<td width="50%">
+
+#### Part I: Foundation
+- Complete project overview
+- System architecture diagrams
+- Full tech stack with versions
+- File organization (67+ files)
+
+#### Part II: Core Systems
+- Configuration system reference
+- Cache system internals
+- Git layer API
+- Database schema & queries
+- Indexer implementation
+
+#### Part III: User Interface
+- UI architecture patterns
+- Complete component catalog
+- Screen specifications
+- Material Design 3 theming
+- Keyboard shortcut reference
+
+</td>
+<td width="50%">
+
+#### Part IV: Advanced Features
+- Plugin development guide
+- AG-UI protocol integration
+- Code Planner system
+- Time tracking implementation
+- Multi-repository support
+
+#### Part V: Reference
+- Complete API documentation
+- TypeScript type definitions
+- Database schema (all tables)
+- Integration points
+- Security best practices
+- Performance optimizations
+
+</td>
+</tr>
+</table>
+
+### Use Cases for SPECIFICATION.md
+
+| Audience | Use Case |
+|----------|----------|
+| **Contributors** | Understand architecture before making changes |
+| **Plugin Developers** | Reference API contracts and extension points |
+| **Integrators** | Learn integration points (AG-UI, git, database) |
+| **Code Reviewers** | Verify changes align with architectural patterns |
+| **Technical Writers** | Reference for creating additional documentation |
+| **AI Agents** | Complete context for understanding and modifying code |
+
+### Quick Links
+
+- 📋 **[SPECIFICATION.md](./SPECIFICATION.md)** - Complete technical reference
+- 🏗️ **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Architecture deep-dive
+- ⚙️ **[CONFIGURATION.md](./CONFIGURATION.md)** - Configuration options
+- 🔌 **[PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md)** - Plugin development
+- 🎯 **[CODE_PLANNER.md](./CODE_PLANNER.md)** - Code planning system
+- 🤖 **[AGUI_INTEGRATION.md](./AGUI_INTEGRATION.md)** - AG-UI protocol
+- 🎨 **[MATERIAL_DESIGN_3.md](./MATERIAL_DESIGN_3.md)** - Design system
+- 📦 **[COMPONENTS.md](./COMPONENTS.md)** - Component catalog
 
 ---
 

@@ -1,5 +1,7 @@
 # HistTUI Plugin Development Guide
 
+> **📋 For complete API reference and architecture details**, see **[SPECIFICATION.md](./SPECIFICATION.md)** - Section 15: Plugin System & Section 20: API Reference.
+
 This guide explains how to create plugins for HistTUI, including how the built-in AI Assistant plugin was created.
 
 ## Plugin Architecture
