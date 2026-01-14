@@ -14,6 +14,7 @@ import { FileTreeScreen } from './screens/FileTreeScreen';
 import { FuzzySearchScreen } from './screens/FuzzySearchScreen';
 import { ChangelogViewerScreen } from './screens/ChangelogViewerScreen';
 import { RepoManagerScreen } from './screens/RepoManagerScreen';
+import { CodePlannerScreen } from './screens/CodePlannerScreen';
 import { ActivityDashboard } from './dashboards/ActivityDashboard';
 import { ErrorDisplay } from './common/UI';
 import { GenerativeStatusBar } from './common/GenerativeStatusBar';
@@ -42,6 +43,7 @@ function AppContent({
   repoName,
   currentRepoUrl,
   onSwitchRepo,
+  cacheDir,
 }: {
   gitClient: GitClient;
   database: GitDatabase;
@@ -49,6 +51,7 @@ function AppContent({
   repoName: string;
   currentRepoUrl: string;
   onSwitchRepo: (repoUrl: string) => void;
+  cacheDir: string;
 }) {
   const { screen, error, setError, setScreen } = useApp();
 
@@ -61,6 +64,7 @@ function AppContent({
       'search': 'Search',
       'dashboard-activity': 'Activity Dashboard',
       'repo-manager': 'Repository Manager',
+      'code-planner': 'Code Planner',
     };
     return screenNames[screenId] || 'Dashboard';
   };
@@ -93,7 +97,13 @@ function AppContent({
             onBack={() => setScreen('dashboard-activity')}
           />
         )}
-        {!['timeline', 'commit-detail', 'branches', 'files', 'search', 'dashboard-activity', 'repo-manager'].includes(screen) && (
+        {screen === 'code-planner' && (
+          <CodePlannerScreen 
+            repoUrl={currentRepoUrl}
+            cacheDir={cacheDir}
+          />
+        )}
+        {!['timeline', 'commit-detail', 'branches', 'files', 'search', 'dashboard-activity', 'repo-manager', 'code-planner'].includes(screen) && (
           <ActivityDashboard database={database} />
         )}
       </Box>
@@ -336,6 +346,7 @@ export function App({ repoUrl: initialRepoUrl, skipUpdate = false }: AppProps) {
             repoName={repoName}
             currentRepoUrl={repoUrl}
             onSwitchRepo={handleRepoSwitch}
+            cacheDir={config.getCacheDir()}
           />
         </AppProvider>
       </AGUIProvider>

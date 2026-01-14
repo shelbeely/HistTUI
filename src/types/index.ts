@@ -249,7 +249,8 @@ export type Screen =
   | 'dashboard-ownership'
   | 'search'
   | 'help'
-  | 'repo-manager';
+  | 'repo-manager'
+  | 'code-planner';
 
 export interface AppState {
   screen: Screen;
@@ -307,3 +308,6 @@ export interface Logger {
   error: (message: string, ...args: any[]) => void;
   debug: (message: string, ...args: any[]) => void;
 }
+
+// Code Planner Types
+export * from './code-planner';

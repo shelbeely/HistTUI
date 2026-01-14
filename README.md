@@ -81,6 +81,7 @@ Smart caching system
 - [Screenshots](#-screenshots)
 - [Installation](#-installation)
 - [Keyboard Shortcuts](#️-keyboard-shortcuts)
+- [Code Planner](#-code-planner)
 - [Architecture](#️-architecture)
 - [Plugin System](#-plugin-system)
 - [AI Assistant](#-ai-assistant-plugin)
@@ -219,6 +220,13 @@ histtui https://github.com/user/repo --debug
 - 🗂️ **Smart caching** system
 - 🔄 **Update on demand**
 - 💨 **No restart required** (press '5')
+
+#### 🎯 Code Planner
+- 📝 **Create code specs** with structured templates
+- 🤖 **AI-powered planning** with AG-UI integration
+- 💡 **Project context** management (tech stack, style guide, goals)
+- 👀 **Safe iteration** - review plans before code generation
+- 💾 **Persistent storage** per repository
 
 #### 🔥 File Hotspots
 - 🎯 **Identify most-changed files**
@@ -378,6 +386,7 @@ When launching with `bun run launch` for the first time, you'll see an interacti
 | `3` | **File Tree** | Jump to File Tree Explorer |
 | `4` | **Dashboard** | Jump to Activity Dashboard (default) |
 | `5` | **Repos** | Jump to Repository Manager |
+| `6` | **Code Planner** | Jump to Code Planner (agent-driven development) |
 
 ### ⌨️ Navigation (Vim-Style)
 
@@ -411,6 +420,135 @@ When launching with `bun run launch` for the first time, you'll see an interacti
 |-----|--------|
 | `Tab` | Switch between branches and tags |
 | `Enter` | Checkout branch (view-only) |
+
+#### Code Planner
+| Key | Action |
+|-----|--------|
+| `n` | Create new spec |
+| `c` | Open context manager |
+| `t` | Browse templates |
+| `d` | Delete selected spec |
+| `f` | Filter by status |
+| `Enter` | Edit selected spec |
+| `Esc` | Back to dashboard |
+
+---
+
+## 🎯 Code Planner
+
+**Agent-driven development for planning and executing code changes.**
+
+Press `6` from any screen to access the Code Planner - an in-app system for creating specifications, maintaining project context, and working with AI agents to plan and execute code changes.
+
+### Key Features
+
+- **📝 Structured Specs** - Create detailed specifications with problem statements, requirements, constraints, and acceptance criteria
+- **🎯 Project Context** - Maintain tech stack, style guides, architecture patterns, and product goals
+- **🤖 AI Integration** - Send specs + context to AG-UI agents for intelligent implementation plans
+- **👀 Safe Iteration** - Review AI-generated plans before any code is written
+- **💾 Persistent Storage** - All data stored locally per repository in `~/.histtui/projects/`
+
+### Quick Start
+
+1. **Press `6`** to open Code Planner
+2. **Press `n`** to create a new spec, or **`t`** to browse templates
+3. **Press `c`** to set up project context (tech stack, style guide, goals)
+4. Create specs using predefined templates:
+   - ✨ **New Feature** - Add new functionality
+   - 🐛 **Bug Fix** - Fix defects
+   - ♻️ **Refactor** - Improve code structure
+   - 📚 **Documentation** - Add/improve docs
+   - 🧪 **Add Tests** - Improve coverage
+   - 🏗️ **Architecture** - Make architectural changes
+
+### Spec Templates
+
+Each template provides a structured format:
+
+```typescript
+{
+  title: "Feature: Add code ownership view",
+  description: "Display file ownership and bus factor metrics",
+  context: {
+    problem: "Hard to identify code ownership risks",
+    requirements: ["Show top contributors", "Calculate bus factor"],
+    constraints: ["Must work with existing DB schema"],
+    acceptanceCriteria: ["User can see ownership breakdown"]
+  },
+  priority: "high",
+  tags: ["feature", "dashboard"]
+}
+```
+
+### Project Context
+
+Store comprehensive project information used by AI agents:
+
+```json
+{
+  "techStack": {
+    "languages": ["TypeScript"],
+    "frameworks": ["React", "Ink"],
+    "tools": ["Bun"]
+  },
+  "styleGuide": {
+    "codeStyle": "TypeScript strict mode",
+    "namingConventions": "camelCase for variables"
+  },
+  "productGoals": {
+    "vision": "Beautiful Git history explorer",
+    "objectives": ["Fast navigation", "Accessible UI"]
+  },
+  "architecture": {
+    "patterns": ["Component-driven UI"],
+    "layers": ["CLI", "Core", "UI", "Plugins"]
+  }
+}
+```
+
+### AI-Powered Planning
+
+When you request a plan:
+1. Code Planner sends your spec + project context to AG-UI agent
+2. Agent analyzes and generates implementation plan with steps, risks, and file changes
+3. You review the plan before any code is written
+4. Execute approved plans with confidence
+
+### File Storage
+
+```
+~/.histtui/projects/
+└── <repo-hash>/
+    ├── context.json      # Project context
+    └── specs/            # Code specifications
+        ├── spec-1.json
+        ├── spec-2.json
+        └── ...
+```
+
+### Use Cases
+
+**For Your Projects:**
+- Plan new features with structured specs
+- Maintain project documentation and context
+- Get AI help with implementation plans
+- Share context across team members
+
+**For HistTUI Development:**
+- We use Code Planner to develop HistTUI itself
+- All new features start as specs
+- AI helps generate implementation plans
+
+### Full Documentation
+
+See **[CODE_PLANNER.md](./CODE_PLANNER.md)** for comprehensive guide including:
+- Detailed user guide
+- Spec template reference
+- Project context format
+- AI integration details
+- Keyboard shortcuts
+- Best practices
+- Troubleshooting
 
 ---
 

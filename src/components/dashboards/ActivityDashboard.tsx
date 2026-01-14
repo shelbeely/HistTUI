@@ -66,6 +66,7 @@ export function ActivityDashboard({ database }: ActivityDashboardProps) {
       else if (num === 3) setScreen('files');
       else if (num === 4) setScreen('dashboard-activity');
       else if (num === 5) setScreen('repo-manager');
+      else if (num === 6) setScreen('code-planner');
     },
     onTab: () => {
       // Cycle through sections for focus

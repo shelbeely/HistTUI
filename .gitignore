@@ -11,3 +11,7 @@ coverage/
 ~/.bun/
 bun.lock
 test-inkui.tsx
+
+# Agent spec drafts (only commit approved specs)
+.github/agents/specs/*-draft.md
+.github/agents/specs/*-wip.md

@@ -1,13 +1,24 @@
 # HistTUI Project Context & Planning System
 
+> **🤖 AI Agents:** Before working on HistTUI, read `.github/agents/CONTEXT.md` first!
+> It contains mandatory style guides, workflow processes, and quality standards.
+
 ## Overview
 
-This document defines the **agent-driven development system** for HistTUI. It ensures AI agents:
-1. **Plan before building** - Create specs and plans that guide development
-2. **Maintain context** - Follow style guides, tech stack, and product goals
-3. **Iterate safely** - Review plans before writing code
-4. **Work as a team** - Share project context and best practices
-5. **Build on existing** - Use existing code to inform decisions
+This document provides high-level context for HistTUI. The **complete agent-driven development system** lives in `.github/agents/`:
+
+- **`.github/agents/CONTEXT.md`** - Complete context (READ THIS FIRST)
+- **`.github/agents/SPEC_TEMPLATE.md`** - How to create specifications
+- **`.github/agents/REVIEW_PROCESS.md`** - How to submit work for review
+- **`.github/agents/specs/`** - Approved feature specifications
+
+### Agent Workflow Summary
+
+1. **Plan before building** - Create specs using template
+2. **Maintain context** - Follow style guides and tech stack rules
+3. **Iterate safely** - Get review approval before coding
+4. **Work as a team** - Coordinate via spec assignment
+5. **Build on existing** - Use patterns from `docs/PATTERNS.md`
 
 ---
 
