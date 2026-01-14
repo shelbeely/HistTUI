@@ -57,6 +57,7 @@ export function BranchesScreen({ database }: BranchesScreenProps) {
       else if (num === 2) setScreen('branches');
       else if (num === 3) setScreen('files');
       else if (num === 4) setScreen('dashboard-activity');
+      else if (num === 6) setScreen('code-planner');
     },
   });
 

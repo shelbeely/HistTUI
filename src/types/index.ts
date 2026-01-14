@@ -199,6 +199,20 @@ export interface AppConfig {
   accessibility?: AccessibilityConfig;
   timeTracking?: TimeTrackingConfig;
   ui?: UIConfig;
+  llm?: LLMConfig;
+  agui?: AGUIConfig;
+}
+
+export interface LLMConfig {
+  provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'none';
+  apiKey?: string;
+  model?: string;
+  baseUrl?: string;
+}
+
+export interface AGUIConfig {
+  enabled: boolean;
+  endpoint?: string;
 }
 
 export interface KeyBindings {
@@ -234,7 +248,9 @@ export type Screen =
   | 'dashboard-hotspots'
   | 'dashboard-ownership'
   | 'search'
-  | 'help';
+  | 'help'
+  | 'repo-manager'
+  | 'code-planner';
 
 export interface AppState {
   screen: Screen;
@@ -292,3 +308,6 @@ export interface Logger {
   error: (message: string, ...args: any[]) => void;
   debug: (message: string, ...args: any[]) => void;
 }
+
+// Code Planner Types
+export * from './code-planner';

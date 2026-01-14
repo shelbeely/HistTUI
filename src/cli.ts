@@ -29,12 +29,12 @@ program
   .name('histtui')
   .description('Interactive Git History TUI - Explore repository history with a beautiful terminal interface')
   .version(packageJson.version)
-  .argument('<repo-url>', 'Git repository URL or local path')
+  .argument('[repo-url]', 'Git repository URL or local path (optional - will prompt if not provided)')
   .option('-s, --skip-update', 'Skip fetching updates from remote')
   .option('-d, --debug', 'Enable debug logging')
   .option('--cache-dir <path>', 'Custom cache directory')
   .option('--max-commits <number>', 'Maximum number of commits to index', parseInt)
-  .action((repoUrl: string, options) => {
+  .action((repoUrl: string | undefined, options) => {
     // Enable debug logging if requested
     if (options.debug) {
       logger.setEnabled(true);
@@ -56,7 +56,7 @@ program
     try {
       render(
         React.createElement(App, {
-          repoUrl,
+          repoUrl: repoUrl || undefined,
           skipUpdate: options.skipUpdate,
         })
       );

@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
-import TextInput from 'ink-text-input';
+import { TextInput } from '@inkjs/ui';
 import type { AIService } from '../services/AIService.js';
 import type { WorktreeManager } from '../services/WorktreeManager.js';
 import type { FileOperations } from '../services/FileOperations.js';
@@ -134,10 +134,11 @@ export function AIAssistantScreen({
       <Box marginTop={1}>
         <Text bold>{'> '}</Text>
         <TextInput
-          value={input}
+          defaultValue={input}
           onChange={setInput}
           onSubmit={handleSubmit}
           placeholder="Type your message..."
+          isDisabled={isLoading}
         />
       </Box>
     </Box>

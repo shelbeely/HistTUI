@@ -2,6 +2,16 @@
 
 Thank you for your interest in contributing to HistTUI! 🎉
 
+## 📋 Before You Start
+
+**📖 Read the Technical Specification**: Before making changes, review **[SPECIFICATION.md](./SPECIFICATION.md)** to understand the complete architecture, design patterns, and coding conventions.
+
+**Key Documents**:
+- **[SPECIFICATION.md](./SPECIFICATION.md)** - Complete technical reference (START HERE)
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Architecture patterns and data flow
+- **[PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md)** - Plugin development guide
+- **[COMPONENTS.md](./COMPONENTS.md)** - UI component reference
+
 ## 📋 Code of Conduct
 
 Be respectful, inclusive, and constructive. We're all here to build great software.

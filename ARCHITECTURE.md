@@ -1,8 +1,12 @@
 # HistTUI Architecture Guide
 
+> **💡 Looking for the complete technical reference?** See **[SPECIFICATION.md](./SPECIFICATION.md)** for comprehensive documentation of all systems, APIs, data models, and integration points.
+
 ## Overview
 
 HistTUI is a production-grade Terminal User Interface for exploring Git repository history. Built with Ink (React for terminals) and TypeScript, it provides a fast, keyboard-driven interface inspired by tools like lazygit, k9s, and tig.
+
+**This document focuses on architectural patterns and layer interactions. For complete API reference, database schemas, and component specifications, see [SPECIFICATION.md](./SPECIFICATION.md).**
 
 ## Design Principles
 
@@ -519,6 +523,214 @@ export default {
 };
 ```
 
+### 9. Code Planner Layer (`src/core/code-planner/`)
+
+**Purpose:** Agent-driven development system for planning and executing code changes
+
+**Structure:**
+```
+core/code-planner/
+├── index.ts                    # Module exports
+├── ProjectContextManager.ts    # Manages project context
+├── SpecStorage.ts              # Manages code specifications
+└── templates.ts                # Predefined spec templates
+```
+
+**Components:**
+
+**ProjectContextManager**
+- Stores project-specific context (tech stack, style guide, goals, architecture)
+- Storage: `~/.histtui/projects/<repo-hash>/context.json`
+- Methods:
+  ```typescript
+  loadContext(repoUrl: string): ProjectContext | null
+  saveContext(context: ProjectContext): void
+  createContext(repoUrl: string): ProjectContext
+  hasContext(repoUrl: string): boolean
+  deleteContext(repoUrl: string): void
+  listProjects(): ProjectContext[]
+  ```
+
+**SpecStorage**
+- Manages code specifications (features, bugs, refactors, etc.)
+- Storage: `~/.histtui/projects/<repo-hash>/specs/<spec-id>.json`
+- Methods:
+  ```typescript
+  loadSpecs(repoUrl: string): CodeSpec[]
+  loadSpec(repoUrl: string, specId: string): CodeSpec | null
+  saveSpec(repoUrl: string, spec: CodeSpec): void
+  deleteSpec(repoUrl: string, specId: string): void
+  createSpec(title: string, templateId?: string): CodeSpec
+  updateSpecStatus(repoUrl: string, specId: string, status: SpecStatus): void
+  getSpecsByStatus(repoUrl: string, status: SpecStatus): CodeSpec[]
+  searchSpecs(repoUrl: string, query: string): CodeSpec[]
+  ```
+
+**Templates**
+- Predefined spec templates for common tasks
+- Categories: feature, bugfix, refactor, docs, test, architecture
+- Templates include: title format, problem statement, requirements, constraints, acceptance criteria
+
+**UI Screens:**
+```
+components/screens/
+├── CodePlannerScreen.tsx       # Main entry point (keyboard shortcut '6')
+├── SpecEditorScreen.tsx        # Create/edit specs (future)
+├── ContextManagerScreen.tsx    # Manage project context (future)
+├── PlanReviewScreen.tsx        # Review AI-generated plans (future)
+└── TemplateLibraryScreen.tsx   # Browse templates (future)
+```
+
+**Data Flow:**
+```
+User presses '6'
+  → CodePlannerScreen loads
+  → ProjectContextManager loads context.json
+  → SpecStorage loads all specs from specs/
+  → User creates/edits specs
+  → Changes saved to ~/.histtui/projects/<repo-hash>/
+  → AG-UI integration sends spec + context to agent backend
+  → Agent generates plan
+  → User reviews plan before execution
+```
+
+**AG-UI Integration:**
+```typescript
+interface AGUIRequest {
+  type: 'generate-plan' | 'review-spec' | 'suggest-improvements';
+  spec: CodeSpec;              // What to build
+  context: ProjectContext;     // How to build it
+  options?: {
+    includeTests?: boolean;
+    includeDocs?: boolean;
+    safetyChecks?: boolean;
+  };
+}
+```
+
+**Key Principles:**
+- **Local-First**: All data stored locally, no cloud dependency
+- **Per-Repository**: Each repo has isolated context and specs
+- **Safe Iteration**: Review AI plans before execution
+- **Context-Aware**: AI receives full project context for better suggestions
+
+<details>
+<summary><strong>For AI Agents / LLMs - Code Planner Layer</strong></summary>
+
+**Step 0:** Verify Code Planner is available
+```bash
+# Check if code-planner module exists
+ls -la src/core/code-planner/
+
+# Verify screen exists
+cat src/components/screens/CodePlannerScreen.tsx | head -20
+```
+
+**Step 1:** Access Code Planner storage
+```bash
+# Navigate to projects directory
+cd ~/.histtui/projects/
+
+# List all projects with context
+ls -la
+
+# View a specific project's context
+cat <repo-hash>/context.json | jq .
+
+# List specs for a project
+ls -la <repo-hash>/specs/
+```
+
+**Step 2:** Create or modify specs programmatically
+```typescript
+import { SpecStorage } from './src/core/code-planner';
+
+// Initialize storage
+const storage = new SpecStorage('/path/to/cache');
+
+// Create a new spec
+const spec = storage.createSpec('Add new dashboard', 'feature-new');
+spec.description = 'Dashboard showing code ownership';
+spec.context.problem = 'Hard to identify file ownership';
+spec.context.requirements = [
+  'Show top contributors per file',
+  'Calculate bus factor',
+];
+spec.priority = 'high';
+spec.tags = ['feature', 'dashboard'];
+
+// Save spec
+storage.saveSpec(repoUrl, spec);
+```
+
+**Step 3:** Work with project context
+```typescript
+import { ProjectContextManager } from './src/core/code-planner';
+
+// Initialize manager
+const contextMgr = new ProjectContextManager('/path/to/cache');
+
+// Load or create context
+let context = contextMgr.loadContext(repoUrl);
+if (!context) {
+  context = contextMgr.createContext(repoUrl);
+}
+
+// Update context
+context.techStack.languages = ['TypeScript', 'JavaScript'];
+context.techStack.frameworks = ['React', 'Ink'];
+context.styleGuide.codeStyle = 'TypeScript strict mode';
+context.productGoals.vision = 'Beautiful Git history explorer';
+
+// Save context
+contextMgr.saveContext(context);
+```
+
+**Step 4:** Integrate with AG-UI
+```typescript
+import { useAgentState } from '../core/ag-ui';
+
+// In a component
+const agentState = useAgentState();
+
+// Send request to agent
+const request: AGUIRequest = {
+  type: 'generate-plan',
+  spec: selectedSpec,
+  context: projectContext,
+  options: {
+    includeTests: true,
+    includeDocs: true,
+    safetyChecks: true,
+  },
+};
+
+// Agent receives full context and generates plan
+// User reviews plan before execution
+```
+
+**Step 5:** Verify storage structure
+```bash
+# Check directory structure
+tree ~/.histtui/projects/<repo-hash>/
+
+# Expected output:
+# <repo-hash>/
+# ├── context.json
+# └── specs/
+#     ├── spec-1.json
+#     ├── spec-2.json
+#     └── ...
+
+# Verify context format
+cat ~/.histtui/projects/<repo-hash>/context.json | jq '.techStack'
+
+# Verify spec format
+cat ~/.histtui/projects/<repo-hash>/specs/spec-*.json | jq '.context'
+```
+
+</details>
+
 ## Data Flow
 
 ### Initial Load
@@ -677,7 +889,21 @@ npm run dev -- https://github.com/microsoft/vscode
 
 ---
 
-For more information, see:
-- [README.md](./README.md) - User documentation
-- [CONTRIBUTING.md](./CONTRIBUTING.md) - Contribution guidelines
-- [PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md) - Plugin development (TODO)
+## 📚 Related Documentation
+
+For comprehensive technical details, see:
+
+- **[📋 SPECIFICATION.md](./SPECIFICATION.md)** - ⭐ Complete technical specification (authoritative reference)
+  - All systems architecture
+  - Complete API reference  
+  - Database schemas
+  - Component catalog
+  - Integration points
+  - Security & performance
+- **[README.md](./README.md)** - User documentation and quick start
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines
+- **[PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md)** - Plugin development
+- **[CONFIGURATION.md](./CONFIGURATION.md)** - Configuration options
+- **[CODE_PLANNER.md](./CODE_PLANNER.md)** - Code planning system
+- **[AGUI_INTEGRATION.md](./AGUI_INTEGRATION.md)** - AG-UI protocol integration
+- **[MATERIAL_DESIGN_3.md](./MATERIAL_DESIGN_3.md)** - Material Design 3 theming

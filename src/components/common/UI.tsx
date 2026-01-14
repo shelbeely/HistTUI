@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Box, Text } from 'ink';
+import { Badge as InkBadge, StatusMessage as InkStatusMessage, Alert as InkAlert, Spinner } from '@inkjs/ui';
 
 interface BoxBorderProps {
   children: React.ReactNode;
@@ -100,7 +101,7 @@ interface LoadingProps {
 export function Loading({ message = 'Loading...' }: LoadingProps) {
   return (
     <Box flexDirection="column" alignItems="center" justifyContent="center" flexGrow={1}>
-      <Text color="cyan">{message}</Text>
+      <Spinner label={message} />
     </Box>
   );
 }
@@ -112,10 +113,12 @@ interface ErrorDisplayProps {
 
 export function ErrorDisplay({ error, onDismiss }: ErrorDisplayProps) {
   return (
-    <Box borderStyle="round" borderColor="red" padding={1}>
-      <Text color="red">⚠ {error}</Text>
+    <Box>
+      <InkAlert variant="error">
+        {error}
+      </InkAlert>
       {onDismiss && (
-        <Box marginLeft={2}>
+        <Box marginLeft={2} marginTop={1}>
           <Text dimColor>(Press any key to dismiss)</Text>
         </Box>
       )}
@@ -195,4 +198,40 @@ export function SplitPane({ left, right, splitRatio = 50 }: SplitPaneProps) {
       </Box>
     </Box>
   );
+}
+
+// New @inkjs/ui based components
+
+interface BadgeProps {
+  children: React.ReactNode;
+  variant?: 'success' | 'error' | 'warning' | 'info';
+}
+
+export function Badge({ children, variant = 'info' }: BadgeProps) {
+  const colorMap = {
+    success: 'green',
+    error: 'red',
+    warning: 'yellow',
+    info: 'blue',
+  };
+  
+  return <InkBadge color={colorMap[variant]}>{children}</InkBadge>;
+}
+
+interface StatusMessageProps {
+  children: React.ReactNode;
+  variant?: 'success' | 'error' | 'warning' | 'info';
+}
+
+export function StatusMessage({ children, variant = 'info' }: StatusMessageProps) {
+  return <InkStatusMessage variant={variant}>{children}</InkStatusMessage>;
+}
+
+interface AlertProps {
+  children: React.ReactNode;
+  variant?: 'success' | 'error' | 'warning' | 'info';
+}
+
+export function Alert({ children, variant = 'info' }: AlertProps) {
+  return <InkAlert variant={variant}>{children}</InkAlert>;
 }

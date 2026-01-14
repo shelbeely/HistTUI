@@ -20,12 +20,14 @@ export function useKeyboard(handlers: {
   onHome?: () => void;
   onEnd?: () => void;
   onEnter?: () => void;
+  onEscape?: () => void;
   onSearch?: () => void;
   onHelp?: () => void;
   onTab?: () => void;
   onShiftTab?: () => void;
   onNumber?: (num: number) => void;
   onChar?: (char: string) => void;
+  onCustom?: (key: string) => void;
 }) {
   const { exit } = useInkApp();
   const keyBindings = config.get().keyBindings;
@@ -96,6 +98,12 @@ export function useKeyboard(handlers: {
       return;
     }
 
+    // Escape
+    if (key.escape && handlers.onEscape) {
+      handlers.onEscape();
+      return;
+    }
+
     // Tab
     if (key.tab && !key.shift && handlers.onTab) {
       handlers.onTab();
@@ -110,6 +118,12 @@ export function useKeyboard(handlers: {
     // Numbers (for tab shortcuts)
     if (handlers.onNumber && /^[1-9]$/.test(input)) {
       handlers.onNumber(parseInt(input, 10));
+      return;
+    }
+
+    // Custom key handler (for other single keys like 'n', 'c', 't', etc.)
+    if (handlers.onCustom && input.length === 1 && !key.ctrl && !key.meta && !key.return) {
+      handlers.onCustom(input);
       return;
     }
 
