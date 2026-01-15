@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HistTUI - Complete Interactive Demo</title>
+    <link rel="stylesheet" href="demo-complete.css">
+</head>
+<body>
+    <!-- Theme Selector (Neurodivergent-Friendly) -->
+    <div class="theme-selector" id="theme-selector">
+        <button class="theme-toggle" id="theme-toggle">🎨 Theme</button>
+        <div class="theme-menu" id="theme-menu" style="display: none;">
+            <button class="theme-option" data-theme="default">Default (MD3)</button>
+            <button class="theme-option" data-theme="calm">Calm (Autism-Friendly)</button>
+            <button class="theme-option" data-theme="high-contrast">High Contrast</button>
+            <button class="theme-option" data-theme="colorblind">Colorblind Safe</button>
+            <button class="theme-option" data-theme="monochrome">Monochrome Focus</button>
+        </div>
+    </div>
+
+    <!-- Main Terminal Container -->
+    <div class="terminal" id="terminal" data-theme="default">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span class="status-repo">📁 HistTUI</span>
+                <span class="status-screen" id="status-screen">Timeline</span>
+            </div>
+            <div class="status-right">
+                <span class="status-time" id="status-time">Jan 15, 2026 18:50</span>
+                <span class="status-ag-ui">🤖 AG-UI</span>
+            </div>
+        </div>
+
+        <!-- Screen Container -->
+        <div class="screen-container" id="screen-container">
+            <!-- Screen 1: Timeline -->
+            <div class="screen active" id="screen-timeline" data-screen="timeline">
+                <div class="content">
+                    <div class="header">
+                        <div class="header-title">📊 Commit Timeline</div>
+                        <div class="header-subtitle">142 commits • Use ↑↓ or j/k to navigate, Enter to view details</div>
+                    </div>
+
+                    <div class="help-panel" id="help-panel" style="display: none;">
+                        <div class="help-title">Keyboard Shortcuts:</div>
+                        <div class="help-line"><span class="key">j/↓</span> Down • <span class="key">k/↑</span> Up • <span class="key">Ctrl+d</span> Page Down • <span class="key">Ctrl+u</span> Page Up</div>
+                        <div class="help-line"><span class="key">g</span> First • <span class="key">G</span> Last • <span class="key">Enter</span> View Details • <span class="key">/</span> Search</div>
+                        <div class="help-line"><span class="key">1-6</span> Switch Screens • <span class="key">?</span> Toggle Help • <span class="key">q</span> Quit</div>
+                    </div>
+
+                    <div class="commit-list">
+                        <div class="commit-item selected" data-hash="b24d118">
+                            <span class="commit-hash">b24d118</span>
+                            <span class="commit-message">♿ feat: Add accesskey attributes to kbd elements</span>
+                            <span class="commit-author">GitHub Copilot</span>
+                            <span class="commit-date">2 hours ago</span>
+                        </div>
+                        <div class="commit-item" data-hash="876fc4d">
+                            <span class="commit-hash">876fc4d</span>
+                            <span class="commit-message">📄 docs: Add HTML/CSS version of tri-fold</span>
+                            <span class="commit-author">GitHub Copilot</span>
+                            <span class="commit-date">9 hours ago</span>
+                        </div>
+                        <div class="commit-item" data-hash="95be77b">
+                            <span class="commit-hash">95be77b</span>
+                            <span class="commit-message">📄 docs: Add printable tri-fold keyboard cheat sheet</span>
+                            <span class="commit-author">GitHub Copilot</span>
+                            <span class="commit-date">9 hours ago</span>
+                        </div>
+                        <div class="commit-item" data-hash="203612e">
+                            <span class="commit-hash">203612e</span>
+                            <span class="commit-message">📚 docs: Add comprehensive visual documentation</span>
+                            <span class="commit-author">GitHub Copilot</span>
+                            <span class="commit-date">10 hours ago</span>
+                        </div>
+                        <div class="commit-item" data-hash="ca15d8f">
+                            <span class="commit-hash">ca15d8f</span>
+                            <span class="commit-message">✨ feat: Add ASCII art logo and visual enhancements</span>
+                            <span class="commit-author">GitHub Copilot</span>
+                            <span class="commit-date">10 hours ago</span>
+                        </div>
+                        <div class="commit-item" data-hash="edbb934">
+                            <span class="commit-hash">edbb934</span>
+                            <span class="commit-message">📸 docs: Add screenshots of all major features</span>
+                            <span class="commit-author">GitHub Copilot</span>
+                            <span class="commit-date">11 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 2: Branches & Tags -->
+            <div class="screen" id="screen-branches" data-screen="branches">
+                <div class="content">
+                    <div class="header">
+                        <div class="header-title">🌿 Branches & Tags</div>
+                        <div class="header-subtitle">5 branches • Use Tab to switch between branches/tags</div>
+                    </div>
+
+                    <div class="tabs-container">
+                        <button class="tab-button active" data-tab="branches">Branches</button>
+                        <button class="tab-button" data-tab="tags">Tags</button>
+                    </div>
+
+                    <div class="branch-list">
+                        <div class="branch-item selected">
+                            <span class="branch-indicator">⭐</span>
+                            <span class="branch-name">copilot/capture-feature-screenshots</span>
+                            <span class="branch-commits">9 commits</span>
+                            <span class="branch-date">2 hours ago</span>
+                        </div>
+                        <div class="branch-item">
+                            <span class="branch-indicator">→</span>
+                            <span class="branch-name">main</span>
+                            <span class="branch-commits">142 commits</span>
+                            <span class="branch-date">1 day ago</span>
+                        </div>
+                        <div class="branch-item">
+                            <span class="branch-indicator">→</span>
+                            <span class="branch-name">copilot/add-generative-ui-feature</span>
+                            <span class="branch-commits">8 commits</span>
+                            <span class="branch-date">1 day ago</span>
+                        </div>
+                        <div class="branch-item">
+                            <span class="branch-indicator">→</span>
+                            <span class="branch-name">feature/material-design-3</span>
+                            <span class="branch-commits">12 commits</span>
+                            <span class="branch-date">2 days ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 3: File Tree Explorer -->
+            <div class="screen" id="screen-files" data-screen="files">
+                <div class="content">
+                    <div class="header">
+                        <div class="header-title">🌳 File Tree Explorer</div>
+                        <div class="header-subtitle">At commit b24d118 • Use ← → to navigate folders</div>
+                    </div>
+
+                    <div class="file-tree">
+                        <div class="tree-item folder selected">
+                            <span class="tree-icon">📁</span>
+                            <span class="tree-name">src/</span>
+                        </div>
+                        <div class="tree-item folder indent-1">
+                            <span class="tree-icon">📁</span>
+                            <span class="tree-name">components/</span>
+                        </div>
+                        <div class="tree-item file indent-2">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-name">App.tsx</span>
+                            <span class="tree-size">8.2 KB</span>
+                        </div>
+                        <div class="tree-item file indent-2">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-name">AppContext.tsx</span>
+                            <span class="tree-size">3.5 KB</span>
+                        </div>
+                        <div class="tree-item folder indent-1">
+                            <span class="tree-icon">📁</span>
+                            <span class="tree-name">core/</span>
+                        </div>
+                        <div class="tree-item file indent-2">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-name">git/index.ts</span>
+                            <span class="tree-size">12.4 KB</span>
+                        </div>
+                        <div class="tree-item file indent-2">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-name">database/index.ts</span>
+                            <span class="tree-size">7.8 KB</span>
+                        </div>
+                        <div class="tree-item file indent-1">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-name">README.md</span>
+                            <span class="tree-size">15.2 KB</span>
+                        </div>
+                        <div class="tree-item file indent-1">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-name">package.json</span>
+                            <span class="tree-size">2.1 KB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 4: Activity Dashboard -->
+            <div class="screen" id="screen-dashboard" data-screen="dashboard">
+                <div class="content">
+                    <div class="header">
+                        <div class="header-title">📈 Activity Dashboard</div>
+                        <div class="header-subtitle">Repository statistics and insights</div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-title">📊 Repository Stats</div>
+                            <div class="card-content">
+                                <div class="stat-row"><span class="stat-label">Total Commits:</span> <span class="stat-value">142</span></div>
+                                <div class="stat-row"><span class="stat-label">Contributors:</span> <span class="stat-value">3</span></div>
+                                <div class="stat-row"><span class="stat-label">Branches:</span> <span class="stat-value">5</span></div>
+                                <div class="stat-row"><span class="stat-label">Tags:</span> <span class="stat-value">8</span></div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-title">👥 Top Contributors</div>
+                            <div class="card-content">
+                                <div class="contributor-row">
+                                    <span class="contributor-name">shelbeely</span>
+                                    <span class="contributor-bar" style="width: 100%"></span>
+                                    <span class="contributor-commits">78</span>
+                                </div>
+                                <div class="contributor-row">
+                                    <span class="contributor-name">GitHub Copilot</span>
+                                    <span class="contributor-bar" style="width: 65%"></span>
+                                    <span class="contributor-commits">51</span>
+                                </div>
+                                <div class="contributor-row">
+                                    <span class="contributor-name">dependabot</span>
+                                    <span class="contributor-bar" style="width: 20%"></span>
+                                    <span class="contributor-commits">13</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-title">📅 Recent Activity</div>
+                            <div class="card-content">
+                                <div class="activity-row">
+                                    <span class="activity-date">Today</span>
+                                    <span class="activity-count">9 commits</span>
+                                </div>
+                                <div class="activity-row">
+                                    <span class="activity-date">Yesterday</span>
+                                    <span class="activity-count">5 commits</span>
+                                </div>
+                                <div class="activity-row">
+                                    <span class="activity-date">This Week</span>
+                                    <span class="activity-count">23 commits</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-title">🔥 Hot Files</div>
+                            <div class="card-content">
+                                <div class="file-row">
+                                    <span class="file-name">README.md</span>
+                                    <span class="file-changes">32 changes</span>
+                                </div>
+                                <div class="file-row">
+                                    <span class="file-name">src/components/App.tsx</span>
+                                    <span class="file-changes">28 changes</span>
+                                </div>
+                                <div class="file-row">
+                                    <span class="file-name">package.json</span>
+                                    <span class="file-changes">15 changes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 5: Repository Manager -->
+            <div class="screen" id="screen-repos" data-screen="repos">
+                <div class="content">
+                    <div class="header">
+                        <div class="header-title">💾 Repository Manager</div>
+                        <div class="header-subtitle">Manage multiple repositories • Press 'a' to add, 'd' to delete</div>
+                    </div>
+
+                    <div class="repo-list">
+                        <div class="repo-item selected">
+                            <span class="repo-status">⭐</span>
+                            <span class="repo-name">HistTUI</span>
+                            <span class="repo-path">~/projects/HistTUI</span>
+                            <span class="repo-commits">142 commits</span>
+                            <span class="repo-cache">Cached</span>
+                        </div>
+                        <div class="repo-item">
+                            <span class="repo-status">→</span>
+                            <span class="repo-name">lazygit</span>
+                            <span class="repo-path">~/projects/lazygit</span>
+                            <span class="repo-commits">2.5k commits</span>
+                            <span class="repo-cache">Cached</span>
+                        </div>
+                        <div class="repo-item">
+                            <span class="repo-status">→</span>
+                            <span class="repo-name">ink</span>
+                            <span class="repo-path">~/projects/ink</span>
+                            <span class="repo-commits">1.2k commits</span>
+                            <span class="repo-cache">Cached</span>
+                        </div>
+                        <div class="repo-item">
+                            <span class="repo-status">→</span>
+                            <span class="repo-name">ag-ui</span>
+                            <span class="repo-path">~/projects/ag-ui</span>
+                            <span class="repo-commits">450 commits</span>
+                            <span class="repo-cache">Not Cached</span>
+                        </div>
+                    </div>
+
+                    <div class="repo-actions">
+                        <span class="action-hint"><span class="key">a</span> Add Repository</span>
+                        <span class="action-hint"><span class="key">d</span> Delete</span>
+                        <span class="action-hint"><span class="key">u</span> Update from Remote</span>
+                        <span class="action-hint"><span class="key">Enter</span> Switch</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 6: Code Planner -->
+            <div class="screen" id="screen-planner" data-screen="planner">
+                <div class="content">
+                    <div class="header">
+                        <div class="header-title">🎯 Code Planner</div>
+                        <div class="header-subtitle">AI-powered development planning • Press 'n' for new spec</div>
+                    </div>
+
+                    <div class="planner-grid">
+                        <div class="spec-list">
+                            <div class="spec-header">Specifications</div>
+                            <div class="spec-item selected">
+                                <span class="spec-status">🟢</span>
+                                <span class="spec-title">Add Screenshot Gallery</span>
+                                <span class="spec-type">✨ Feature</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-status">🟡</span>
+                                <span class="spec-title">Fix Memory Leak in Indexer</span>
+                                <span class="spec-type">🐛 Bug</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-status">⚪</span>
+                                <span class="spec-title">Refactor Database Layer</span>
+                                <span class="spec-type">♻️ Refactor</span>
+                            </div>
+                        </div>
+
+                        <div class="spec-detail">
+                            <div class="detail-header">Add Screenshot Gallery</div>
+                            <div class="detail-section">
+                                <div class="section-title">Problem</div>
+                                <div class="section-content">Users need to visualize different features without installing the app</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="section-title">Requirements</div>
+                                <div class="section-content">
+                                    • Capture screenshots of all 9 screens<br>
+                                    • Create animated SVG files<br>
+                                    • Add to README and docs<br>
+                                    • Optimize for web viewing
+                                </div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="section-title">AI Suggestion</div>
+                                <div class="section-content ai-suggestion">
+                                    Use asciinema + termtosvg for terminal recording.<br>
+                                    Size: 120×35 for consistency.<br>
+                                    Store in /screenshots directory.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="planner-actions">
+                        <span class="action-hint"><span class="key">n</span> New Spec</span>
+                        <span class="action-hint"><span class="key">c</span> Context</span>
+                        <span class="action-hint"><span class="key">t</span> Templates</span>
+                        <span class="action-hint"><span class="key">Enter</span> Edit</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commit Detail Screen (opens on Enter from Timeline) -->
+            <div class="screen" id="screen-commit-detail" data-screen="commit-detail">
+                <div class="content">
+                    <div class="header">
+                        <div class="header-title">💬 Commit Details</div>
+                        <div class="header-subtitle">Press 'd' to toggle diff view, ← to go back</div>
+                    </div>
+
+                    <div class="commit-detail">
+                        <div class="detail-meta">
+                            <div class="meta-row"><span class="meta-label">Hash:</span> <span class="meta-value commit-hash">b24d118</span></div>
+                            <div class="meta-row"><span class="meta-label">Author:</span> <span class="meta-value">GitHub Copilot</span></div>
+                            <div class="meta-row"><span class="meta-label">Date:</span> <span class="meta-value">2026-01-15 18:38:47</span></div>
+                            <div class="meta-row"><span class="meta-label">Message:</span> <span class="meta-value">♿ feat: Add accesskey attributes to kbd elements</span></div>
+                        </div>
+
+                        <div class="files-changed">
+                            <div class="files-header">Files Changed (1)</div>
+                            <div class="file-change selected">
+                                <span class="file-icon">📄</span>
+                                <span class="file-path">trifold.html</span>
+                                <span class="file-stats"><span class="additions">+28</span> <span class="deletions">-28</span></span>
+                            </div>
+                        </div>
+
+                        <div class="diff-view">
+                            <div class="diff-header">trifold.html</div>
+                            <div class="diff-line removed">-            &lt;kbd&gt;1&lt;/kbd&gt; Timeline View</div>
+                            <div class="diff-line added">+            &lt;kbd accesskey="1"&gt;1&lt;/kbd&gt; Timeline View</div>
+                            <div class="diff-line removed">-            &lt;kbd&gt;q&lt;/kbd&gt; Quit application</div>
+                            <div class="diff-line added">+            &lt;kbd accesskey="q"&gt;q&lt;/kbd&gt; Quit application</div>
+                            <div class="diff-line context">             &lt;/ul&gt;</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <span class="footer-hint">Press <span class="key">?</span> for help • <span class="key">1-6</span> to switch screens • <span class="key">q</span> to quit</span>
+        </div>
+
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+            <button class="tab active" data-screen="timeline">1: Timeline</button>
+            <button class="tab" data-screen="branches">2: Branches</button>
+            <button class="tab" data-screen="files">3: Files</button>
+            <button class="tab" data-screen="dashboard">4: Dashboard</button>
+            <button class="tab" data-screen="repos">5: Repos</button>
+            <button class="tab" data-screen="planner">6: Code Planner</button>
+        </div>
+    </div>
+
+    <!-- Remotion Compatibility Marker -->
+    <div id="remotion-ready" data-version="1.0.0" style="display: none;"></div>
+
+    <script src="demo-complete.js"></script>
+</body>
+</html>
