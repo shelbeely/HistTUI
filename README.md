@@ -179,6 +179,20 @@ Smart caching system
 - [Contributing](#-contributing)
 - [License](#-license)
 
+### 📚 Visual Documentation
+
+<div align="center">
+
+[![Architecture](https://img.shields.io/badge/📐-Architecture_Diagram-6750A4?style=for-the-badge)](./docs/architecture-diagram.md)
+[![Keyboard](https://img.shields.io/badge/⌨️-Keyboard_Cheatsheet-6750A4?style=for-the-badge)](./docs/keyboard-cheatsheet.md)
+[![Workflows](https://img.shields.io/badge/🔄-Common_Workflows-6750A4?style=for-the-badge)](./docs/workflows.md)
+[![Comparison](https://img.shields.io/badge/⚖️-Tool_Comparison-6750A4?style=for-the-badge)](./docs/comparison.md)
+[![Colors](https://img.shields.io/badge/🎨-Color_Palette-6750A4?style=for-the-badge)](./docs/color-palette.md)
+
+*ASCII art diagrams, visual guides, and comprehensive comparisons*
+
+</div>
+
 ---
 
 ## 🚀 Quick Start
