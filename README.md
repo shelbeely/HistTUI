@@ -13,7 +13,9 @@
 [![Ink](https://img.shields.io/badge/Ink-6.6-purple.svg)](https://github.com/vadimdemedes/ink)
 [![AG-UI](https://img.shields.io/badge/AG--UI-Enabled-orange.svg)](https://github.com/ag-ui/ag-ui)
 
-![HistTUI Demo](https://via.placeholder.com/800x400/6750A4/FFFFFF?text=HistTUI+Demo+GIF)
+![HistTUI Demo](./screenshots/03-timeline.svg)
+
+*Terminal UI with Material Design 3 theming, vim-style navigation, and AI-powered features*
 
 </div>
 
@@ -78,7 +80,7 @@ Smart caching system
 
 - [Quick Start](#-quick-start)
 - [Features](#-features)
-- [Screenshots](#-screenshots)
+- [Screenshots](#-screenshots) • [📖 Complete Gallery](./SCREENSHOTS.md)
 - [Installation](#-installation)
 - [Keyboard Shortcuts](#️-keyboard-shortcuts)
 - [Code Planner](#-code-planner)
@@ -279,33 +281,70 @@ HistTUI integrates the **AG-UI protocol** for true generative terminal UI:
 
 ## 📸 Screenshots
 
+> 📖 **[View Complete Screenshots Gallery](./SCREENSHOTS.md)** - Detailed guide with keyboard shortcuts and feature descriptions
+
 <div align="center">
 
+### 🚀 First-Time Setup Wizard
+![Setup Wizard](./screenshots/01-setup-wizard.svg)
+
+*Configure LLM providers, API keys, and AG-UI settings on first launch*
+
+---
+
 ### 📈 Activity Dashboard (Default Screen)
-![Activity Dashboard](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Activity+Dashboard+-+Repository+Stats+%26+Contributors)
+![Activity Dashboard](./screenshots/02-activity-dashboard.svg)
 
 *View repository statistics, top contributors, and recent activity at a glance*
 
 ---
 
 ### 📊 Commit Timeline
-![Commit Timeline](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Commit+Timeline+-+Browse+History+with+Vim+Navigation)
+![Commit Timeline](./screenshots/03-timeline.svg)
 
-*Browse commits with instant filtering and vim-style navigation*
+*Browse commits with instant filtering and vim-style navigation (Press '1')*
 
 ---
 
 ### 💬 Commit Details & Diff Viewer
-![Commit Details](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Commit+Details+-+Full+Diff+View+with+Syntax+Highlighting)
+![Commit Details](./screenshots/04-commit-detail.svg)
 
 *View full commit information with syntax-highlighted diffs*
 
 ---
 
-### 🤖 AI Assistant (AG-UI Powered)
-![AI Assistant](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=AI+Assistant+-+Real-time+Insights+%26+Code+Analysis)
+### 🌿 Branches & Tags
+![Branches](./screenshots/05-branches.svg)
 
-*Get AI-powered insights and code analysis in real-time*
+*Navigate branches and tags with current branch indicators (Press '2')*
+
+---
+
+### 🌳 File Tree Explorer
+![File Tree](./screenshots/06-file-tree.svg)
+
+*Browse your codebase at any commit with beautiful file tree (Press '3')*
+
+---
+
+### 💾 Multi-Repository Manager
+![Repo Manager](./screenshots/07-repo-manager.svg)
+
+*Switch between repositories instantly with smart caching (Press '5')*
+
+---
+
+### 🎯 Code Planner
+![Code Planner](./screenshots/08-code-planner.svg)
+
+*Create specs and plan code changes with AI assistance (Press '6')*
+
+---
+
+### 🔍 Fuzzy Search
+![Search](./screenshots/09-search.svg)
+
+*Intelligent search across commits, files, and content (Press '/')*
 
 </div>
 
