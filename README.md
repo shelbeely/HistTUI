@@ -1,21 +1,75 @@
 <div align="center">
 
-# 🚀 HistTUI
+```
+╔══════════════════════════════════════════════════════════╗
+║                                                          ║
+║  ██   ██ ██ ███████ ████████ ████████ ██    ██ ██       ║
+║  ██   ██ ██ ██         ██       ██    ██    ██ ██       ║
+║  ███████ ██ ███████    ██       ██    ██    ██ ██       ║
+║  ██   ██ ██      ██    ██       ██    ██    ██ ██       ║
+║  ██   ██ ██ ███████    ██       ██     ██████  ██       ║
+║                                                          ║
+║          Interactive Git History TUI v1.1.0             ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```
 
 ### Interactive Git History TUI with Generative AI
 
 **Explore repository history like a pro with a beautiful terminal interface**
 
-[![Version](https://img.shields.io/badge/version-1.1.0-6750A4.svg)](https://github.com/shelbeely/HistTUI/releases)
-[![License](https://img.shields.io/badge/license-ISC-green.svg)](./LICENSE)
-[![Bun](https://img.shields.io/badge/bun-%3E%3D1.3.5-black.svg)](https://bun.sh)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
-[![Ink](https://img.shields.io/badge/Ink-6.6-purple.svg)](https://github.com/vadimdemedes/ink)
-[![AG-UI](https://img.shields.io/badge/AG--UI-Enabled-orange.svg)](https://github.com/ag-ui/ag-ui)
+[![Version](https://img.shields.io/badge/version-1.1.0-6750A4.svg?style=for-the-badge)](https://github.com/shelbeely/HistTUI/releases)
+[![License](https://img.shields.io/badge/license-ISC-green.svg?style=for-the-badge)](./LICENSE)
+[![Bun](https://img.shields.io/badge/bun-%3E%3D1.3.5-black.svg?style=for-the-badge&logo=bun)](https://bun.sh)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Ink](https://img.shields.io/badge/Ink-6.6-purple.svg?style=for-the-badge)](https://github.com/vadimdemedes/ink)
+[![AG-UI](https://img.shields.io/badge/AG--UI-Enabled-orange.svg?style=for-the-badge)](https://github.com/ag-ui/ag-ui)
 
 ![HistTUI Demo](./screenshots/03-timeline.svg)
 
 *Terminal UI with Material Design 3 theming, vim-style navigation, and AI-powered features*
+
+<br>
+
+```bash
+# 🚀 Get started in one command
+bunx histtui https://github.com/torvalds/linux
+```
+
+**or**
+
+```bash
+# Install globally
+bun install -g histtui
+histtui /path/to/your/repo
+```
+
+<br>
+
+<table>
+<tr>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/⚡-Instant_Search-6750A4?style=flat-square" alt="Instant Search"/>
+<br/>
+<sub>SQLite FTS powered</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/🤖-AI_Powered-6750A4?style=flat-square" alt="AI Powered"/>
+<br/>
+<sub>AG-UI integration</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/⌨️-Vim_Style-6750A4?style=flat-square" alt="Vim Style"/>
+<br/>
+<sub>j/k navigation</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/💾-Multi_Repo-6750A4?style=flat-square" alt="Multi Repo"/>
+<br/>
+<sub>Smart caching</sub>
+</td>
+</tr>
+</table>
 
 </div>
 
@@ -73,6 +127,39 @@ Smart caching system
 </table>
 
 > 💡 Inspired by the best terminal UIs: [lazygit](https://github.com/jesseduffield/lazygit), [k9s](https://github.com/derailed/k9s), [tig](https://github.com/jonas/tig), [htop](https://github.com/htop-dev/htop), [btop](https://github.com/aristocratos/btop)
+
+---
+
+## 📊 At a Glance
+
+<div align="center">
+
+<table>
+<tr>
+<td align="center" width="25%">
+<h3>9</h3>
+<sub>🖥️ Screens</sub>
+</td>
+<td align="center" width="25%">
+<h3>15+</h3>
+<sub>⌨️ Keyboard Shortcuts</sub>
+</td>
+<td align="center" width="25%">
+<h3>4</h3>
+<sub>🤖 AI Providers</sub>
+</td>
+<td align="center" width="25%">
+<h3>∞</h3>
+<sub>📦 Repositories</sub>
+</td>
+</tr>
+</table>
+
+**Core Technologies:** Bun • Ink • TypeScript • SQLite • AG-UI • Material Design 3
+
+**Key Capabilities:** Multi-repo management • AI-powered insights • Code planning • Real-time search • Vim navigation
+
+</div>
 
 ---
 
