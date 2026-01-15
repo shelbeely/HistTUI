@@ -71,6 +71,8 @@
     "@types/marked": "^5.0.2",
     "@types/node": "^25.0.6",
     "@types/react": "^19.2.8",
+    "gifski": "^1.7.1",
+    "playwright": "^1.57.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
