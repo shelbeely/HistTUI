@@ -1,0 +1,280 @@
+/* HistTUI Tri-Fold Keyboard Cheat Sheet - Print-Friendly CSS */
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4;
+    color: #000;
+    background: #fff;
+}
+
+/* Page setup for US Letter landscape */
+@page {
+    size: letter landscape;
+    margin: 0.5in;
+}
+
+/* Page container */
+.page {
+    width: 11in;
+    height: 8.5in;
+    page-break-after: always;
+    display: flex;
+    flex-direction: row;
+}
+
+.page-2 {
+    page-break-after: auto;
+}
+
+/* Panel layout - 3 equal columns per page */
+.panel {
+    width: 3.667in;
+    padding: 0.3in;
+    border-right: 1px dashed #ccc;
+    overflow: hidden;
+}
+
+.panel:last-child {
+    border-right: none;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+    margin-bottom: 0.1in;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 24pt;
+    margin-bottom: 0.05in;
+}
+
+h2 {
+    font-size: 16pt;
+    margin-bottom: 0.05in;
+}
+
+h3 {
+    font-size: 11pt;
+    margin-top: 0.15in;
+    margin-bottom: 0.08in;
+    border-bottom: 1px solid #333;
+    padding-bottom: 2pt;
+}
+
+h4 {
+    font-size: 10pt;
+    margin-top: 0.1in;
+    margin-bottom: 0.05in;
+    font-style: italic;
+}
+
+p {
+    margin-bottom: 0.08in;
+}
+
+/* Front cover styling (Panel 1) */
+.cover {
+    text-align: center;
+    padding-top: 0.5in;
+}
+
+.logo {
+    font-size: 32pt;
+    font-weight: bold;
+    color: #6750A4;
+    margin-bottom: 0.1in;
+    letter-spacing: 2pt;
+}
+
+.subtitle {
+    font-size: 14pt;
+    margin-bottom: 0.2in;
+}
+
+.tagline {
+    font-size: 10pt;
+    line-height: 1.3;
+    margin-bottom: 0.3in;
+}
+
+.features {
+    font-size: 9pt;
+    line-height: 1.5;
+    margin-bottom: 0.3in;
+}
+
+.version {
+    font-size: 9pt;
+    color: #666;
+    margin-top: 0.5in;
+}
+
+/* Lists */
+ul, ol {
+    margin-left: 0.15in;
+    margin-bottom: 0.1in;
+}
+
+ul.shortcuts,
+ul.tips,
+ol.tips {
+    list-style: none;
+    margin-left: 0;
+}
+
+ul.shortcuts li,
+ul.tips li,
+ol.tips li {
+    margin-bottom: 3pt;
+    padding-left: 0;
+}
+
+ul.shortcuts.compact li {
+    margin-bottom: 2pt;
+}
+
+ol.tips {
+    counter-reset: item;
+    list-style-type: none;
+}
+
+ol.tips li {
+    counter-increment: item;
+}
+
+ol.tips li:before {
+    content: counter(item) ". ";
+    font-weight: bold;
+    margin-right: 3pt;
+}
+
+/* Keyboard shortcuts */
+kbd {
+    display: inline-block;
+    padding: 1pt 4pt;
+    font-family: 'Courier New', monospace;
+    font-size: 9pt;
+    font-weight: bold;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 2pt;
+    white-space: nowrap;
+    margin-right: 3pt;
+}
+
+/* Code elements */
+code {
+    font-family: 'Courier New', monospace;
+    font-size: 9pt;
+    background: #f5f5f5;
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+}
+
+/* Special sections */
+.intro {
+    font-weight: bold;
+    margin-bottom: 0.05in;
+}
+
+.troubleshooting {
+    font-size: 9pt;
+    margin-bottom: 0.08in;
+    line-height: 1.3;
+}
+
+.print-instructions {
+    font-size: 8pt;
+    margin-top: 0.15in;
+    padding-top: 0.08in;
+    border-top: 1px solid #ccc;
+    color: #666;
+}
+
+/* Print-specific styles */
+@media print {
+    body {
+        background: none;
+    }
+
+    .page {
+        page-break-after: always;
+        margin: 0;
+    }
+
+    .page-2 {
+        page-break-before: always;
+    }
+
+    /* Ensure clean printing */
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Hide any print-only instructions on screen */
+    .print-instructions {
+        display: block;
+    }
+}
+
+/* Screen preview styles */
+@media screen {
+    body {
+        background: #e0e0e0;
+        padding: 20px;
+    }
+
+    .page {
+        margin: 20px auto;
+        background: white;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    /* Show page numbers for screen preview */
+    .page-1:before {
+        content: "Page 1 (Front)";
+        position: absolute;
+        top: -20px;
+        left: 0;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .page-2:before {
+        content: "Page 2 (Back)";
+        position: absolute;
+        top: -20px;
+        left: 0;
+        font-size: 12px;
+        color: #666;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    kbd {
+        border: 2px solid #000;
+    }
+
+    h3 {
+        border-bottom: 2px solid #000;
+    }
+}
