@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HistTUI - Interactive Demo</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+    <div class="terminal">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span class="status-repo">📁 HistTUI</span>
+                <span class="status-screen">Timeline</span>
+            </div>
+            <div class="status-right">
+                <span class="status-time">Jan 15, 2026 18:38</span>
+                <span class="status-ag-ui">🤖 AG-UI</span>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-title">📊 Commit Timeline</div>
+                <div class="header-subtitle">142 commits • Use ↑↓ or j/k to navigate, Enter to view details</div>
+            </div>
+
+            <!-- Help Panel (when ? is pressed) -->
+            <div class="help-panel" id="help-panel" style="display: none;">
+                <div class="help-title">Keyboard Shortcuts:</div>
+                <div class="help-line">
+                    <span class="key">j/↓</span> Down • <span class="key">k/↑</span> Up •
+                    <span class="key">Ctrl+d/PgDn</span> Page Down • <span class="key">Ctrl+u/PgUp</span> Page Up
+                </div>
+                <div class="help-line">
+                    <span class="key">g</span> First • <span class="key">G</span> Last •
+                    <span class="key">Enter</span> View Details • <span class="key">/</span> Search
+                </div>
+                <div class="help-line">
+                    <span class="key">1</span> Timeline • <span class="key">2</span> Branches •
+                    <span class="key">3</span> Files • <span class="key">4</span> Dashboards
+                </div>
+                <div class="help-line">
+                    <span class="key">?</span> Toggle Help • <span class="key">q</span> Quit
+                </div>
+            </div>
+
+            <!-- Commit List -->
+            <div class="commit-list">
+                <div class="commit-item selected">
+                    <span class="commit-hash">b24d118</span>
+                    <span class="commit-message">♿ feat: Add accesskey attributes to kbd elements</span>
+                    <span class="commit-author">GitHub Copilot</span>
+                    <span class="commit-date">2 hours ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">876fc4d</span>
+                    <span class="commit-message">📄 docs: Add HTML/CSS version of tri-fold keyboard cheat sheet</span>
+                    <span class="commit-author">GitHub Copilot</span>
+                    <span class="commit-date">9 hours ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">95be77b</span>
+                    <span class="commit-message">📄 docs: Add printable tri-fold keyboard cheat sheet</span>
+                    <span class="commit-author">GitHub Copilot</span>
+                    <span class="commit-date">9 hours ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">203612e</span>
+                    <span class="commit-message">📚 docs: Add comprehensive visual documentation</span>
+                    <span class="commit-author">GitHub Copilot</span>
+                    <span class="commit-date">10 hours ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">ca15d8f</span>
+                    <span class="commit-message">✨ feat: Add ASCII art logo and visual enhancements</span>
+                    <span class="commit-author">GitHub Copilot</span>
+                    <span class="commit-date">10 hours ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">edbb934</span>
+                    <span class="commit-message">📸 docs: Add screenshots of all major HistTUI features</span>
+                    <span class="commit-author">GitHub Copilot</span>
+                    <span class="commit-date">11 hours ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">0bd0960</span>
+                    <span class="commit-message">Initial plan</span>
+                    <span class="commit-author">shelbeely</span>
+                    <span class="commit-date">12 hours ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">00ef165</span>
+                    <span class="commit-message">Merge pull request #6 from shelbeely/copilot/add-generative-ui</span>
+                    <span class="commit-author">shelbeely</span>
+                    <span class="commit-date">1 day ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">7a3b2c1</span>
+                    <span class="commit-message">✨ feat: Add AG-UI generative terminal interface integration</span>
+                    <span class="commit-author">GitHub Copilot</span>
+                    <span class="commit-date">1 day ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">5f8e9d2</span>
+                    <span class="commit-message">🎨 style: Update Material Design 3 theming</span>
+                    <span class="commit-author">shelbeely</span>
+                    <span class="commit-date">2 days ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">3c7a1b4</span>
+                    <span class="commit-message">🐛 fix: Handle large repositories without freezing UI</span>
+                    <span class="commit-author">shelbeely</span>
+                    <span class="commit-date">2 days ago</span>
+                </div>
+                <div class="commit-item">
+                    <span class="commit-hash">9d2e4f6</span>
+                    <span class="commit-message">♻️ refactor: Extract file tree logic into component</span>
+                    <span class="commit-author">shelbeely</span>
+                    <span class="commit-date">3 days ago</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Help -->
+        <div class="footer">
+            <span class="footer-hint">Press <span class="key">?</span> for help • <span class="key">q</span> to quit</span>
+        </div>
+
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+            <button class="tab active" data-screen="timeline">1: Timeline</button>
+            <button class="tab" data-screen="branches">2: Branches</button>
+            <button class="tab" data-screen="files">3: Files</button>
+            <button class="tab" data-screen="dashboard">4: Dashboard</button>
+            <button class="tab" data-screen="repos">5: Repos</button>
+            <button class="tab" data-screen="planner">6: Code Planner</button>
+        </div>
+    </div>
+
+    <!-- Multiple Screen Views (hidden by default) -->
+    <div class="screen" id="branches-screen" style="display: none;">
+        <div class="terminal">
+            <div class="status-bar">
+                <div class="status-left">
+                    <span class="status-repo">📁 HistTUI</span>
+                    <span class="status-screen">Branches & Tags</span>
+                </div>
+                <div class="status-right">
+                    <span class="status-time">Jan 15, 2026 18:38</span>
+                    <span class="status-ag-ui">🤖 AG-UI</span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="header">
+                    <div class="header-title">🌿 Branches & Tags</div>
+                    <div class="header-subtitle">5 branches • Use Tab to switch views</div>
+                </div>
+                <div class="branch-list">
+                    <div class="branch-item selected">
+                        <span class="branch-current">⭐</span>
+                        <span class="branch-name">copilot/capture-feature-screenshots</span>
+                        <span class="branch-date">2 hours ago</span>
+                    </div>
+                    <div class="branch-item">
+                        <span class="branch-indicator">→</span>
+                        <span class="branch-name">main</span>
+                        <span class="branch-date">1 day ago</span>
+                    </div>
+                    <div class="branch-item">
+                        <span class="branch-indicator">→</span>
+                        <span class="branch-name">copilot/add-generative-ui-feature</span>
+                        <span class="branch-date">1 day ago</span>
+                    </div>
+                    <div class="branch-item">
+                        <span class="branch-indicator">→</span>
+                        <span class="branch-name">feature/material-design-3</span>
+                        <span class="branch-date">2 days ago</span>
+                    </div>
+                    <div class="branch-item">
+                        <span class="branch-indicator">→</span>
+                        <span class="branch-name">develop</span>
+                        <span class="branch-date">3 days ago</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <span class="footer-hint">Press <span class="key">?</span> for help • <span class="key">q</span> to quit</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="demo.js"></script>
+</body>
+</html>
