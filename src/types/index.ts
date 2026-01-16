@@ -204,7 +204,7 @@ export interface AppConfig {
 }
 
 export interface LLMConfig {
-  provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'none';
+  provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'copilot-sdk' | 'none';
   apiKey?: string;
   model?: string;
   baseUrl?: string;

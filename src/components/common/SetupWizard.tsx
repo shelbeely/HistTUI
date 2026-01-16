@@ -3,10 +3,112 @@
  * Interactive setup for configuring LLM API keys and preferences
  */
 
-import React, { useState } from 'react';
-import { Box, Text } from 'ink';
+import React, { useState, useEffect } from 'react';
+import { Box, Text, useInput } from 'ink';
+import Gradient from 'ink-gradient';
+import Spinner from 'ink-spinner';
 import { TextInput, PasswordInput, Select, ConfirmInput } from '@inkjs/ui';
 import { BoxBorder, StatusMessage, Alert } from './UI';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
+
+// Animated status indicator component for ADHD-friendly visual feedback
+function AnimatedStatus({ status, label }: { status: 'checking' | 'success' | 'pending' | 'error'; label: string }) {
+  const [pulse, setPulse] = useState(0);
+
+  useEffect(() => {
+    if (status === 'pending') {
+      const interval = setInterval(() => {
+        setPulse(p => (p + 1) % 3);
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, [status]);
+
+  const icon = {
+    checking: <Spinner type="dots" />,
+    success: <Text color="green">✓</Text>,
+    pending: <Text color="yellow">{pulse === 0 ? '○' : pulse === 1 ? '◐' : '◑'}</Text>,
+    error: <Text color="red">✗</Text>,
+  }[status];
+
+  const color = {
+    checking: 'cyan',
+    success: 'green',
+    pending: 'yellow',
+    error: 'red',
+  }[status];
+
+  return (
+    <Box>
+      {icon}
+      <Text color={color}> {label}</Text>
+    </Box>
+  );
+}
+
+// Animated progress dots for visual engagement
+function ProgressDots({ active }: { active: boolean }) {
+  const [dots, setDots] = useState(0);
+
+  useEffect(() => {
+    if (active) {
+      const interval = setInterval(() => {
+        setDots(d => (d + 1) % 4);
+      }, 400);
+      return () => clearInterval(interval);
+    }
+  }, [active]);
+
+  return (
+    <Text dimColor>
+      {'.'.repeat(dots)}{' '.repeat(3 - dots)}
+    </Text>
+  );
+}
+
+interface CopilotSetupInputProps {
+  status: {
+    ghInstalled: boolean;
+    extensionInstalled: boolean;
+    authenticated: boolean;
+    checking: boolean;
+  };
+  onInstall: () => void;
+  onRecheck: () => void;
+  onContinue: () => void;
+  onCancel: () => void;
+}
+
+function CopilotSetupInput({ status, onInstall, onRecheck, onContinue, onCancel }: CopilotSetupInputProps) {
+  useInput((input, key) => {
+    if (key.return) {
+      if (status.ghInstalled && status.extensionInstalled && status.authenticated) {
+        onContinue();
+      } else {
+        onRecheck();
+      }
+    } else if (input === 'i' && status.ghInstalled && !status.extensionInstalled) {
+      onInstall();
+    } else if (input === 'r') {
+      onRecheck();
+    } else if (key.escape || input === 'q') {
+      onCancel();
+    }
+  });
+
+  return (
+    <Box>
+      <Text dimColor>
+        {status.ghInstalled && status.extensionInstalled && status.authenticated 
+          ? '(Enter: Continue, r: Recheck, Esc: Back)' 
+          : '(r: Recheck' + (status.ghInstalled && !status.extensionInstalled ? ', i: Install' : '') + ', Esc: Back)'}
+      </Text>
+    </Box>
+  );
+}
 
 interface SetupWizardProps {
   onComplete: (config: SetupConfig) => void;
@@ -14,7 +116,7 @@ interface SetupWizardProps {
 }
 
 export interface SetupConfig {
-  llmProvider?: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'none';
+  llmProvider?: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'copilot-sdk' | 'none';
   apiKey?: string;
   model?: string;
   baseUrl?: string;
@@ -22,7 +124,7 @@ export interface SetupConfig {
   enableAGUI?: boolean;
 }
 
-type SetupStep = 'welcome' | 'provider' | 'apikey' | 'model' | 'agent' | 'confirm' | 'complete';
+type SetupStep = 'welcome' | 'provider' | 'apikey' | 'model' | 'copilot-setup' | 'agent' | 'confirm' | 'complete';
 
 export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
   const [step, setStep] = useState<SetupStep>('welcome');
@@ -30,6 +132,20 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [modelInput, setModelInput] = useState('');
   const [agentEndpointInput, setAgentEndpointInput] = useState('http://localhost:3001/api/agent');
+  
+  // Copilot setup state
+  const [copilotStatus, setCopilotStatus] = useState<{
+    ghInstalled: boolean;
+    extensionInstalled: boolean;
+    authenticated: boolean;
+    checking: boolean;
+    error?: string;
+  }>({
+    ghInstalled: false,
+    extensionInstalled: false,
+    authenticated: false,
+    checking: false,
+  });
 
   // Popular OpenRouter models
   const openRouterModels = [
@@ -52,8 +168,63 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     { label: 'Anthropic (Claude)', value: 'anthropic' },
     { label: 'OpenRouter (Multiple Models)', value: 'openrouter' },
     { label: 'Ollama (Local Models)', value: 'ollama' },
+    { label: 'GitHub Copilot SDK', value: 'copilot-sdk' },
     { label: 'Skip - Configure Later', value: 'none' },
   ];
+
+  // Check Copilot CLI status
+  const checkCopilotStatus = async () => {
+    setCopilotStatus(prev => ({ ...prev, checking: true, error: undefined }));
+    
+    try {
+      // Check if gh is installed
+      try {
+        await execAsync('gh --version');
+        setCopilotStatus(prev => ({ ...prev, ghInstalled: true }));
+      } catch {
+        setCopilotStatus(prev => ({ ...prev, ghInstalled: false, checking: false }));
+        return;
+      }
+
+      // Check if copilot extension is installed
+      try {
+        const { stdout } = await execAsync('gh extension list');
+        const extensionInstalled = stdout.includes('gh-copilot') || stdout.includes('github/gh-copilot');
+        setCopilotStatus(prev => ({ ...prev, extensionInstalled }));
+      } catch {
+        setCopilotStatus(prev => ({ ...prev, extensionInstalled: false }));
+      }
+
+      // Check if authenticated by trying to run copilot
+      try {
+        await execAsync('gh copilot --version 2>/dev/null || copilot --version 2>/dev/null');
+        setCopilotStatus(prev => ({ ...prev, authenticated: true, checking: false }));
+      } catch {
+        setCopilotStatus(prev => ({ ...prev, authenticated: false, checking: false }));
+      }
+    } catch (error: any) {
+      setCopilotStatus(prev => ({ 
+        ...prev, 
+        checking: false, 
+        error: error.message || 'Failed to check Copilot status' 
+      }));
+    }
+  };
+
+  // Install gh extension
+  const installCopilotExtension = async () => {
+    try {
+      setCopilotStatus(prev => ({ ...prev, checking: true, error: undefined }));
+      await execAsync('gh extension install github/gh-copilot');
+      await checkCopilotStatus();
+    } catch (error: any) {
+      setCopilotStatus(prev => ({ 
+        ...prev, 
+        checking: false,
+        error: 'Failed to install Copilot extension. Please run: gh extension install github/gh-copilot'
+      }));
+    }
+  };
 
   const handleProviderSelect = (provider: string) => {
     const newConfig = { ...config, llmProvider: provider as any };
@@ -61,6 +232,11 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     if (provider === 'none') {
       setStep('complete');
       onComplete({ ...newConfig, llmProvider: 'none' });
+    } else if (provider === 'copilot-sdk') {
+      // Copilot SDK needs setup - check status and guide user
+      setConfig(newConfig);
+      checkCopilotStatus();
+      setStep('copilot-setup');
     } else if (provider === 'ollama') {
       // Ollama doesn't need API key but needs model
       setConfig({ ...newConfig, baseUrl: 'http://localhost:11434' });
@@ -123,9 +299,11 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={2}>
-          <Text bold color="cyan" wrap="wrap">
-            🚀 Welcome to HistTUI!
-          </Text>
+          <Gradient name="rainbow">
+            <Text bold>
+              🚀 Welcome to HistTUI!
+            </Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title="First-Time Setup" borderColor="green" width="100%">
@@ -135,7 +313,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
             </Text>
             
             <Box marginTop={1}>
-              <Text bold color="cyan">✨ What you'll get:</Text>
+              <Gradient name="pastel">
+                <Text bold>✨ What you'll get:</Text>
+              </Gradient>
             </Box>
             <Box marginLeft={2} flexDirection="column">
               <Text>• 🤖 AI-powered insights and code analysis</Text>
@@ -149,7 +329,7 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
               <Text dimColor bold>Configure:</Text>
             </Box>
             <Box marginLeft={2} flexDirection="column">
-              <Text>• LLM Provider (OpenAI, Anthropic, OpenRouter, Ollama)</Text>
+              <Text>• LLM Provider (OpenAI, Anthropic, OpenRouter, Ollama, Copilot SDK)</Text>
               <Text>• API Keys for cloud providers</Text>
               <Text>• Model selection (OpenRouter: 12+ models)</Text>
               <Text>• AG-UI Agent endpoint (optional)</Text>
@@ -188,7 +368,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={1}>
-          <Text bold color="cyan">Step 1/3: Select LLM Provider</Text>
+          <Gradient name="morning">
+            <Text bold>Step 1/3: Select LLM Provider</Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title="Choose Your AI Provider" borderColor="blue" width="100%">
@@ -197,6 +379,11 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
               HistTUI uses AI to provide generative insights, code analysis, and
               intelligent recommendations.
             </Text>
+            <Box marginTop={1}>
+              <StatusMessage variant="info">
+                💡 GitHub Copilot SDK requires Copilot CLI installed and authenticated
+              </StatusMessage>
+            </Box>
             <Box marginTop={1}>
               <Select
                 options={providers}
@@ -208,6 +395,7 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
 
         <Box marginTop={1}>
           <Text dimColor>Use arrow keys to navigate, Enter to select</Text>
+          <ProgressDots active={true} />
         </Box>
       </Box>
     );
@@ -237,7 +425,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={1}>
-          <Text bold color="cyan">Step 2/3: Enter API Key</Text>
+          <Gradient name="teen">
+            <Text bold>Step 2/3: Enter API Key</Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title={`${info.name} API Key`} borderColor="yellow" width="100%">
@@ -357,6 +547,150 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     );
   }
 
+  if (step === 'copilot-setup') {
+    return (
+      <Box flexDirection="column" padding={2}>
+        <Box marginBottom={1}>
+          <Gradient name="cristal">
+            <Text bold>Step 2/3: GitHub Copilot CLI Setup</Text>
+          </Gradient>
+        </Box>
+
+        <BoxBorder title="Copilot CLI Configuration" borderColor="magenta" width="100%">
+          <Box flexDirection="column" gap={1}>
+            <Text>
+              GitHub Copilot SDK requires the Copilot CLI to be installed and authenticated.
+            </Text>
+            
+            {copilotStatus.checking && (
+              <Box marginTop={1} flexDirection="row" gap={1}>
+                <Spinner type="dots" />
+                <Text color="cyan">Checking Copilot CLI status</Text>
+                <ProgressDots active={true} />
+              </Box>
+            )}
+
+            {!copilotStatus.checking && (
+              <>
+                {/* GitHub CLI Status */}
+                <Box marginTop={1} flexDirection="column">
+                  <AnimatedStatus 
+                    status={copilotStatus.ghInstalled ? 'success' : 'error'}
+                    label="1. GitHub CLI (gh)"
+                  />
+                  {!copilotStatus.ghInstalled && (
+                    <Box marginLeft={2} marginTop={1}>
+                      <Alert variant="warning">
+                        Install GitHub CLI: https://cli.github.com/
+                      </Alert>
+                    </Box>
+                  )}
+                </Box>
+
+                {/* Copilot Extension Status */}
+                {copilotStatus.ghInstalled && (
+                  <Box marginTop={1} flexDirection="column">
+                    <AnimatedStatus 
+                      status={copilotStatus.extensionInstalled ? 'success' : 'pending'}
+                      label="2. Copilot Extension"
+                    />
+                    {!copilotStatus.extensionInstalled && (
+                      <Box marginLeft={2} marginTop={1} flexDirection="column">
+                        <StatusMessage variant="info">
+                          Installing extension: gh extension install github/gh-copilot
+                        </StatusMessage>
+                        <Box marginTop={1}>
+                          <Text dimColor>Press 'i' to install now, or Enter to skip</Text>
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                )}
+
+                {/* Authentication Status */}
+                {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && (
+                  <Box marginTop={1} flexDirection="column">
+                    <AnimatedStatus 
+                      status={copilotStatus.authenticated ? 'success' : 'pending'}
+                      label="3. Authentication"
+                    />
+                    {!copilotStatus.authenticated && (
+                      <Box marginLeft={2} marginTop={1} flexDirection="column">
+                        <Alert variant="warning">
+                          Authentication required
+                        </Alert>
+                        <Box marginTop={1} flexDirection="column" gap={1}>
+                          <Text bold color="cyan">To authenticate:</Text>
+                          <Box marginLeft={2} flexDirection="column">
+                            <Text>1. Open a new terminal</Text>
+                            <Text>2. Run: <Text bold color="green">gh auth login</Text></Text>
+                            <Text>3. Follow the browser prompts</Text>
+                            <Text>4. Return here and press 'r' to recheck</Text>
+                          </Box>
+                        </Box>
+                        <Box marginTop={1}>
+                          <StatusMessage variant="info">
+                            This is a one-time setup. You'll stay authenticated.
+                          </StatusMessage>
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                )}
+
+                {copilotStatus.error && (
+                  <Box marginTop={1}>
+                    <Alert variant="error">
+                      {copilotStatus.error}
+                    </Alert>
+                  </Box>
+                )}
+
+                {/* All checks passed */}
+                {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && copilotStatus.authenticated && (
+                  <Box marginTop={2}>
+                    <Alert variant="success">
+                      ✅ All requirements met! Ready to proceed.
+                    </Alert>
+                  </Box>
+                )}
+
+                {/* Actions */}
+                <Box marginTop={2} flexDirection="column">
+                  {!copilotStatus.ghInstalled && (
+                    <Text dimColor>Install gh CLI first, then press 'r' to recheck</Text>
+                  )}
+                  {copilotStatus.ghInstalled && !copilotStatus.extensionInstalled && (
+                    <Text dimColor>Press 'i' to install extension or 'r' to recheck</Text>
+                  )}
+                  {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && !copilotStatus.authenticated && (
+                    <>
+                      <Text dimColor>Run: gh auth login</Text>
+                      <Text dimColor>Then press 'r' to recheck status</Text>
+                    </>
+                  )}
+                  {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && copilotStatus.authenticated && (
+                    <Text dimColor>Press Enter to continue or 'r' to recheck</Text>
+                  )}
+                </Box>
+              </>
+            )}
+          </Box>
+        </BoxBorder>
+
+        <Box marginTop={1}>
+          <CopilotSetupInput
+            status={copilotStatus}
+            onInstall={installCopilotExtension}
+            onRecheck={checkCopilotStatus}
+            onContinue={() => setStep('agent')}
+            onCancel={() => setStep('provider')}
+          />
+        </Box>
+      </Box>
+    );
+  }
+
   if (step === 'agent') {
     const stepNumber = config.llmProvider === 'openrouter' ? '4/4' : '3/3';
     
@@ -377,6 +711,13 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
                 Features: Streaming insights, tool execution, dynamic visualizations
               </StatusMessage>
             </Box>
+            {config.llmProvider === 'copilot-sdk' && (
+              <Box marginTop={1}>
+                <StatusMessage variant="warning">
+                  ⚠️  For Copilot SDK, run: npm run agent:copilot (instead of npm run agent)
+                </StatusMessage>
+              </Box>
+            )}
             <Box marginTop={1} flexDirection="column">
               <Text bold>Agent Endpoint (optional):</Text>
               <Text dimColor>Leave default if running agent locally</Text>
@@ -408,7 +749,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={1}>
-          <Text bold color="cyan">Confirm Configuration</Text>
+          <Gradient name="fruit">
+            <Text bold>Confirm Configuration</Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title="Review Your Settings" borderColor="magenta" width="100%">
@@ -470,23 +813,45 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
       <Box flexDirection="column" padding={2}>
         <BoxBorder title="Setup Complete!" borderColor="green" width="100%">
           <Box flexDirection="column" gap={1}>
-            <Text bold color="green">✅ Configuration saved successfully!</Text>
+            <Box>
+              <Gradient name="rainbow">
+                <Text bold>✅ Configuration saved successfully!</Text>
+              </Gradient>
+            </Box>
             <Box marginTop={1}>
               <Text>Your HistTUI is now configured with:</Text>
               <Box marginLeft={2} marginTop={1} flexDirection="column">
                 {config.llmProvider && config.llmProvider !== 'none' && (
-                  <Text>• {config.llmProvider?.toUpperCase()} integration</Text>
+                  <Box>
+                    <Text color="green">✓</Text>
+                    <Text> {config.llmProvider?.toUpperCase()} integration</Text>
+                  </Box>
                 )}
                 {config.enableAGUI && (
-                  <Text>• AG-UI generative capabilities</Text>
+                  <Box>
+                    <Text color="green">✓</Text>
+                    <Text> AG-UI generative capabilities</Text>
+                  </Box>
                 )}
-                <Text>• Enhanced terminal UI with @inkjs/ui</Text>
+                <Box>
+                  <Text color="green">✓</Text>
+                  <Text> Enhanced terminal UI with @inkjs/ui</Text>
+                </Box>
               </Box>
             </Box>
-            <Box marginTop={2}>
-              <StatusMessage variant="success">
-                Launching HistTUI...
-              </StatusMessage>
+            {config.llmProvider === 'copilot-sdk' && config.enableAGUI && (
+              <Box marginTop={2}>
+                <StatusMessage variant="warning">
+                  📝 To use Copilot SDK, run the Copilot backend: npm run agent:copilot
+                </StatusMessage>
+              </Box>
+            )}
+            <Box marginTop={2} flexDirection="row" gap={1}>
+              <Spinner type="dots" />
+              <Gradient name="pastel">
+                <Text bold>Launching HistTUI</Text>
+              </Gradient>
+              <ProgressDots active={true} />
             </Box>
           </Box>
         </BoxBorder>

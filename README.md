@@ -145,7 +145,7 @@ Smart caching system
 <sub>⌨️ Keyboard Shortcuts</sub>
 </td>
 <td align="center" width="25%">
-<h3>4</h3>
+<h3>5</h3>
 <sub>🤖 AI Providers</sub>
 </td>
 <td align="center" width="25%">
@@ -348,6 +348,7 @@ histtui https://github.com/user/repo --debug
 
 ![AG-UI Enabled](https://img.shields.io/badge/Powered%20by-AG--UI-orange?style=for-the-badge)
 ![Material Design 3](https://img.shields.io/badge/Theme-Material%20Design%203-6750A4?style=for-the-badge)
+[![Copilot SDK Compatible](https://img.shields.io/badge/GitHub%20Copilot%20SDK-Compatible-green?style=for-the-badge)](./COPILOT_SDK_INTEGRATION.md)
 
 </div>
 
@@ -362,6 +363,7 @@ HistTUI integrates the **AG-UI protocol** for true generative terminal UI:
 | 🎯 **Context-Aware** | AI understands your repository structure, history, and current focus |
 | 🛠️ **Multi-Provider Support** | Works with OpenAI, Anthropic, OpenRouter, or local Ollama models |
 | 🚀 **One-Command Launch** | `bun run launch` starts both agent server and TUI together |
+| 🤝 **Copilot SDK Compatible** | Optional [GitHub Copilot SDK](./COPILOT_SDK_INTEGRATION.md) integration for Copilot subscribers |
 
 ### 🎨 Design & UX
 
@@ -1142,6 +1144,7 @@ The specification covers:
 - 🔌 **[PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md)** - Plugin development
 - 🎯 **[CODE_PLANNER.md](./CODE_PLANNER.md)** - Code planning system
 - 🤖 **[AGUI_INTEGRATION.md](./AGUI_INTEGRATION.md)** - AG-UI protocol
+- 🤝 **[COPILOT_SDK_INTEGRATION.md](./COPILOT_SDK_INTEGRATION.md)** - GitHub Copilot SDK integration
 - 🎨 **[MATERIAL_DESIGN_3.md](./MATERIAL_DESIGN_3.md)** - Design system
 - 📦 **[COMPONENTS.md](./COMPONENTS.md)** - Component catalog
 

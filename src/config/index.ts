@@ -136,7 +136,7 @@ export class ConfigManager {
   }
 
   public updateLLMConfig(llmConfig: {
-    provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'none';
+    provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'copilot-sdk' | 'none';
     apiKey?: string;
     model?: string;
     baseUrl?: string;
