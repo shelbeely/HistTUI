@@ -3,10 +3,55 @@
  * Interactive setup for configuring LLM API keys and preferences
  */
 
-import React, { useState } from 'react';
-import { Box, Text } from 'ink';
+import React, { useState, useEffect } from 'react';
+import { Box, Text, useInput } from 'ink';
 import { TextInput, PasswordInput, Select, ConfirmInput } from '@inkjs/ui';
 import { BoxBorder, StatusMessage, Alert } from './UI';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
+
+interface CopilotSetupInputProps {
+  status: {
+    ghInstalled: boolean;
+    extensionInstalled: boolean;
+    authenticated: boolean;
+    checking: boolean;
+  };
+  onInstall: () => void;
+  onRecheck: () => void;
+  onContinue: () => void;
+  onCancel: () => void;
+}
+
+function CopilotSetupInput({ status, onInstall, onRecheck, onContinue, onCancel }: CopilotSetupInputProps) {
+  useInput((input, key) => {
+    if (key.return) {
+      if (status.ghInstalled && status.extensionInstalled && status.authenticated) {
+        onContinue();
+      } else {
+        onRecheck();
+      }
+    } else if (input === 'i' && status.ghInstalled && !status.extensionInstalled) {
+      onInstall();
+    } else if (input === 'r') {
+      onRecheck();
+    } else if (key.escape || input === 'q') {
+      onCancel();
+    }
+  });
+
+  return (
+    <Box>
+      <Text dimColor>
+        {status.ghInstalled && status.extensionInstalled && status.authenticated 
+          ? '(Enter: Continue, r: Recheck, Esc: Back)' 
+          : '(r: Recheck' + (status.ghInstalled && !status.extensionInstalled ? ', i: Install' : '') + ', Esc: Back)'}
+      </Text>
+    </Box>
+  );
+}
 
 interface SetupWizardProps {
   onComplete: (config: SetupConfig) => void;
@@ -22,7 +67,7 @@ export interface SetupConfig {
   enableAGUI?: boolean;
 }
 
-type SetupStep = 'welcome' | 'provider' | 'apikey' | 'model' | 'agent' | 'confirm' | 'complete';
+type SetupStep = 'welcome' | 'provider' | 'apikey' | 'model' | 'copilot-setup' | 'agent' | 'confirm' | 'complete';
 
 export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
   const [step, setStep] = useState<SetupStep>('welcome');
@@ -30,6 +75,20 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [modelInput, setModelInput] = useState('');
   const [agentEndpointInput, setAgentEndpointInput] = useState('http://localhost:3001/api/agent');
+  
+  // Copilot setup state
+  const [copilotStatus, setCopilotStatus] = useState<{
+    ghInstalled: boolean;
+    extensionInstalled: boolean;
+    authenticated: boolean;
+    checking: boolean;
+    error?: string;
+  }>({
+    ghInstalled: false,
+    extensionInstalled: false,
+    authenticated: false,
+    checking: false,
+  });
 
   // Popular OpenRouter models
   const openRouterModels = [
@@ -56,6 +115,60 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     { label: 'Skip - Configure Later', value: 'none' },
   ];
 
+  // Check Copilot CLI status
+  const checkCopilotStatus = async () => {
+    setCopilotStatus(prev => ({ ...prev, checking: true, error: undefined }));
+    
+    try {
+      // Check if gh is installed
+      try {
+        await execAsync('gh --version');
+        setCopilotStatus(prev => ({ ...prev, ghInstalled: true }));
+      } catch {
+        setCopilotStatus(prev => ({ ...prev, ghInstalled: false, checking: false }));
+        return;
+      }
+
+      // Check if copilot extension is installed
+      try {
+        const { stdout } = await execAsync('gh extension list');
+        const extensionInstalled = stdout.includes('gh-copilot') || stdout.includes('github/gh-copilot');
+        setCopilotStatus(prev => ({ ...prev, extensionInstalled }));
+      } catch {
+        setCopilotStatus(prev => ({ ...prev, extensionInstalled: false }));
+      }
+
+      // Check if authenticated by trying to run copilot
+      try {
+        await execAsync('gh copilot --version 2>/dev/null || copilot --version 2>/dev/null');
+        setCopilotStatus(prev => ({ ...prev, authenticated: true, checking: false }));
+      } catch {
+        setCopilotStatus(prev => ({ ...prev, authenticated: false, checking: false }));
+      }
+    } catch (error: any) {
+      setCopilotStatus(prev => ({ 
+        ...prev, 
+        checking: false, 
+        error: error.message || 'Failed to check Copilot status' 
+      }));
+    }
+  };
+
+  // Install gh extension
+  const installCopilotExtension = async () => {
+    try {
+      setCopilotStatus(prev => ({ ...prev, checking: true, error: undefined }));
+      await execAsync('gh extension install github/gh-copilot');
+      await checkCopilotStatus();
+    } catch (error: any) {
+      setCopilotStatus(prev => ({ 
+        ...prev, 
+        checking: false,
+        error: 'Failed to install Copilot extension. Please run: gh extension install github/gh-copilot'
+      }));
+    }
+  };
+
   const handleProviderSelect = (provider: string) => {
     const newConfig = { ...config, llmProvider: provider as any };
     
@@ -63,9 +176,10 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
       setStep('complete');
       onComplete({ ...newConfig, llmProvider: 'none' });
     } else if (provider === 'copilot-sdk') {
-      // Copilot SDK doesn't need API key, uses Copilot CLI auth
+      // Copilot SDK needs setup - check status and guide user
       setConfig(newConfig);
-      setStep('agent');
+      checkCopilotStatus();
+      setStep('copilot-setup');
     } else if (provider === 'ollama') {
       // Ollama doesn't need API key but needs model
       setConfig({ ...newConfig, baseUrl: 'http://localhost:11434' });
@@ -362,6 +476,160 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
               ? 'Enter the model name and press Enter'
               : 'Use arrow keys to navigate, Enter to select'}
           </Text>
+        </Box>
+      </Box>
+    );
+  }
+
+  if (step === 'copilot-setup') {
+    return (
+      <Box flexDirection="column" padding={2}>
+        <Box marginBottom={1}>
+          <Text bold color="cyan">Step 2/3: GitHub Copilot CLI Setup</Text>
+        </Box>
+
+        <BoxBorder title="Copilot CLI Configuration" borderColor="magenta" width="100%">
+          <Box flexDirection="column" gap={1}>
+            <Text>
+              GitHub Copilot SDK requires the Copilot CLI to be installed and authenticated.
+            </Text>
+            
+            {copilotStatus.checking && (
+              <Box marginTop={1}>
+                <StatusMessage variant="info">
+                  🔍 Checking Copilot CLI status...
+                </StatusMessage>
+              </Box>
+            )}
+
+            {!copilotStatus.checking && (
+              <>
+                {/* GitHub CLI Status */}
+                <Box marginTop={1} flexDirection="column">
+                  <Box>
+                    <Text bold>1. GitHub CLI (gh): </Text>
+                    {copilotStatus.ghInstalled ? (
+                      <Text color="green">✓ Installed</Text>
+                    ) : (
+                      <Text color="red">✗ Not Found</Text>
+                    )}
+                  </Box>
+                  {!copilotStatus.ghInstalled && (
+                    <Box marginLeft={2} marginTop={1}>
+                      <Alert variant="warning">
+                        Install GitHub CLI: https://cli.github.com/
+                      </Alert>
+                    </Box>
+                  )}
+                </Box>
+
+                {/* Copilot Extension Status */}
+                {copilotStatus.ghInstalled && (
+                  <Box marginTop={1} flexDirection="column">
+                    <Box>
+                      <Text bold>2. Copilot Extension: </Text>
+                      {copilotStatus.extensionInstalled ? (
+                        <Text color="green">✓ Installed</Text>
+                      ) : (
+                        <Text color="yellow">○ Not Installed</Text>
+                      )}
+                    </Box>
+                    {!copilotStatus.extensionInstalled && (
+                      <Box marginLeft={2} marginTop={1} flexDirection="column">
+                        <StatusMessage variant="info">
+                          Installing extension: gh extension install github/gh-copilot
+                        </StatusMessage>
+                        <Box marginTop={1}>
+                          <Text dimColor>Press 'i' to install now, or Enter to skip</Text>
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                )}
+
+                {/* Authentication Status */}
+                {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && (
+                  <Box marginTop={1} flexDirection="column">
+                    <Box>
+                      <Text bold>3. Authentication: </Text>
+                      {copilotStatus.authenticated ? (
+                        <Text color="green">✓ Authenticated</Text>
+                      ) : (
+                        <Text color="yellow">○ Not Authenticated</Text>
+                      )}
+                    </Box>
+                    {!copilotStatus.authenticated && (
+                      <Box marginLeft={2} marginTop={1} flexDirection="column">
+                        <Alert variant="warning">
+                          Authentication required
+                        </Alert>
+                        <Box marginTop={1} flexDirection="column" gap={1}>
+                          <Text bold color="cyan">To authenticate:</Text>
+                          <Box marginLeft={2} flexDirection="column">
+                            <Text>1. Open a new terminal</Text>
+                            <Text>2. Run: <Text bold color="green">gh auth login</Text></Text>
+                            <Text>3. Follow the browser prompts</Text>
+                            <Text>4. Return here and press 'r' to recheck</Text>
+                          </Box>
+                        </Box>
+                        <Box marginTop={1}>
+                          <StatusMessage variant="info">
+                            This is a one-time setup. You'll stay authenticated.
+                          </StatusMessage>
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                )}
+
+                {copilotStatus.error && (
+                  <Box marginTop={1}>
+                    <Alert variant="error">
+                      {copilotStatus.error}
+                    </Alert>
+                  </Box>
+                )}
+
+                {/* All checks passed */}
+                {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && copilotStatus.authenticated && (
+                  <Box marginTop={2}>
+                    <Alert variant="success">
+                      ✅ All requirements met! Ready to proceed.
+                    </Alert>
+                  </Box>
+                )}
+
+                {/* Actions */}
+                <Box marginTop={2} flexDirection="column">
+                  {!copilotStatus.ghInstalled && (
+                    <Text dimColor>Install gh CLI first, then press 'r' to recheck</Text>
+                  )}
+                  {copilotStatus.ghInstalled && !copilotStatus.extensionInstalled && (
+                    <Text dimColor>Press 'i' to install extension or 'r' to recheck</Text>
+                  )}
+                  {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && !copilotStatus.authenticated && (
+                    <>
+                      <Text dimColor>Run: gh auth login</Text>
+                      <Text dimColor>Then press 'r' to recheck status</Text>
+                    </>
+                  )}
+                  {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && copilotStatus.authenticated && (
+                    <Text dimColor>Press Enter to continue or 'r' to recheck</Text>
+                  )}
+                </Box>
+              </>
+            )}
+          </Box>
+        </BoxBorder>
+
+        <Box marginTop={1}>
+          <CopilotSetupInput
+            status={copilotStatus}
+            onInstall={installCopilotExtension}
+            onRecheck={checkCopilotStatus}
+            onContinue={() => setStep('agent')}
+            onCancel={() => setStep('provider')}
+          />
         </Box>
       </Box>
     );
