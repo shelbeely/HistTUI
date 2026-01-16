@@ -4,6 +4,8 @@
 
 HistTUI now features **true generative UI** powered by the AG-UI protocol. This enables AI agents to dynamically create and update terminal interface components based on context and user intent.
 
+> **💡 Looking for GitHub Copilot SDK integration?** See **[COPILOT_SDK_INTEGRATION.md](./COPILOT_SDK_INTEGRATION.md)** for a detailed comparison and integration guide for using GitHub Copilot SDK as an alternative agent backend.
+
 ## What is AG-UI?
 
 AG-UI (Agent-User Interaction) is an open, event-driven protocol that standardizes how AI agents connect to user-facing applications, including terminal/CLI interfaces like HistTUI.
@@ -380,12 +382,67 @@ Check browser console (if running in terminal that supports it) or log files at:
 - [ ] Agent marketplace integration
 - [ ] Offline mode with local LLMs
 
+## Alternative Agent Backends
+
+While HistTUI's default AG-UI implementation is flexible and production-ready, you can also use:
+
+### GitHub Copilot SDK Backend
+
+For users with GitHub Copilot subscriptions, you can use the Copilot SDK as an alternative backend:
+
+**Advantages:**
+- ✅ Code-specific intelligence trained by GitHub
+- ✅ Built-in tool calling system
+- ✅ No API key management (uses Copilot auth)
+- ✅ Included with Copilot subscription
+
+**Trade-offs:**
+- ❌ Requires Copilot CLI installation
+- ❌ No offline support
+- ❌ Single provider (cannot switch to Anthropic, Ollama, etc.)
+- ❌ More complex setup
+
+**See the complete guide:** [COPILOT_SDK_INTEGRATION.md](./COPILOT_SDK_INTEGRATION.md)
+
+### Custom Backend Implementation
+
+You can implement your own agent backend following the AG-UI protocol:
+
+**Requirements:**
+1. HTTP server with SSE support
+2. POST `/api/agent` endpoint
+3. Stream events in AG-UI format
+4. Handle connection lifecycle
+
+**Example backends:**
+- LangGraph with custom chains
+- CrewAI with multiple agents
+- Custom LangChain pipelines
+- Direct API integrations
+
+**See:** [AGENT_BACKEND.md](./AGENT_BACKEND.md) for implementation details
+
+## Comparison: Default vs. Copilot SDK vs. Custom
+
+| Feature | Default AG-UI | Copilot SDK | Custom Backend |
+|---------|--------------|-------------|----------------|
+| **Setup** | API key only | Copilot CLI + auth | Implement yourself |
+| **Providers** | Multiple | GitHub only | Depends on you |
+| **Offline** | Yes (Ollama) | No | Depends on you |
+| **Code Analysis** | Good | Excellent | Depends on you |
+| **Flexibility** | High | Medium | Total |
+| **Maintenance** | Included | SDK updates | Your responsibility |
+
+**Recommendation:** Start with the default AG-UI backend. It provides excellent flexibility and supports multiple LLM providers.
+
 ## Resources
 
 - [AG-UI Protocol Specification](https://ag-ui.com/docs/protocol)
 - [AG-UI GitHub](https://github.com/ag-ui-protocol/ag-ui)
 - [HistTUI Documentation](./README.md)
 - [Example Agent Backends](https://github.com/ag-ui-protocol/examples)
+- [COPILOT_SDK_INTEGRATION.md](./COPILOT_SDK_INTEGRATION.md) - GitHub Copilot SDK integration guide
+- [AGENT_BACKEND.md](./AGENT_BACKEND.md) - Agent backend implementation details
 
 ## License
 
