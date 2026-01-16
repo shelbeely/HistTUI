@@ -5,12 +5,69 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
+import Gradient from 'ink-gradient';
+import Spinner from 'ink-spinner';
 import { TextInput, PasswordInput, Select, ConfirmInput } from '@inkjs/ui';
 import { BoxBorder, StatusMessage, Alert } from './UI';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
+
+// Animated status indicator component for ADHD-friendly visual feedback
+function AnimatedStatus({ status, label }: { status: 'checking' | 'success' | 'pending' | 'error'; label: string }) {
+  const [pulse, setPulse] = useState(0);
+
+  useEffect(() => {
+    if (status === 'pending') {
+      const interval = setInterval(() => {
+        setPulse(p => (p + 1) % 3);
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, [status]);
+
+  const icon = {
+    checking: <Spinner type="dots" />,
+    success: <Text color="green">✓</Text>,
+    pending: <Text color="yellow">{pulse === 0 ? '○' : pulse === 1 ? '◐' : '◑'}</Text>,
+    error: <Text color="red">✗</Text>,
+  }[status];
+
+  const color = {
+    checking: 'cyan',
+    success: 'green',
+    pending: 'yellow',
+    error: 'red',
+  }[status];
+
+  return (
+    <Box>
+      {icon}
+      <Text color={color}> {label}</Text>
+    </Box>
+  );
+}
+
+// Animated progress dots for visual engagement
+function ProgressDots({ active }: { active: boolean }) {
+  const [dots, setDots] = useState(0);
+
+  useEffect(() => {
+    if (active) {
+      const interval = setInterval(() => {
+        setDots(d => (d + 1) % 4);
+      }, 400);
+      return () => clearInterval(interval);
+    }
+  }, [active]);
+
+  return (
+    <Text dimColor>
+      {'.'.repeat(dots)}{' '.repeat(3 - dots)}
+    </Text>
+  );
+}
 
 interface CopilotSetupInputProps {
   status: {
@@ -242,9 +299,11 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={2}>
-          <Text bold color="cyan" wrap="wrap">
-            🚀 Welcome to HistTUI!
-          </Text>
+          <Gradient name="rainbow">
+            <Text bold>
+              🚀 Welcome to HistTUI!
+            </Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title="First-Time Setup" borderColor="green" width="100%">
@@ -254,7 +313,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
             </Text>
             
             <Box marginTop={1}>
-              <Text bold color="cyan">✨ What you'll get:</Text>
+              <Gradient name="pastel">
+                <Text bold>✨ What you'll get:</Text>
+              </Gradient>
             </Box>
             <Box marginLeft={2} flexDirection="column">
               <Text>• 🤖 AI-powered insights and code analysis</Text>
@@ -307,7 +368,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={1}>
-          <Text bold color="cyan">Step 1/3: Select LLM Provider</Text>
+          <Gradient name="morning">
+            <Text bold>Step 1/3: Select LLM Provider</Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title="Choose Your AI Provider" borderColor="blue" width="100%">
@@ -332,6 +395,7 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
 
         <Box marginTop={1}>
           <Text dimColor>Use arrow keys to navigate, Enter to select</Text>
+          <ProgressDots active={true} />
         </Box>
       </Box>
     );
@@ -361,7 +425,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={1}>
-          <Text bold color="cyan">Step 2/3: Enter API Key</Text>
+          <Gradient name="teen">
+            <Text bold>Step 2/3: Enter API Key</Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title={`${info.name} API Key`} borderColor="yellow" width="100%">
@@ -485,7 +551,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={1}>
-          <Text bold color="cyan">Step 2/3: GitHub Copilot CLI Setup</Text>
+          <Gradient name="cristal">
+            <Text bold>Step 2/3: GitHub Copilot CLI Setup</Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title="Copilot CLI Configuration" borderColor="magenta" width="100%">
@@ -495,10 +563,10 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
             </Text>
             
             {copilotStatus.checking && (
-              <Box marginTop={1}>
-                <StatusMessage variant="info">
-                  🔍 Checking Copilot CLI status...
-                </StatusMessage>
+              <Box marginTop={1} flexDirection="row" gap={1}>
+                <Spinner type="dots" />
+                <Text color="cyan">Checking Copilot CLI status</Text>
+                <ProgressDots active={true} />
               </Box>
             )}
 
@@ -506,14 +574,10 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
               <>
                 {/* GitHub CLI Status */}
                 <Box marginTop={1} flexDirection="column">
-                  <Box>
-                    <Text bold>1. GitHub CLI (gh): </Text>
-                    {copilotStatus.ghInstalled ? (
-                      <Text color="green">✓ Installed</Text>
-                    ) : (
-                      <Text color="red">✗ Not Found</Text>
-                    )}
-                  </Box>
+                  <AnimatedStatus 
+                    status={copilotStatus.ghInstalled ? 'success' : 'error'}
+                    label="1. GitHub CLI (gh)"
+                  />
                   {!copilotStatus.ghInstalled && (
                     <Box marginLeft={2} marginTop={1}>
                       <Alert variant="warning">
@@ -526,14 +590,10 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
                 {/* Copilot Extension Status */}
                 {copilotStatus.ghInstalled && (
                   <Box marginTop={1} flexDirection="column">
-                    <Box>
-                      <Text bold>2. Copilot Extension: </Text>
-                      {copilotStatus.extensionInstalled ? (
-                        <Text color="green">✓ Installed</Text>
-                      ) : (
-                        <Text color="yellow">○ Not Installed</Text>
-                      )}
-                    </Box>
+                    <AnimatedStatus 
+                      status={copilotStatus.extensionInstalled ? 'success' : 'pending'}
+                      label="2. Copilot Extension"
+                    />
                     {!copilotStatus.extensionInstalled && (
                       <Box marginLeft={2} marginTop={1} flexDirection="column">
                         <StatusMessage variant="info">
@@ -550,14 +610,10 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
                 {/* Authentication Status */}
                 {copilotStatus.ghInstalled && copilotStatus.extensionInstalled && (
                   <Box marginTop={1} flexDirection="column">
-                    <Box>
-                      <Text bold>3. Authentication: </Text>
-                      {copilotStatus.authenticated ? (
-                        <Text color="green">✓ Authenticated</Text>
-                      ) : (
-                        <Text color="yellow">○ Not Authenticated</Text>
-                      )}
-                    </Box>
+                    <AnimatedStatus 
+                      status={copilotStatus.authenticated ? 'success' : 'pending'}
+                      label="3. Authentication"
+                    />
                     {!copilotStatus.authenticated && (
                       <Box marginLeft={2} marginTop={1} flexDirection="column">
                         <Alert variant="warning">
@@ -693,7 +749,9 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     return (
       <Box flexDirection="column" padding={2}>
         <Box marginBottom={1}>
-          <Text bold color="cyan">Confirm Configuration</Text>
+          <Gradient name="fruit">
+            <Text bold>Confirm Configuration</Text>
+          </Gradient>
         </Box>
 
         <BoxBorder title="Review Your Settings" borderColor="magenta" width="100%">
@@ -755,17 +813,30 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
       <Box flexDirection="column" padding={2}>
         <BoxBorder title="Setup Complete!" borderColor="green" width="100%">
           <Box flexDirection="column" gap={1}>
-            <Text bold color="green">✅ Configuration saved successfully!</Text>
+            <Box>
+              <Gradient name="rainbow">
+                <Text bold>✅ Configuration saved successfully!</Text>
+              </Gradient>
+            </Box>
             <Box marginTop={1}>
               <Text>Your HistTUI is now configured with:</Text>
               <Box marginLeft={2} marginTop={1} flexDirection="column">
                 {config.llmProvider && config.llmProvider !== 'none' && (
-                  <Text>• {config.llmProvider?.toUpperCase()} integration</Text>
+                  <Box>
+                    <Text color="green">✓</Text>
+                    <Text> {config.llmProvider?.toUpperCase()} integration</Text>
+                  </Box>
                 )}
                 {config.enableAGUI && (
-                  <Text>• AG-UI generative capabilities</Text>
+                  <Box>
+                    <Text color="green">✓</Text>
+                    <Text> AG-UI generative capabilities</Text>
+                  </Box>
                 )}
-                <Text>• Enhanced terminal UI with @inkjs/ui</Text>
+                <Box>
+                  <Text color="green">✓</Text>
+                  <Text> Enhanced terminal UI with @inkjs/ui</Text>
+                </Box>
               </Box>
             </Box>
             {config.llmProvider === 'copilot-sdk' && config.enableAGUI && (
@@ -775,10 +846,12 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
                 </StatusMessage>
               </Box>
             )}
-            <Box marginTop={2}>
-              <StatusMessage variant="success">
-                Launching HistTUI...
-              </StatusMessage>
+            <Box marginTop={2} flexDirection="row" gap={1}>
+              <Spinner type="dots" />
+              <Gradient name="pastel">
+                <Text bold>Launching HistTUI</Text>
+              </Gradient>
+              <ProgressDots active={true} />
             </Box>
           </Box>
         </BoxBorder>
