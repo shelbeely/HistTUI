@@ -14,7 +14,10 @@
     "agent": "bun agent-server/server.ts",
     "agent:dev": "bun --watch agent-server/server.ts",
     "launch": "bun launch-with-agent.ts",
-    "launch:dev": "bun build && bun launch-with-agent.ts"
+    "launch:dev": "bun build && bun launch-with-agent.ts",
+    "remotion:studio": "remotion studio remotion/index.ts",
+    "remotion:render": "./scripts/render-remotion-gifs.sh",
+    "generate-gifs": "./scripts/render-remotion-gifs.sh"
   },
   "keywords": [
     "git",
@@ -67,10 +70,14 @@
     "zod-to-json-schema": "^3.25.1"
   },
   "devDependencies": {
+    "@remotion/cli": "^4.0.406",
     "@types/bun": "latest",
     "@types/marked": "^5.0.2",
     "@types/node": "^25.0.6",
     "@types/react": "^19.2.8",
+    "gifski": "^1.7.1",
+    "playwright": "^1.57.0",
+    "remotion": "^4.0.406",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

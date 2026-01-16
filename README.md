@@ -1,19 +1,75 @@
 <div align="center">
 
-# 🚀 HistTUI
+```
+╔══════════════════════════════════════════════════════════╗
+║                                                          ║
+║  ██   ██ ██ ███████ ████████ ████████ ██    ██ ██       ║
+║  ██   ██ ██ ██         ██       ██    ██    ██ ██       ║
+║  ███████ ██ ███████    ██       ██    ██    ██ ██       ║
+║  ██   ██ ██      ██    ██       ██    ██    ██ ██       ║
+║  ██   ██ ██ ███████    ██       ██     ██████  ██       ║
+║                                                          ║
+║          Interactive Git History TUI v1.1.0             ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```
 
 ### Interactive Git History TUI with Generative AI
 
 **Explore repository history like a pro with a beautiful terminal interface**
 
-[![Version](https://img.shields.io/badge/version-1.1.0-6750A4.svg)](https://github.com/shelbeely/HistTUI/releases)
-[![License](https://img.shields.io/badge/license-ISC-green.svg)](./LICENSE)
-[![Bun](https://img.shields.io/badge/bun-%3E%3D1.3.5-black.svg)](https://bun.sh)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
-[![Ink](https://img.shields.io/badge/Ink-6.6-purple.svg)](https://github.com/vadimdemedes/ink)
-[![AG-UI](https://img.shields.io/badge/AG--UI-Enabled-orange.svg)](https://github.com/ag-ui/ag-ui)
+[![Version](https://img.shields.io/badge/version-1.1.0-6750A4.svg?style=for-the-badge)](https://github.com/shelbeely/HistTUI/releases)
+[![License](https://img.shields.io/badge/license-ISC-green.svg?style=for-the-badge)](./LICENSE)
+[![Bun](https://img.shields.io/badge/bun-%3E%3D1.3.5-black.svg?style=for-the-badge&logo=bun)](https://bun.sh)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Ink](https://img.shields.io/badge/Ink-6.6-purple.svg?style=for-the-badge)](https://github.com/vadimdemedes/ink)
+[![AG-UI](https://img.shields.io/badge/AG--UI-Enabled-orange.svg?style=for-the-badge)](https://github.com/ag-ui/ag-ui)
 
-![HistTUI Demo](https://via.placeholder.com/800x400/6750A4/FFFFFF?text=HistTUI+Demo+GIF)
+![HistTUI Demo](./screenshots/03-timeline.svg)
+
+*Terminal UI with Material Design 3 theming, vim-style navigation, and AI-powered features*
+
+<br>
+
+```bash
+# 🚀 Get started in one command
+bunx histtui https://github.com/torvalds/linux
+```
+
+**or**
+
+```bash
+# Install globally
+bun install -g histtui
+histtui /path/to/your/repo
+```
+
+<br>
+
+<table>
+<tr>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/⚡-Instant_Search-6750A4?style=flat-square" alt="Instant Search"/>
+<br/>
+<sub>SQLite FTS powered</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/🤖-AI_Powered-6750A4?style=flat-square" alt="AI Powered"/>
+<br/>
+<sub>AG-UI integration</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/⌨️-Vim_Style-6750A4?style=flat-square" alt="Vim Style"/>
+<br/>
+<sub>j/k navigation</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/💾-Multi_Repo-6750A4?style=flat-square" alt="Multi Repo"/>
+<br/>
+<sub>Smart caching</sub>
+</td>
+</tr>
+</table>
 
 </div>
 
@@ -74,11 +130,44 @@ Smart caching system
 
 ---
 
+## 📊 At a Glance
+
+<div align="center">
+
+<table>
+<tr>
+<td align="center" width="25%">
+<h3>9</h3>
+<sub>🖥️ Screens</sub>
+</td>
+<td align="center" width="25%">
+<h3>15+</h3>
+<sub>⌨️ Keyboard Shortcuts</sub>
+</td>
+<td align="center" width="25%">
+<h3>4</h3>
+<sub>🤖 AI Providers</sub>
+</td>
+<td align="center" width="25%">
+<h3>∞</h3>
+<sub>📦 Repositories</sub>
+</td>
+</tr>
+</table>
+
+**Core Technologies:** Bun • Ink • TypeScript • SQLite • AG-UI • Material Design 3
+
+**Key Capabilities:** Multi-repo management • AI-powered insights • Code planning • Real-time search • Vim navigation
+
+</div>
+
+---
+
 ## 📑 Table of Contents
 
 - [Quick Start](#-quick-start)
 - [Features](#-features)
-- [Screenshots](#-screenshots)
+- [Screenshots](#-screenshots) • [📖 Complete Gallery](./SCREENSHOTS.md)
 - [Installation](#-installation)
 - [Keyboard Shortcuts](#️-keyboard-shortcuts)
 - [Code Planner](#-code-planner)
@@ -89,6 +178,20 @@ Smart caching system
 - [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
 - [License](#-license)
+
+### 📚 Visual Documentation
+
+<div align="center">
+
+[![Architecture](https://img.shields.io/badge/📐-Architecture_Diagram-6750A4?style=for-the-badge)](./docs/architecture-diagram.md)
+[![Keyboard](https://img.shields.io/badge/⌨️-Keyboard_Cheatsheet-6750A4?style=for-the-badge)](./docs/keyboard-cheatsheet.md)
+[![Workflows](https://img.shields.io/badge/🔄-Common_Workflows-6750A4?style=for-the-badge)](./docs/workflows.md)
+[![Comparison](https://img.shields.io/badge/⚖️-Tool_Comparison-6750A4?style=for-the-badge)](./docs/comparison.md)
+[![Colors](https://img.shields.io/badge/🎨-Color_Palette-6750A4?style=for-the-badge)](./docs/color-palette.md)
+
+*ASCII art diagrams, visual guides, and comprehensive comparisons*
+
+</div>
 
 ---
 
@@ -279,33 +382,70 @@ HistTUI integrates the **AG-UI protocol** for true generative terminal UI:
 
 ## 📸 Screenshots
 
+> 📖 **[View Complete Screenshots Gallery](./SCREENSHOTS.md)** - Detailed guide with keyboard shortcuts and feature descriptions
+
 <div align="center">
 
+### 🚀 First-Time Setup Wizard
+![Setup Wizard](./screenshots/01-setup-wizard.svg)
+
+*Configure LLM providers, API keys, and AG-UI settings on first launch*
+
+---
+
 ### 📈 Activity Dashboard (Default Screen)
-![Activity Dashboard](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Activity+Dashboard+-+Repository+Stats+%26+Contributors)
+![Activity Dashboard](./screenshots/02-activity-dashboard.svg)
 
 *View repository statistics, top contributors, and recent activity at a glance*
 
 ---
 
 ### 📊 Commit Timeline
-![Commit Timeline](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Commit+Timeline+-+Browse+History+with+Vim+Navigation)
+![Commit Timeline](./screenshots/03-timeline.svg)
 
-*Browse commits with instant filtering and vim-style navigation*
+*Browse commits with instant filtering and vim-style navigation (Press '1')*
 
 ---
 
 ### 💬 Commit Details & Diff Viewer
-![Commit Details](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=Commit+Details+-+Full+Diff+View+with+Syntax+Highlighting)
+![Commit Details](./screenshots/04-commit-detail.svg)
 
 *View full commit information with syntax-highlighted diffs*
 
 ---
 
-### 🤖 AI Assistant (AG-UI Powered)
-![AI Assistant](https://via.placeholder.com/900x500/6750A4/FFFFFF?text=AI+Assistant+-+Real-time+Insights+%26+Code+Analysis)
+### 🌿 Branches & Tags
+![Branches](./screenshots/05-branches.svg)
 
-*Get AI-powered insights and code analysis in real-time*
+*Navigate branches and tags with current branch indicators (Press '2')*
+
+---
+
+### 🌳 File Tree Explorer
+![File Tree](./screenshots/06-file-tree.svg)
+
+*Browse your codebase at any commit with beautiful file tree (Press '3')*
+
+---
+
+### 💾 Multi-Repository Manager
+![Repo Manager](./screenshots/07-repo-manager.svg)
+
+*Switch between repositories instantly with smart caching (Press '5')*
+
+---
+
+### 🎯 Code Planner
+![Code Planner](./screenshots/08-code-planner.svg)
+
+*Create specs and plan code changes with AI assistance (Press '6')*
+
+---
+
+### 🔍 Fuzzy Search
+![Search](./screenshots/09-search.svg)
+
+*Intelligent search across commits, files, and content (Press '/')*
 
 </div>
 

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="terminal" baseProfile="full" viewBox="0 0 960 597" width="960" version="1.1">
+    <defs>
+        <termtosvg:template_settings xmlns:termtosvg="https://github.com/nbedos/termtosvg">
+            <termtosvg:screen_geometry columns="120" rows="35"/>
+            <termtosvg:animation type="css"/>
+        </termtosvg:template_settings>
+        <style type="text/css" id="generated-style"><![CDATA[#screen {
+                font-family: 'DejaVu Sans Mono', monospace;
+                font-style: normal;
+                font-size: 14px;
+            }
+
+        text {
+            dominant-baseline: text-before-edge;
+            white-space: pre;
+        }
+    
+            :root {
+                --animation-duration: 3253ms;
+            }
+
+            @keyframes roll {
+                0.000%{transform:translateY(0px)}
+0.154%{transform:translateY(-612px)}
+7.716%{transform:translateY(-1224px)}
+69.198%{transform:translateY(-1836px)}
+69.259%{transform:translateY(-2448px)}
+100.000%{transform:translateY(-2448px)}
+            }
+
+            #screen_view {
+                animation-duration: 3253ms;
+                animation-iteration-count:infinite;
+                animation-name:roll;
+                animation-timing-function: steps(1,end);
+                animation-fill-mode: forwards;
+            }
+        ]]></style>
+        <style type="text/css" id="user-style">
+            /* The colors defined below are the default 16 colors used for rendering text of the terminal. Adjust
+               them as needed.
+               PowerShell colors based on https://en.wikipedia.org/wiki/ANSI_escape_code#Colors */
+            .foreground {fill: #cccccc;}
+            .background {fill: #0c0c0c;}
+            .color0 {fill: #0c0c0c;}
+            .color1 {fill: #c50f1f;}
+            .color2 {fill: #13a10e;}
+            .color3 {fill: #c19c00;}
+            .color4 {fill: #0037da;}
+            .color5 {fill: #881798;}
+            .color6 {fill: #3a96dd;}
+            .color7 {fill: #cccccc;}
+            .color8 {fill: #767676;}
+            .color9 {fill: #e74856;}
+            .color10 {fill: #16c60c;}
+            .color11 {fill: #f9f1a5;}
+            .color12 {fill: #3b78ff;}
+            .color13 {fill: #b4009e;}
+            .color14 {fill: #61d6d6;}
+            .color15 {fill: #f2f2f2;}
+        </style>
+    </defs>
+    <svg id="screen" width="960" height="595" viewBox="0 0 960 595" preserveAspectRatio="xMidYMin slice">
+    <rect class="background" height="100%" width="100%" x="0" y="0"/><defs><g id="g1"><text x="0" textLength="8" class="background"> </text></g><g id="g2"><text x="0" textLength="8" class="color5">$</text><text x="8" textLength="8" class="foreground"> </text><text x="16" textLength="392" font-weight="bold" class="foreground">bun dist/cli.js /home/runner/work/HistTUI/HistTUI</text></g><g id="g3"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="232" font-weight="bold" class="color14">Step 1/3: Select LLM Provider</text></g><g id="g4"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="928" class="color4">&#9581;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9582;</text></g><g id="g5"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="8" class="color4">&#9474;</text><text x="24" textLength="8" class="foreground"> </text><text x="32" textLength="184" font-weight="bold" class="color12">Choose Your AI Provider</text><text x="216" textLength="720" class="foreground">                                                                                          </text><text x="936" textLength="8" class="color4">&#9474;</text></g><g id="g6"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="928" class="color4">&#9584;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9583;</text></g><g id="g7"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="8" class="color4">&#9474;</text><text x="24" textLength="912" class="foreground">                                                                                                                  </text><text x="936" textLength="8" class="color4">&#9474;</text></g><g id="g8"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="8" class="color4">&#9474;</text><text x="24" textLength="912" class="foreground"> HistTUI uses AI to provide generative insights, code analysis, and intelligent recommendations.                  </text><text x="936" textLength="8" class="color4">&#9474;</text></g><g id="g9"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="8" class="color4">&#9474;</text><text x="24" textLength="8" class="foreground"> </text><text x="32" textLength="896" fill="#374151">&#9581;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9582;</text><text x="928" textLength="8" class="foreground"> </text><text x="936" textLength="8" class="color4">&#9474;</text></g><g id="g10"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="8" class="color4">&#9474;</text><text x="24" textLength="8" class="foreground"> </text><text x="32" textLength="8" fill="#374151">&#9474;</text><text x="40" textLength="8" class="color4">&#10095;</text><text x="48" textLength="8" class="foreground"> </text><text x="56" textLength="120" class="color4">OpenAI (GPT-4, </text><text x="176" textLength="744" class="foreground">        Anthropic         OpenRouter (Multiple       Ollama (Local       Skip - Configure    </text><text x="920" textLength="8" fill="#374151">&#9474;</text><text x="928" textLength="8" class="foreground"> </text><text x="936" textLength="8" class="color4">&#9474;</text></g><g id="g11"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="8" class="color4">&#9474;</text><text x="24" textLength="8" class="foreground"> </text><text x="32" textLength="8" fill="#374151">&#9474;</text><text x="40" textLength="16" class="foreground">  </text><text x="56" textLength="64" class="color4">GPT-3.5)</text><text x="120" textLength="800" class="foreground">               (Claude)          Models)                    Models)             Later               </text><text x="920" textLength="8" fill="#374151">&#9474;</text><text x="928" textLength="8" class="foreground"> </text><text x="936" textLength="8" class="color4">&#9474;</text></g><g id="g12"><text x="0" textLength="16" class="foreground">  </text><text x="16" textLength="8" class="color4">&#9474;</text><text x="24" textLength="8" class="foreground"> </text><text x="32" textLength="896" fill="#374151">&#9584;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9583;</text><text x="928" textLength="8" class="foreground"> </text><text x="936" textLength="8" class="color4">&#9474;</text></g><g id="g13"><text x="0" textLength="360" class="foreground">  Use arrow keys to navigate, Enter to select</text></g></defs><g id="screen_view"><g><rect x="0" y="0" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="0"/></g><g><use xlink:href="#g2" y="612"/><rect x="0" y="629" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="629"/></g><g><use xlink:href="#g2" y="1224"/></g><g><use xlink:href="#g2" y="1836"/><use xlink:href="#g3" y="1887"/><use xlink:href="#g4" y="1921"/><use xlink:href="#g5" y="1938"/><use xlink:href="#g6" y="1955"/><use xlink:href="#g4" y="1972"/><use xlink:href="#g7" y="1989"/><use xlink:href="#g8" y="2006"/><use xlink:href="#g7" y="2023"/><use xlink:href="#g7" y="2040"/><use xlink:href="#g9" y="2057"/><use xlink:href="#g10" y="2074"/><use xlink:href="#g11" y="2091"/><use xlink:href="#g12" y="2108"/><use xlink:href="#g7" y="2125"/><use xlink:href="#g6" y="2142"/><use xlink:href="#g13" y="2176"/></g><g><use xlink:href="#g2" y="2448"/><use xlink:href="#g3" y="2499"/><use xlink:href="#g4" y="2533"/><use xlink:href="#g5" y="2550"/><use xlink:href="#g6" y="2567"/><use xlink:href="#g4" y="2584"/><use xlink:href="#g7" y="2601"/><use xlink:href="#g8" y="2618"/><use xlink:href="#g7" y="2635"/><use xlink:href="#g7" y="2652"/><use xlink:href="#g9" y="2669"/><use xlink:href="#g10" y="2686"/><use xlink:href="#g11" y="2703"/><use xlink:href="#g12" y="2720"/><use xlink:href="#g7" y="2737"/><use xlink:href="#g6" y="2754"/><use xlink:href="#g13" y="2788"/><rect x="0" y="2839" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="2839"/></g></g></svg>
+</svg>

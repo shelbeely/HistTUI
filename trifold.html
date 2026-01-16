@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HistTUI Keyboard Cheat Sheet - Tri-Fold</title>
+    <link rel="stylesheet" href="trifold.css">
+</head>
+<body>
+    <!-- Page 1 (Front) -->
+    <div class="page page-1">
+        <!-- Panel 1: Front Cover (Outside Right) -->
+        <div class="panel panel-1">
+            <div class="cover">
+                <h1 class="logo">HistTUI</h1>
+                <h2 class="subtitle">Keyboard Cheat Sheet</h2>
+                <p class="tagline">Interactive Git History TUI<br>Explore repository history with vim-style navigation</p>
+                <p class="features">
+                    <strong>Quick Reference Guide</strong><br>
+                    Material Design 3 • AI-Powered • Multi-Repo
+                </p>
+                <p class="version">Version 1.1.0</p>
+            </div>
+        </div>
+
+        <!-- Panel 2: Inside Left -->
+        <div class="panel panel-2">
+            <h3>Screen Navigation</h3>
+            <p class="intro">Press number keys to jump between screens:</p>
+            <ul class="shortcuts">
+                <li><kbd accesskey="1">1</kbd> Timeline View</li>
+                <li><kbd accesskey="2">2</kbd> Branches & Tags</li>
+                <li><kbd accesskey="3">3</kbd> File Tree Explorer</li>
+                <li><kbd accesskey="4">4</kbd> Activity Dashboard</li>
+                <li><kbd accesskey="5">5</kbd> Repository Manager</li>
+                <li><kbd accesskey="6">6</kbd> Code Planner</li>
+            </ul>
+
+            <h3>Global Commands</h3>
+            <ul class="shortcuts">
+                <li><kbd accesskey="q">q</kbd> Quit application</li>
+                <li><kbd>Ctrl+C</kbd> Force quit</li>
+                <li><kbd accesskey="?">?</kbd> or <kbd accesskey="h">h</kbd> Toggle help overlay</li>
+                <li><kbd accesskey="/">/</kbd> Search/Filter</li>
+                <li><kbd>Ctrl+F</kbd> Search (alternate)</li>
+                <li><kbd>Esc</kbd> Go back/Cancel</li>
+            </ul>
+
+            <h3>Tab Navigation</h3>
+            <ul class="shortcuts">
+                <li><kbd>Tab</kbd> Next tab</li>
+                <li><kbd>Ctrl+N</kbd> Next tab (alternate)</li>
+                <li><kbd>Shift+Tab</kbd> Previous tab</li>
+                <li><kbd>Ctrl+P</kbd> Previous tab (alternate)</li>
+            </ul>
+        </div>
+
+        <!-- Panel 3: Inside Center -->
+        <div class="panel panel-3">
+            <h3>Vim-Style Movement</h3>
+            
+            <h4>Basic Navigation:</h4>
+            <ul class="shortcuts">
+                <li><kbd accesskey="j">j</kbd> or <kbd>↓</kbd> Move down</li>
+                <li><kbd accesskey="k">k</kbd> or <kbd>↑</kbd> Move up</li>
+                <li><kbd>h</kbd> or <kbd>←</kbd> Move left/Go back</li>
+                <li><kbd accesskey="l">l</kbd> or <kbd>→</kbd> Move right/Select</li>
+                <li><kbd>Enter</kbd> Select/Confirm</li>
+            </ul>
+
+            <h4>Fast Navigation:</h4>
+            <ul class="shortcuts">
+                <li><kbd>Ctrl+D</kbd> Page down</li>
+                <li><kbd>Ctrl+U</kbd> Page up</li>
+                <li><kbd>PgDn</kbd> Page down (alternate)</li>
+                <li><kbd>PgUp</kbd> Page up (alternate)</li>
+                <li><kbd accesskey="g">g</kbd> Jump to top/first item</li>
+                <li><kbd accesskey="G">G</kbd> Jump to bottom/last item</li>
+                <li><kbd>Home</kbd> Jump to start</li>
+                <li><kbd>End</kbd> Jump to end</li>
+            </ul>
+
+            <h3>Timeline Screen</h3>
+            <ul class="shortcuts">
+                <li><kbd>Enter</kbd> View commit details</li>
+                <li><kbd>/</kbd> Filter commits</li>
+                <li><kbd>1-6</kbd> Switch screens</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Page 2 (Back) -->
+    <div class="page page-2">
+        <!-- Panel 4: Inside Right -->
+        <div class="panel panel-4">
+            <h3>Commit Detail View</h3>
+            <ul class="shortcuts">
+                <li><kbd accesskey="d">d</kbd> Toggle diff view mode</li>
+                <li><kbd>←</kbd> or <kbd>Esc</kbd> Back to timeline</li>
+                <li><kbd>j/k</kbd> Navigate file changes</li>
+                <li><kbd>Tab</kbd> Switch panels</li>
+            </ul>
+
+            <h3>Branches & Tags</h3>
+            <ul class="shortcuts">
+                <li><kbd>Tab</kbd> Switch between branches/tags</li>
+                <li><kbd>Enter</kbd> View branch history</li>
+                <li><kbd>/</kbd> Search branches</li>
+            </ul>
+
+            <h3>File Tree Explorer</h3>
+            <ul class="shortcuts">
+                <li><kbd>Enter</kbd> or <kbd>→</kbd> Open folder/view file</li>
+                <li><kbd>←</kbd> Back to parent folder</li>
+                <li><kbd>h</kbd> Collapse current folder</li>
+                <li><kbd>/</kbd> Search files</li>
+            </ul>
+
+            <h3>Repository Manager</h3>
+            <ul class="shortcuts">
+                <li><kbd accesskey="a">a</kbd> Add new repository</li>
+                <li><kbd>d</kbd> Delete cached repository</li>
+                <li><kbd accesskey="u">u</kbd> Update from remote</li>
+                <li><kbd>Enter</kbd> Switch to repository</li>
+                <li><kbd>Esc</kbd> Back to dashboard</li>
+            </ul>
+        </div>
+
+        <!-- Panel 5: Back Inside (Outside Center) -->
+        <div class="panel panel-5">
+            <h3>Code Planner</h3>
+            <ul class="shortcuts">
+                <li><kbd accesskey="n">n</kbd> Create new specification</li>
+                <li><kbd accesskey="c">c</kbd> Open context manager</li>
+                <li><kbd accesskey="t">t</kbd> Browse templates</li>
+                <li><kbd>Enter</kbd> Edit selected spec</li>
+                <li><kbd>d</kbd> Delete specification</li>
+                <li><kbd accesskey="f">f</kbd> Filter by status</li>
+                <li><kbd>Esc</kbd> Back to dashboard</li>
+            </ul>
+
+            <h3>Search/Filter Screen</h3>
+            <ul class="shortcuts">
+                <li><kbd>Type</kbd> Search query</li>
+                <li><kbd>Enter</kbd> Go to result</li>
+                <li><kbd>Esc</kbd> Cancel search</li>
+                <li><kbd>↑↓</kbd> or <kbd>j/k</kbd> Navigate results</li>
+            </ul>
+
+            <h4>Filter Syntax:</h4>
+            <ul class="shortcuts compact">
+                <li><code>author:name</code> By author</li>
+                <li><code>after:2024-01-01</code> By date</li>
+                <li><code>path:src/</code> By file path</li>
+                <li><code>fix memory</code> Text search</li>
+            </ul>
+        </div>
+
+        <!-- Panel 6: Back Cover (Outside Left) -->
+        <div class="panel panel-6">
+            <h3>Tips & Tricks</h3>
+            
+            <h4>First-Time Users:</h4>
+            <ol class="tips">
+                <li>Setup wizard appears on first launch</li>
+                <li>Choose AI provider (OpenAI, Anthropic, etc.)</li>
+                <li>Enter API key (securely masked)</li>
+                <li>Press 's' to skip if needed</li>
+            </ol>
+
+            <h4>Power User Tips:</h4>
+            <ul class="tips">
+                <li>Use <kbd accesskey="g">g</kbd> then <kbd accesskey="G">G</kbd> for quick jumps</li>
+                <li>Combine <kbd accesskey="/">/</kbd> with filters for precise searches</li>
+                <li>Press <kbd accesskey="?">?</kbd> in any screen for contextual help</li>
+                <li>Number keys (1-6) work from any screen</li>
+                <li>Repository switching (Press 5) is instant</li>
+            </ul>
+
+            <h4>Multi-Repo Workflow:</h4>
+            <ol class="tips">
+                <li>Press <kbd accesskey="5">5</kbd> for Repository Manager</li>
+                <li>Press <kbd accesskey="a">a</kbd> to add repositories</li>
+                <li>Press <kbd>Enter</kbd> to switch instantly</li>
+                <li>All repos stay cached (no re-clone)</li>
+            </ol>
+
+            <h4>Performance:</h4>
+            <ul class="tips">
+                <li>Initial indexing: ~30-60s for large repos</li>
+                <li>Subsequent loads: &lt;2 seconds (cached)</li>
+                <li>Search speed: &lt;100ms with SQLite FTS</li>
+            </ul>
+
+            <h4>AI Features:</h4>
+            <ul class="tips">
+                <li>Press <kbd accesskey="6">6</kbd> for Code Planner</li>
+                <li>Create specs with templates</li>
+                <li>Get AI implementation suggestions</li>
+                <li>Review before coding</li>
+            </ul>
+
+            <h3>Quick Troubleshooting</h3>
+            <p class="troubleshooting">
+                <strong>App won't start?</strong><br>
+                Check Node/Bun version (≥1.3.5)<br>
+                Run: <code>histtui --debug</code>
+            </p>
+            <p class="troubleshooting">
+                <strong>Slow performance?</strong><br>
+                First launch indexes repo (one-time)<br>
+                Check: <code>histtui cache --list</code>
+            </p>
+            <p class="troubleshooting">
+                <strong>Need help?</strong><br>
+                Press <kbd accesskey="?">?</kbd> for inline help<br>
+                Visit: github.com/shelbeely/HistTUI
+            </p>
+
+            <p class="print-instructions">
+                <strong>Print Instructions:</strong> Print on US Letter (8.5" × 11"), landscape orientation, double-sided. Fold into thirds with Panel 1 as front cover.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
