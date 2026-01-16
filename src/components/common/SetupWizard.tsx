@@ -14,7 +14,7 @@ interface SetupWizardProps {
 }
 
 export interface SetupConfig {
-  llmProvider?: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'none';
+  llmProvider?: 'openai' | 'anthropic' | 'openrouter' | 'ollama' | 'copilot-sdk' | 'none';
   apiKey?: string;
   model?: string;
   baseUrl?: string;
@@ -52,6 +52,7 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     { label: 'Anthropic (Claude)', value: 'anthropic' },
     { label: 'OpenRouter (Multiple Models)', value: 'openrouter' },
     { label: 'Ollama (Local Models)', value: 'ollama' },
+    { label: 'GitHub Copilot SDK', value: 'copilot-sdk' },
     { label: 'Skip - Configure Later', value: 'none' },
   ];
 
@@ -61,6 +62,10 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
     if (provider === 'none') {
       setStep('complete');
       onComplete({ ...newConfig, llmProvider: 'none' });
+    } else if (provider === 'copilot-sdk') {
+      // Copilot SDK doesn't need API key, uses Copilot CLI auth
+      setConfig(newConfig);
+      setStep('agent');
     } else if (provider === 'ollama') {
       // Ollama doesn't need API key but needs model
       setConfig({ ...newConfig, baseUrl: 'http://localhost:11434' });
@@ -149,7 +154,7 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
               <Text dimColor bold>Configure:</Text>
             </Box>
             <Box marginLeft={2} flexDirection="column">
-              <Text>• LLM Provider (OpenAI, Anthropic, OpenRouter, Ollama)</Text>
+              <Text>• LLM Provider (OpenAI, Anthropic, OpenRouter, Ollama, Copilot SDK)</Text>
               <Text>• API Keys for cloud providers</Text>
               <Text>• Model selection (OpenRouter: 12+ models)</Text>
               <Text>• AG-UI Agent endpoint (optional)</Text>
@@ -197,6 +202,11 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
               HistTUI uses AI to provide generative insights, code analysis, and
               intelligent recommendations.
             </Text>
+            <Box marginTop={1}>
+              <StatusMessage variant="info">
+                💡 GitHub Copilot SDK requires Copilot CLI installed and authenticated
+              </StatusMessage>
+            </Box>
             <Box marginTop={1}>
               <Select
                 options={providers}
@@ -377,6 +387,13 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
                 Features: Streaming insights, tool execution, dynamic visualizations
               </StatusMessage>
             </Box>
+            {config.llmProvider === 'copilot-sdk' && (
+              <Box marginTop={1}>
+                <StatusMessage variant="warning">
+                  ⚠️  For Copilot SDK, run: npm run agent:copilot (instead of npm run agent)
+                </StatusMessage>
+              </Box>
+            )}
             <Box marginTop={1} flexDirection="column">
               <Text bold>Agent Endpoint (optional):</Text>
               <Text dimColor>Leave default if running agent locally</Text>
@@ -483,6 +500,13 @@ export function SetupWizard({ onComplete, onSkip }: SetupWizardProps) {
                 <Text>• Enhanced terminal UI with @inkjs/ui</Text>
               </Box>
             </Box>
+            {config.llmProvider === 'copilot-sdk' && config.enableAGUI && (
+              <Box marginTop={2}>
+                <StatusMessage variant="warning">
+                  📝 To use Copilot SDK, run the Copilot backend: npm run agent:copilot
+                </StatusMessage>
+              </Box>
+            )}
             <Box marginTop={2}>
               <StatusMessage variant="success">
                 Launching HistTUI...

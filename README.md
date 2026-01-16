@@ -145,7 +145,7 @@ Smart caching system
 <sub>⌨️ Keyboard Shortcuts</sub>
 </td>
 <td align="center" width="25%">
-<h3>4</h3>
+<h3>5</h3>
 <sub>🤖 AI Providers</sub>
 </td>
 <td align="center" width="25%">
